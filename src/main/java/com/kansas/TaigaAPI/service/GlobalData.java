@@ -1,3 +1,5 @@
+package com.kansas.TaigaAPI.service;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,5 +24,6 @@ public class GlobalData {
         }
     }
 
-        
+
 }
+

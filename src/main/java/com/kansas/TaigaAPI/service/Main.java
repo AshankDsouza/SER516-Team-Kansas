@@ -1,3 +1,5 @@
+package com.kansas.TaigaAPI.service;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -26,6 +28,7 @@ public class Main {
         String taigaUsername = promptUser("Enter your Taiga username: ");
         String taigaPassword = promptUserPassword("Enter your Taiga password: ");
         String authToken = Authentication.authenticate(taigaUsername, taigaPassword);
+        System.out.println(authToken);
         if (authToken != null) {
             System.out.println("Authentication successful.");
 
@@ -213,3 +216,4 @@ public class Main {
 
 
 }
+

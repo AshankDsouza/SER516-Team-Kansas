@@ -1,3 +1,5 @@
+package com.kansas.TaigaAPI.service;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpResponse;
@@ -54,3 +56,4 @@ public class Authentication {
         }
     }
 }
+
