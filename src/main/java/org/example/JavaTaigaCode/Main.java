@@ -1,9 +1,13 @@
+package org.example.JavaTaigaCode;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
+import org.springframework.boot.SpringApplication;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+@SpringBootApplication
+@ComponentScan
 public class Main {
 
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
@@ -21,21 +29,22 @@ public class Main {
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        // Prompting user for Taiga's username and password
-        String taigaUsername = promptUser("Enter your Taiga username: ");
-        String taigaPassword = promptUserPassword("Enter your Taiga password: ");
-        String authToken = Authentication.authenticate(taigaUsername, taigaPassword);
-        if (authToken != null) {
-            System.out.println("Authentication successful.");
-
-            // Calling Taiga API to get project details
-            int projectId = Project.getProjectId(authToken,TAIGA_API_ENDPOINT);
-
-            if (projectId != -1) {
-                handleUserAction(projectId, authToken, scanner);
-            }
-        }
+        SpringApplication.run(Main.class, args);
+//        Scanner scanner = new Scanner(System.in);
+//        // Prompting user for Taiga's username and password
+//        String taigaUsername = promptUser("Enter your Taiga username: ");
+//        String taigaPassword = promptUserPassword("Enter your Taiga password: ");
+//        String authToken = Authentication.authenticate(taigaUsername, taigaPassword);
+//        if (authToken != null) {
+//            System.out.println("Authentication successful.");
+//
+//            // Calling Taiga API to get project details
+//            int projectId = Project.getProjectId(authToken,TAIGA_API_ENDPOINT);
+//
+//            if (projectId != -1) {
+//                handleUserAction(projectId, authToken, scanner);
+//            }
+//        }
     }
 
     private static String promptUser(String prompt) {

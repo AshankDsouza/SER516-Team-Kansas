@@ -1,3 +1,5 @@
+package org.example.JavaTaigaCode.auth;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpResponse;
@@ -6,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
+import org.example.JavaTaigaCode.GlobalData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
