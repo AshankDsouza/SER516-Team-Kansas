@@ -1,4 +1,4 @@
-package com.kansas.TaigaAPI.service;
+package com.kansas.TaigaAPI.utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

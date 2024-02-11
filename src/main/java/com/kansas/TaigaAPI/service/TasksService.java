@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.kansas.TaigaAPI.TaigaApiApplication;
+import com.kansas.TaigaAPI.utils.GlobalData;
+import com.kansas.TaigaAPI.utils.HTTPRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,12 +17,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tasks {
+@Service
+public class TasksService {
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-    public static List<JsonNode> getClosedTasks(int projectId, String authToken, String TAIGA_API_ENDPOINT) {
+    private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
+
+    public static List<JsonNode> getClosedTasks(int projectId, String authToken) {
 
         // API to get list of all tasks in a project.
         String endpoint = TAIGA_API_ENDPOINT + "/tasks?project=" + projectId;
@@ -73,7 +80,7 @@ public class Tasks {
         return new int[]{cycleTime, closedTasks};
     }
 
-    public static List<Integer> getTaskHistory(List<JsonNode> tasks, String authToken, String TAIGA_API_ENDPOINT) {
+    public static List<Integer> getTaskHistory(List<JsonNode> tasks, String authToken) {
         List<Integer> result = new ArrayList<>(List.of(0, 0));
 
         for (JsonNode task : tasks) {

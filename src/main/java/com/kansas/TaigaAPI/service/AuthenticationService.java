@@ -2,21 +2,28 @@ package com.kansas.TaigaAPI.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kansas.TaigaAPI.TaigaApiApplication;
+import com.kansas.TaigaAPI.utils.GlobalData;
+import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Base64;
 
-public class Authentication {
+@Service
+@Log4j2
+public class AuthenticationService {
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
-    public static String authenticate(String username, String password) {
+    private static String authToken;
+
+    public void authenticate(String username, String password) {
 
         // Endpoint to authenticate taiga's username and password
         String authEndpoint = TAIGA_API_ENDPOINT + "/auth";
@@ -38,22 +45,26 @@ public class Authentication {
                 result.append(line);
             }
 
-            return parseAuthToken(result.toString());
+            parseAuthToken(result.toString());
         } catch (IOException e) {
+            log.error(e.getMessage());
             e.printStackTrace();
-            return null;
         }
     }
 
-    private static String parseAuthToken(String responseJson) {
+    private void parseAuthToken(String responseJson) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseJson);
-            return rootNode.path("auth_token").asText();
+            authToken = rootNode.path("auth_token").asText();
         } catch (Exception e) {
+            log.error(e.getMessage());
             e.printStackTrace();
-            return null;
         }
+    }
+
+    public String getAuthToken() {
+        return authToken;
     }
 }
 
