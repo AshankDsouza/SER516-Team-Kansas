@@ -59,7 +59,7 @@ export default function LoginForm() {
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Password" {...field} />
+                                    <Input type="password" placeholder="Password" {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     Taiga password

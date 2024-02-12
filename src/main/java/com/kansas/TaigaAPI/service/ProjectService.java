@@ -1,14 +1,23 @@
+package com.kansas.TaigaAPI.service;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.kansas.TaigaAPI.TaigaApiApplication;
+import com.kansas.TaigaAPI.utils.GlobalData;
+import com.kansas.TaigaAPI.utils.HTTPRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
+import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
 
-public class Project {
+
+@Service
+public class ProjectService {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -27,13 +36,12 @@ public class Project {
         }
     }
 
-    public static int getProjectId(String authToken,String TAIGA_API_ENDPOINT) {
+    public int getProjectId(String authToken,String projectSlug) {
 
         // Prompting user to enter project slug name. A slug name is nothing but an identifier for a project.
         // Open any Taiga project and check the url of your browser. Slug name is the value after " /project/SLUG_NAME "
         // Example https://tree.taiga.io/project/SLUG_NAME/us/1?no-milestone=1
 
-        String projectSlug = promptUser("Enter the Taiga project slug: ");
         String endpoint = TAIGA_API_ENDPOINT + "/projects/by_slug?slug=" + projectSlug;
 
         HttpGet request = new HttpGet(endpoint);
@@ -61,3 +69,4 @@ public class Project {
         return -1;
     }
 }
+
