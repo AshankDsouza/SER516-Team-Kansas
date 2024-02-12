@@ -29,6 +29,11 @@ public class TaigaAPI {
             String[] projects = {"nicolasrmz-devgym", "whrisurdicky-sim2023q2-spanners",
                     "the-princess-bride", "a21asmchaben-project-hunt", "vitao-locacao-de-veiculos"};
             return projects;
+        } else if (metric.equals("leadtime")) {
+            String[] projects = {"posh", "whrisurdicky-sim2023q2-spanners",
+                    "the-princess-bride", "a21asmchaben-project-hunt", "vitao-locacao-de-veiculos"};
+            return projects;
+
         }
         return null;
     }
