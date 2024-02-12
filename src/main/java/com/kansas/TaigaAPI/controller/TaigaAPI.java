@@ -38,5 +38,14 @@ public class TaigaAPI {
         return null;
     }
 
-
+    @GetMapping("/selectProjectsForVisulaisation")
+    public String getProjectForVisulaisation(@RequestParam String project) {
+        String[] selectedProjects = {"the-princess-bride", "melodicpinpon-z-anatomy", "transformap", "penpot", "viya-mdn-durable-team"};
+        for (int i = 0; i < selectedProjects.length; i++) {
+            if (project.equals(selectedProjects[i])) {
+                return "You have selected Project No: " + (i + 1) ;
+            }
+        }
+        return "Please choose a Project";
+    }
 }
