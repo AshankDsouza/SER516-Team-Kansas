@@ -5,6 +5,7 @@ import com.kansas.TaigaAPI.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api")
 public class OAuthController {
@@ -13,7 +14,8 @@ public class OAuthController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/auth")
-    public void auth(@RequestBody AuthRequest authRequest) {
-        authenticationService.authenticate(authRequest.getUsername(), authRequest.getPassword());
+    public String auth(@RequestBody AuthRequest authRequest) {
+        String token = authenticationService.authenticate(authRequest.getUsername(), authRequest.getPassword());
+        return token;
     }
 }
