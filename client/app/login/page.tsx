@@ -14,10 +14,15 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import getUserToken from "@/actions/userToken"
+import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({ "name": z.string().min(1).max(255), "password": z.string().min(1).max(255) })
 
 export default function LoginForm() {
+
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -27,8 +32,11 @@ export default function LoginForm() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log(values);
+        
+        const userToken = await getUserToken(values.name, values.password)
+        router.push("/")
     }
 
     return (
