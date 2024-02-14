@@ -23,7 +23,7 @@ public class AuthenticationService {
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
     private static String authToken;
 
-    public void authenticate(String username, String password) {
+    public String authenticate(String username, String password) {
 
         // Endpoint to authenticate taiga's username and password
         String authEndpoint = TAIGA_API_ENDPOINT + "/auth";
@@ -45,22 +45,25 @@ public class AuthenticationService {
                 result.append(line);
             }
 
-            parseAuthToken(result.toString());
+            return parseAuthToken(result.toString());
         } catch (IOException e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
-    private void parseAuthToken(String responseJson) {
+    private String parseAuthToken(String responseJson) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseJson);
             authToken = rootNode.path("auth_token").asText();
+            return authToken;
         } catch (Exception e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
     public String getAuthToken() {
