@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function getUserToken(userName: string, password: string) {
 
-    let response
+    let response;
 
     try {
          response = await fetch("localhost:8080/test", {
@@ -15,9 +15,9 @@ export default async function getUserToken(userName: string, password: string) {
             },
             body: JSON.stringify({ username: { userName }, password: { password } }),
         });
+        console.log(response);
+        
     } catch (error){
         console.error(error);
     }
-    // redirect("/")
-    return response
 }
