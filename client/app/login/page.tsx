@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
+import './page.css';
 import {
     Form,
     FormControl,
@@ -32,7 +33,11 @@ export default function LoginForm() {
     }
 
     return (
-        <div className="flex p-16">
+        <div className="flex p-16" link rel="stylesheet" type="text/css" href="page.css">
+
+
+
+            <div className="wrapper">
             <Form {...form}>
                 <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
@@ -67,9 +72,10 @@ export default function LoginForm() {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">LogIn</Button>
                 </form>
             </Form>
+            </div>
         </div>
     )
 }

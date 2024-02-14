@@ -1,0 +1,32 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  font-family:"Poppins", sans-serif;
+}
+.flex.p-16{
+  display: flex;
+justify-content: center;
+align-items: center;
+  min-height: 100vh;
+  background: url(./Login.webp) no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  }
+  .wrapper{
+  justify-content: center;
+    width:420px;
+    background:transparent;
+    border: 2px solid rgba(225, 225, 255, 0.2);
+    backdrop-filter:blur(10px);
+    color: #fff;
+    color: #262323;
+    border-radius:12px;
+    padding: 30px 40px;
+    text-align: center;
+
+}
+.heading{
+   margin-top:0;
+}
