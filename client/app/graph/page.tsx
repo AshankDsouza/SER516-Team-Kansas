@@ -1,11 +1,14 @@
 "use client"
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LineGraph from '../../components/graphs/lineGraph';
+import axios from 'axios';
 
 
 
 export default function GraphPage() {
+
+  const [graphData, setGraphData] = useState<any[]>([]);
 
 
   const data = [
@@ -40,6 +43,23 @@ export default function GraphPage() {
       "optimal_points": 20.0
     }];
 
+    useEffect(() => {
+
+      fetchData();
+
+      
+    }, []);
+
+    const fetchData = async () =>{
+      try {
+      
+        
+        setGraphData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     const getOpenPointsData = (dataPoints:any, pointType: string) =>{
       let points: any[][] = [];
 
@@ -53,8 +73,8 @@ export default function GraphPage() {
       return points;
     }
 
-    let open_points = getOpenPointsData(data, "open_points");
-    let opyimals_points = getOpenPointsData(data, "optimal_points");
+    let open_points = getOpenPointsData(graphData, "open_points");
+    let opyimals_points = getOpenPointsData(graphData, "optimal_points");
 
 
     let series:any = [];
