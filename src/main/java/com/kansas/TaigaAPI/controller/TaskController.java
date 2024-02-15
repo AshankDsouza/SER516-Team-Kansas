@@ -6,6 +6,7 @@ import com.kansas.TaigaAPI.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -23,4 +24,5 @@ public class TaskController {
     public List<JsonNode> getClosedTasks(@RequestParam("project") int projectId){
         return tasksService.getClosedTasks(projectId, authenticationService.getAuthToken());
     }
+
 }
