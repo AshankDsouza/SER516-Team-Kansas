@@ -5,7 +5,12 @@ import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 import java.util.HashMap;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/milestones")
@@ -46,5 +51,36 @@ public class MilestoneController {
         return sprintVal;
 
     }
+
+    @GetMapping("getDataForLeadTime")
+    public HashMap<Integer, HashMap<String, Date>> getDataForLeadTime(@RequestParam("projectId") int projectId, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+        HashMap<Integer, HashMap<String, Date>> map = new HashMap<>();
+        JsonNode jsonNode=getMilestoneList(projectId);
+        int jsonIndexForGivenSprint=jsonNode.size()-sprintNo;
+        int userStoryCount= jsonNode.get(jsonIndexForGivenSprint).get("user_stories").size();
+       // System.out.println("Sprint Index"+ jsonIndexForGivenSprint+" userStorySize "+userStoryCount);
+        for(int i=0;i<userStoryCount;i++)
+        {
+
+            if(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")!=null){
+            String createdDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")).asText();
+            String finishDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("finish_date")).asText();
+            // Parse string to Date object
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date createdDate = dateFormat.parse(createdDateStr);
+            Date finishDate=null;
+            if(finishDateStr.isEmpty()) {
+                 finishDate = dateFormat.parse(finishDateStr);
+            }
+                HashMap<String,Date> hs=new HashMap<String,Date>();
+            hs.put("created_date",createdDate);
+            hs.put("finish_date", finishDate);
+           // System.out.println("Date "+ i +" "+ createdDate);
+                map.put(i+1,hs);
+        }}
+        return map;
+    }
+
+
 
 }
