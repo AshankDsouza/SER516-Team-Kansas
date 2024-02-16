@@ -1,6 +1,9 @@
 package com.kansas.TaigaAPI.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +47,26 @@ public class MilestoneController {
                sprintVal.put(jsonNode.get(i).get("name").asText(),jsonNode.get(i).get("id").asInt());
            }
         return sprintVal;
+    }
 
+    @GetMapping("/{milestoneId}/getTotalStoryPoints")
+    public JsonNode getTotalStoryPoints(@PathVariable int milestoneId) {
+        JsonNode rootNode = milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(), milestoneId);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode arrayNode = mapper.createArrayNode();
+        if (rootNode.isArray()) {
+
+            for (JsonNode elementNode : rootNode) {
+                ObjectNode filteredObject = mapper.createObjectNode();
+                filteredObject.put("day", elementNode.get("day").asText());
+                filteredObject.put("open_points", elementNode.get("open_points").asDouble());
+                filteredObject.put("optimal_points", elementNode.get("optimal_points").asDouble());
+
+                arrayNode.add(filteredObject);
+            }
+        }
+        return arrayNode;
     }
 
 }
