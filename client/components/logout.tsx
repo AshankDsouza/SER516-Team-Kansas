@@ -5,7 +5,7 @@ import { Button } from "./ui/button"
 
 function Logout() {
   return (
-    <Button onClick={()=>deleteAuthToken()}>Logout</Button>
+    <Button onClick={()=>deleteAuthToken()} className=" text-xs">Logout</Button>
   )
 }
 
