@@ -2,7 +2,7 @@ import React from 'react'
 
 function LeadTime() {
   return (
-    <div>LeadTime</div>
+    <div>Lead Time</div>
   )
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 function CycleTime() {
   return (
-    <div>CycleTime</div>
+    <div>Cycle Time</div>
   )
 }
 
