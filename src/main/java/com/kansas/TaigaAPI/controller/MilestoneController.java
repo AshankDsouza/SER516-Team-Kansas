@@ -56,6 +56,8 @@ public class MilestoneController {
     public HashMap<Integer, HashMap<String, Date>> getDataForLeadTime(@RequestParam("projectId") int projectId, @RequestParam("sprintNo") int sprintNo) throws ParseException {
         HashMap<Integer, HashMap<String, Date>> map = new HashMap<>();
         JsonNode jsonNode=getMilestoneList(projectId);
+
+
         int jsonIndexForGivenSprint=jsonNode.size()-sprintNo;
         int userStoryCount= jsonNode.get(jsonIndexForGivenSprint).get("user_stories").size();
        // System.out.println("Sprint Index"+ jsonIndexForGivenSprint+" userStorySize "+userStoryCount);
