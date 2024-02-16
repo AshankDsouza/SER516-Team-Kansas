@@ -15,10 +15,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import getUserToken from "@/actions/userToken"
-import { redirect } from "next/navigation"
 import { useRouter } from "next/navigation"
 
-const formSchema = z.object({ "name": z.string().min(1).max(255), "password": z.string().min(1).max(255) })
+const formSchema = z.object({ "name": z.string().email(), "password": z.string() })
 
 export default function LoginForm() {
 
@@ -33,51 +32,47 @@ export default function LoginForm() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        
-        const userToken = await getUserToken(values.name, values.password)
-        router.push("/dashboard")
+        const userToken = await getUserToken(values.name, values.password);
+        console.log("token: ", userToken);
+
+        if (userToken) {
+            router.push("/project")
+        }
     }
 
     return (
-        <div className="flex p-16">
-            <Form {...form}>
-                <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>UserName</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="userName " {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Taiga userName
-                                </FormDescription>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="Password" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Taiga password
-                                </FormDescription>
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit">Submit</Button>
-                </form>
-            </Form>
+        <div className="flex p-16 h-screen w-screen items-center justify-center ">
+            <div className="flex border-2 rounded-md p-4">
+                <Form {...form}>
+                    <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col items-end">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>UserName</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="userName" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input type="password" placeholder="Password" {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <Button className=" w-min" type="submit">Submit</Button>
+                    </form>
+                </Form>
+            </div>
         </div>
     )
 }
