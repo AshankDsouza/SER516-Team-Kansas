@@ -1,6 +1,6 @@
 "use client"
 
-import { getProjectMilestones } from "@/actions/project"
+import { getBurndowMetrics, getProjectMilestones } from "@/actions/project"
 import {
     Select,
     SelectContent,
@@ -24,6 +24,7 @@ function Burndown() {
     const [showChart, setShowChart] = useState(false)
 
     useEffect(() => {
+        setShowChart(false)
         getProjectMilestones("1")
             .then((data: any) => {
                 setsprints(data)
@@ -31,14 +32,32 @@ function Burndown() {
             })
     }, [])
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'august', 'september', 'october'];
+    useEffect(() => {
+        setShowChart(false)
+        getBurndowMetrics(selectedSprintID)
+        .then((data:any)=>{
+            const daysArray = data.map((item:any) => item.day);
+            setLabels(daysArray)
+            const open_points = data.map((item: any)=>item.open_points)
+            setoptimal_points(open_points)
+        })
+        setShowChart(true)
+    }, [selectedSprintID])
 
+
+    const handleValueChange = async (e: any) => {
+        setselectedSprintID(e)
+    }
+
+    const [labels, setLabels] = useState<string[]>([])
+    const [optimal_points, setoptimal_points] = useState<number[]>([])
+    
     const data = {
         labels,
         datasets: [
             {
                 label: 'Optimal points',
-                data: [10, 20, 50, 40, 80, 100, 60, 30, 5, -1],
+                data: optimal_points,
                 borderColor: '#000',
                 backgroundColor: '#666',
             },
@@ -48,9 +67,9 @@ function Burndown() {
     return (
         <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
             <div className="filters flex flex-col divide-y-2">
-                <div className="p-8">Filters</div>
+                <div className="p-8 font-bold">Filters</div>
                 <div className="p-8">
-                    <Select onValueChange={(e) => setselectedSprintID(e)}>
+                    <Select onValueChange={handleValueChange}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Sprint" />
                         </SelectTrigger>
@@ -65,7 +84,7 @@ function Burndown() {
                     </Select>
                 </div>
             </div>
-            {showChart && <BurndownChart data={data} />}
+            {showChart ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
         </div>
     )
 }
