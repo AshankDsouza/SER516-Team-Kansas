@@ -123,15 +123,7 @@ public class TasksService {
     public static HashMap getTasksClosedByDate(int projectId, int sprintId, String authToken) {
         try{
 
-            String s = "2024-02-01";
-            String e = "2024-02-28";
-            LocalDate start = LocalDate.parse(s);
-            LocalDate end = LocalDate.parse(e);
-            List<LocalDate> totalDates = new ArrayList<>();
-            while (!start.isAfter(end)) {
-                totalDates.add(start);
-                start = start.plusDays(1);
-            }
+
             String sprintTasksUrl =  TAIGA_API_ENDPOINT + "/tasks?project=" + projectId + "&milestone=" + sprintId;
             HttpGet request = new HttpGet(sprintTasksUrl);
             request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
@@ -146,6 +138,16 @@ public class TasksService {
                 return error;
             }
 
+            LocalDate start = LocalDate.parse(taskData.get(0).get("created_date").toString().substring(1,11));
+            LocalDate end= LocalDate.now();
+            if(!taskData.get(0).get("finished_date").equals(null)){
+                 end= LocalDate.parse(taskData.get(0).get("finished_date").toString().substring(1,11));
+            }
+            List<LocalDate> totalDates = new ArrayList<>();
+            while (!start.isAfter(end)) {
+                totalDates.add(start);
+                start = start.plusDays(1);
+            }
             HashMap closedTasksByDay = new HashMap<>();
             for (JsonNode taskNode : taskData) {
                 boolean isClosed = taskNode.has("is_closed") && taskNode.get("is_closed").asBoolean();
