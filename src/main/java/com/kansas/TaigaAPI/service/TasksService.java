@@ -151,9 +151,9 @@ public class TasksService {
                 }
             }
             for (LocalDate remDate : totalDates){
-                if (closedTasksByDay.containsKey(remDate.toString())){}
+                if (closedTasksByDay.containsKey(remDate)){}
                 else{
-                closedTasksByDay.put(remDate.toString(),0);}
+                closedTasksByDay.put(remDate,0);}
             }
             return closedTasksByDay;
         }
