@@ -53,8 +53,8 @@ public class MilestoneController {
     }
 
     @GetMapping("getDataForLeadTime")
-    public HashMap<Integer, HashMap<String, Date>> getDataForLeadTime(@RequestParam("projectId") int projectId, @RequestParam("sprintNo") int sprintNo) throws ParseException {
-        HashMap<Integer, HashMap<String, Date>> map = new HashMap<>();
+    public HashMap<Integer, HashMap<String, String>> getDataForLeadTime(@RequestParam("projectId") int projectId, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+        HashMap<Integer, HashMap<String, String>> map = new HashMap<>();
         JsonNode jsonNode=getMilestoneList(projectId);
 
 
@@ -67,16 +67,11 @@ public class MilestoneController {
             if(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")!=null){
             String createdDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")).asText();
             String finishDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("finish_date")).asText();
-            // Parse string to Date object
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            Date createdDate = dateFormat.parse(createdDateStr);
-            Date finishDate=null;
-            if(finishDateStr.isEmpty()) {
-                 finishDate = dateFormat.parse(finishDateStr);
-            }
-                HashMap<String,Date> hs=new HashMap<String,Date>();
-            hs.put("created_date",createdDate);
-            hs.put("finish_date", finishDate);
+            String userStoryName =(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("subject")).asText();
+                HashMap<String,String> hs=new HashMap<String,String>();
+            hs.put("created_date",createdDateStr);
+            hs.put("finish_date", finishDateStr);
+            hs.put("userStory_Name", userStoryName);
            // System.out.println("Date "+ i +" "+ createdDate);
                 map.put(i+1,hs);
         }}
