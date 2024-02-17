@@ -23,7 +23,7 @@ public class AuthenticationService {
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
     private static String authToken;
 
-    public String authenticate(String username, String password) {
+    public String authenticate(String username, String password) throws Exception {
 
         // Endpoint to authenticate taiga's username and password
         String authEndpoint = TAIGA_API_ENDPOINT + "/auth";
@@ -36,6 +36,11 @@ public class AuthenticationService {
         try {
             HttpClient httpClient = HttpClients.createDefault();
             HttpResponse response = httpClient.execute(request);
+
+            if(response.getStatusLine().getStatusCode()==401){
+                throw new Exception(response.getStatusLine().getReasonPhrase());
+            }
+
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder result = new StringBuilder();
