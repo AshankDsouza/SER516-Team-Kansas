@@ -32,7 +32,8 @@ public class MilestoneService {
 
             return objectMapper.readTree(responseJson).get("days");
         } catch(Exception e) {
-//            log.error(e.getMessage());
+
+          //  log.error(e.getMessage());
             return null;
         }
     }
@@ -49,7 +50,9 @@ public class MilestoneService {
 
             return objectMapper.readTree(responseJson);
         } catch(Exception e) {
-//            log.error(e.getMessage());
+
+           // log.error(e.getMessage());
+
             return null;
         }
     }
