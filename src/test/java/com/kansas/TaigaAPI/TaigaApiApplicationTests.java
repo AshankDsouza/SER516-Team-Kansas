@@ -78,8 +78,6 @@ class TaigaApiApplicationTests {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Autowired
-	private MockMvc mockMvc;
 
 	@Mock
 	private TasksService tasksService;
@@ -90,7 +88,6 @@ class TaigaApiApplicationTests {
 	@InjectMocks
 	private MilestoneController milestoneController;
 
-	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@BeforeEach
 	void setUp() {
