@@ -1,14 +1,21 @@
 package com.kansas.TaigaAPI.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kansas.TaigaAPI.model.CycleTime;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
+import com.kansas.TaigaAPI.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
+import java.util.List;
+
 
 @RestController
-@RequestMapping("/api/milestones")
+@RequestMapping("/api")
 public class MilestoneController {
 
     @Autowired
@@ -16,6 +23,9 @@ public class MilestoneController {
 
     @Autowired
     private MilestoneService milestoneService;
+
+    @Autowired
+    private TasksService tasksService;
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@PathVariable int milestoneId) {
@@ -40,11 +50,37 @@ public class MilestoneController {
         JsonNode jsonNode=getMilestoneList(projectId);
         HashMap<String,Integer> sprintVal= new HashMap<String,Integer>();
            for(int i=0;i<jsonNode.size();i++) {
-           // System.out.println(jsonNode.get(i).get("id"));
                sprintVal.put(jsonNode.get(i).get("name").asText(),jsonNode.get(i).get("id").asInt());
            }
         return sprintVal;
-
     }
+    //Burndown chart
+    @GetMapping("/{milestoneId}/getBurnDownChart")
+    public JsonNode getTotalStoryPoints(@PathVariable int milestoneId) {
+        JsonNode rootNode = milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(), milestoneId);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode arrayNode = mapper.createArrayNode();
+        if (rootNode.isArray()) {
+
+            for (JsonNode elementNode : rootNode) {
+                ObjectNode filteredObject = mapper.createObjectNode();
+                filteredObject.put("day", elementNode.get("day").asText());
+                filteredObject.put("open_points", elementNode.get("open_points").asDouble());
+                filteredObject.put("optimal_points", elementNode.get("optimal_points").asDouble());
+
+                arrayNode.add(filteredObject);
+            }
+        }
+        return arrayNode;
+    }
+    //Cycle Time
+    @GetMapping("/{projectId}/{milestoneId}/getCycleTime")
+    public List<CycleTime> getCycleTime(@PathVariable int projectId, @PathVariable int milestoneId){
+        return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
+    }
+
+
+
 
 }
