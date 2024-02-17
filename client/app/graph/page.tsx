@@ -52,7 +52,10 @@ export default function GraphPage() {
 
     const fetchData = async () =>{
       try {
-      
+        //const data1 = await axios.get("http://localhost:8080/api/tasks/closedByDate?project=1521719&sprint=376621");
+
+        //console.log({data1});
+        
         
         setGraphData(data);
       } catch (error) {
@@ -83,7 +86,7 @@ export default function GraphPage() {
 
 
   return (<div>
-    <LineGraph series={series} />
+    <LineGraph series={series} name="Burndown chart" />
   </div>
   );
 };

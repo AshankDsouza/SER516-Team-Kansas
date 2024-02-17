@@ -7,11 +7,12 @@ import HighchartsReact from "highcharts-react-official";
 
 interface IProps{
     series: any;
+    name: string;
 }
 
 export default function LineGraph(props: IProps) {
 
-    const { series } = props;;
+    const { series, name } = props;;
 
   const options = {
         xAxis: {
@@ -21,7 +22,7 @@ export default function LineGraph(props: IProps) {
       type: "spline"
     },
     title: {
-      text: "My chart"
+      text: name
     },
     series: [
     ]
