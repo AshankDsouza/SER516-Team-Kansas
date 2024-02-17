@@ -14,7 +14,7 @@ import { useEffect, useState } from "react"
 import BurndownChart from "./burndownChart"
 
 
-function Burndown() {
+function Burndown({slug}:{slug: string}) {
     type sprint = {
         id: string,
         value: string
@@ -22,42 +22,38 @@ function Burndown() {
     const [sprints, setsprints] = useState<sprint[]>([{ id: '1', value: "sprint-1" }, { id: '2', value: "sprint-2" }, { id: '3', value: "sprint-3" }])
     const [selectedSprintID, setselectedSprintID] = useState("")
     const [showChart, setShowChart] = useState(false)
+    const [labels, setLabels] = useState<string[]>([])
+    const [open_points, setopen_points] = useState<number[]>([])
 
     useEffect(() => {
-        setShowChart(false)
         getProjectMilestones("1")
             .then((data: any) => {
                 setsprints(data)
                 setShowChart(true)
             })
+        setopen_points([])
     }, [])
 
     useEffect(() => {
-        setShowChart(false)
         getBurndowMetrics(selectedSprintID)
-        .then((data:any)=>{
-            const daysArray = data.map((item:any) => item.day);
-            setLabels(daysArray)
-            const open_points = data.map((item: any)=>item.open_points)
-            setoptimal_points(open_points)
-        })
-        setShowChart(true)
+            .then((data: any) => {
+                if(data.error)
+                return
+                const daysArray = data.map((item: any) => item.day);
+                setLabels(daysArray)
+                const open_points = data.map((item: any) => item.open_points)
+                setopen_points(open_points)
+
+            })
     }, [selectedSprintID])
 
 
-    const handleValueChange = async (e: any) => {
-        setselectedSprintID(e)
-    }
-
-    const [labels, setLabels] = useState<string[]>([])
-    const [optimal_points, setoptimal_points] = useState<number[]>([])
-    
     const data = {
         labels,
         datasets: [
             {
                 label: 'Optimal points',
-                data: optimal_points,
+                data: open_points,
                 borderColor: '#000',
                 backgroundColor: '#666',
             },
@@ -69,7 +65,7 @@ function Burndown() {
             <div className="filters flex flex-col divide-y-2">
                 <div className="p-8 font-bold">Filters</div>
                 <div className="p-8">
-                    <Select onValueChange={handleValueChange}>
+                    <Select onValueChange={(e) => setselectedSprintID(e)}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Sprint" />
                         </SelectTrigger>
