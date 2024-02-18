@@ -81,20 +81,23 @@ public class MilestoneController {
         return arrayNode;
     }
     //Cycle Time
-    @GetMapping("/{projectId}/{milestoneId}/getCycleTime")
-    public List<CycleTime> getCycleTime(@PathVariable int projectId, @PathVariable int milestoneId){
+    @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
+    public List<CycleTime> getCycleTime(@PathVariable String projectSlug, @PathVariable int milestoneId){
+        ProjectService projectService =new ProjectService();
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
     }
 
     @GetMapping("getDataForLeadTime")
-    public HashMap<Integer, HashMap<String, String>> getDataForLeadTime(@RequestParam("projectId") int projectId, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+    public HashMap<Integer, HashMap<String, String>> getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+        ProjectService projectService =new ProjectService();
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+
         HashMap<Integer, HashMap<String, String>> map = new HashMap<>();
         JsonNode jsonNode=getMilestoneList(projectId);
 
-
         int jsonIndexForGivenSprint=jsonNode.size()-sprintNo;
         int userStoryCount= jsonNode.get(jsonIndexForGivenSprint).get("user_stories").size();
-       // System.out.println("Sprint Index"+ jsonIndexForGivenSprint+" userStorySize "+userStoryCount);
         for(int i=0;i<userStoryCount;i++)
         {
 
@@ -106,7 +109,6 @@ public class MilestoneController {
             hs.put("created_date",createdDateStr);
             hs.put("finish_date", finishDateStr);
             hs.put("userStory_Name", userStoryName);
-           // System.out.println("Date "+ i +" "+ createdDate);
                 map.put(i+1,hs);
         }}
         return map;
