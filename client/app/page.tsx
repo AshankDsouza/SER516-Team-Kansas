@@ -16,12 +16,15 @@ import {
 import { Input } from "@/components/ui/input"
 import getUserToken from "@/actions/userToken"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 const formSchema = z.object({ "name": z.string().email(), "password": z.string() })
 
 export default function LoginForm() {
 
     const router = useRouter()
+
+    const [loginError, setLoginError] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -32,10 +35,11 @@ export default function LoginForm() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoginError(false);
         const userToken = await getUserToken(values.name, values.password);
-        console.log("token: ", userToken);
-
-        if (userToken) {
+        if (userToken == "wrong creds") {
+            setLoginError(true);
+        }else{
             router.push("/project")
         }
     }
@@ -49,7 +53,7 @@ export default function LoginForm() {
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className=" w-full">
                                     <FormLabel>UserName</FormLabel>
                                     <FormControl>
                                         <Input placeholder="userName" {...field} />
@@ -61,7 +65,7 @@ export default function LoginForm() {
                             control={form.control}
                             name="password"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className=" w-full">
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
                                         <Input type="password" placeholder="Password" {...field} />
@@ -69,6 +73,7 @@ export default function LoginForm() {
                                 </FormItem>
                             )}
                         />
+                        {loginError && <p className="text-xs p-2 bg-red-300 rounded-sm text-red-800 border-red-800 border-2">Wrong username or password</p>}
                         <Button className=" w-min" type="submit">Submit</Button>
                     </form>
                 </Form>
