@@ -13,9 +13,9 @@ This project is a Java application for interacting with the Taiga API to perform
 ### 2) Compile and Run the spring boot application
 Go to the project root and compile the Maven project
 ```bash
-mvn compile spring:boot-run
-or
 mvn spring-boot:run
+or
+mvn compile spring:boot-run
    ```
 ### 3) Open and new terminal Install dependencies and start the NPM server
 
