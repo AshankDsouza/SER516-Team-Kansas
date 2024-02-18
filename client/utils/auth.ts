@@ -1,8 +1,6 @@
-"use server"
-
 import { cookies } from "next/headers";
 
-export async function getRequestOptions() {
+export function getRequestOptions() {
     var myHeaders = new Headers();
     const auth_token = cookies().get("auth_token");
 
