@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.model.CycleTime;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
+import com.kansas.TaigaAPI.service.ProjectService;
 import com.kansas.TaigaAPI.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,9 @@ public class MilestoneController {
     }
 
     @GetMapping("/getAllSprints")
-    public HashMap<String,Integer> getAllSprints(@RequestParam("project") int projectId){
+    public HashMap<String,Integer> getAllSprints(@RequestParam("project") String projectSlug){
+        ProjectService projectService =new ProjectService();
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         JsonNode jsonNode=getMilestoneList(projectId);
         HashMap<String,Integer> sprintVal= new HashMap<String,Integer>();
            for(int i=0;i<jsonNode.size();i++) {
@@ -54,6 +57,7 @@ public class MilestoneController {
            }
         return sprintVal;
     }
+
     //Burndown chart
     @GetMapping("/{milestoneId}/getBurnDownChart")
     public JsonNode getTotalStoryPoints(@PathVariable int milestoneId) {
