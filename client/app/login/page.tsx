@@ -33,10 +33,7 @@ export default function LoginForm() {
     }
 
     return (
-        <div className="flex p-16" link rel="stylesheet" type="text/css" href="page.css">
-
-
-
+        <div className="flex p-16">
             <div className="wrapper">
             <Form {...form}>
                 <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
