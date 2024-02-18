@@ -1,10 +1,10 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-export default async function getUserToken(userName: string, password: string) {
+export default async function getUserToken(userName: string, password: string): Promise<string> {
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -14,23 +14,25 @@ export default async function getUserToken(userName: string, password: string) {
         "password": password
     });
 
+    const response = await fetch("http://localhost:8080/api/auth", {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+    });
 
+    const res = z.object({
+        token: z.string()
+    });
 
     try {
-        const response = await fetch("http://localhost:8080/api/auth", {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-        });
         const tokenObj = await response.json();
+        res.parse(tokenObj)
         const token = tokenObj.token;
-        if(token){
-            cookies().set('auth_token', token);
-        }
-        return token;
+        cookies().set('auth_token', token, {expires: Date.now()+300000});
+        return "token";
 
     } catch (error) {
-        console.error("fetch call failed: ", error);
+        return "wrong creds";
     }
 }
 
