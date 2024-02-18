@@ -5,16 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kansas.TaigaAPI.TaigaApiApplication;
+import com.kansas.TaigaAPI.model.CycleTime;
 import com.kansas.TaigaAPI.utils.GlobalData;
 import com.kansas.TaigaAPI.utils.HTTPRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -25,7 +29,10 @@ public class TasksService {
 
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
 
-    public static List<JsonNode> getClosedTasks(int projectId, String authToken) {
+    @Autowired
+    private  AuthenticationService authenticationService;
+
+    public List<JsonNode> getClosedTasks(int projectId, String authToken) {
 
         // API to get list of all tasks in a project.
         String endpoint = TAIGA_API_ENDPOINT + "/tasks?project=" + projectId;
@@ -55,12 +62,12 @@ public class TasksService {
         }
     }
 
-    private static LocalDateTime parseDateTime(String dateTimeString) {
+    private LocalDateTime parseDateTime(String dateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
         return LocalDateTime.parse(dateTimeString, formatter);
     }
 
-    private static int[] calculateCycleTime(JsonNode historyData, LocalDateTime finishedDate) {
+    private int[] calculateCycleTime(JsonNode historyData, LocalDateTime finishedDate) {
         int cycleTime = 0;
         int closedTasks = 0;
 
@@ -80,32 +87,92 @@ public class TasksService {
         return new int[]{cycleTime, closedTasks};
     }
 
-    public static List<Integer> getTaskHistory(List<JsonNode> tasks, String authToken) {
-        List<Integer> result = new ArrayList<>(List.of(0, 0));
-
+    public List<CycleTime> getTaskHistory(int projectId, int milestoneId, String authToken) {
+        List<CycleTime> result = new ArrayList<>();
+        List<JsonNode> tasks =  getClosedTasks(projectId, authToken);
         for (JsonNode task : tasks) {
             int taskId = task.get("id").asInt();
+            int milestone = task.get("milestone").asInt();
 
-            // API to get history of task
-            String taskHistoryUrl = TAIGA_API_ENDPOINT + "/history/task/" + taskId;
+            if(milestone == milestoneId){
+                String taskHistoryUrl = TAIGA_API_ENDPOINT + "/history/task/" + taskId;
+                try {
+                    HttpGet request = new HttpGet(taskHistoryUrl);
+                    request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
+                    request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
-            try {
-                HttpGet request = new HttpGet(taskHistoryUrl);
-                request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
-                request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                    String responseJson = HTTPRequest.sendHttpRequest(request);
+                    JsonNode historyData = objectMapper.readTree(responseJson);
+                 //   System.out.println(historyData);
+                    LocalDateTime finishedDate = parseDateTime(task.get("finished_date").asText());
 
-                String responseJson = HTTPRequest.sendHttpRequest(request);
+                    int[] cycleTimeAndClosedTasks = calculateCycleTime(historyData, finishedDate);
+                    String taskName = task.get("subject").toString();
+                    result.add(new CycleTime(taskName,cycleTimeAndClosedTasks[0],cycleTimeAndClosedTasks[1]));
 
-                JsonNode historyData = objectMapper.readTree(responseJson);
-                LocalDateTime finishedDate = parseDateTime(task.get("finished_date").asText());
-
-                int[] cycleTimeAndClosedTasks = calculateCycleTime(historyData, finishedDate);
-                result.set(0, result.get(0) + cycleTimeAndClosedTasks[0]);
-                result.set(1, result.get(1) + cycleTimeAndClosedTasks[1]);
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+            // API to get history of task
         return result;
     }
+
+
+    public static HashMap getTasksClosedByDate(int projectId, int sprintId, String authToken) {
+        try{
+
+
+            String sprintTasksUrl =  TAIGA_API_ENDPOINT + "/tasks?project=" + projectId + "&milestone=" + sprintId;
+            HttpGet request = new HttpGet(sprintTasksUrl);
+            request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
+            request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+
+            String responseJson = HTTPRequest.sendHttpRequest(request);
+            JsonNode taskData = objectMapper.readTree(responseJson);
+            if (taskData.get("code") == null){}
+            else if (taskData.get("code").asText().equals("token_not_valid")){
+                HashMap error = new HashMap<>();
+                error.put("error","Token not valid");
+                return error;
+            }
+
+            LocalDate start = LocalDate.parse(taskData.get(0).get("created_date").toString().substring(1,11));
+            LocalDate end= LocalDate.now();
+            if(!taskData.get(0).get("finished_date").equals(null)){
+                 end= LocalDate.parse(taskData.get(0).get("finished_date").toString().substring(1,11));
+            }
+            List<LocalDate> totalDates = new ArrayList<>();
+            while (!start.isAfter(end)) {
+                totalDates.add(start);
+                start = start.plusDays(1);
+            }
+            HashMap closedTasksByDay = new HashMap<>();
+            for (JsonNode taskNode : taskData) {
+                boolean isClosed = taskNode.has("is_closed") && taskNode.get("is_closed").asBoolean();
+                if (isClosed) {
+                    LocalDate date = LocalDate.parse(taskNode.get("finished_date").toString().substring(1,11));
+                    if (closedTasksByDay.containsKey(date)){
+                        closedTasksByDay.put(date, Integer.parseInt(closedTasksByDay.get(date).toString()) + 1);
+                    }
+                    else {
+                        closedTasksByDay.put(date, 1);
+                    }
+                }
+            }
+            for (LocalDate remDate : totalDates){
+                if (closedTasksByDay.containsKey(remDate)){}
+                else{
+                closedTasksByDay.put(remDate,0);}
+            }
+            return closedTasksByDay;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
 }
