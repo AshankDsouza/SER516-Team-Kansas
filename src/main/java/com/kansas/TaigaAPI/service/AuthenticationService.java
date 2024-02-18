@@ -23,7 +23,7 @@ public class AuthenticationService {
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
     private static String authToken;
 
-    public void authenticate(String username, String password) {
+    public String authenticate(String username, String password) throws Exception {
 
         // Endpoint to authenticate taiga's username and password
         String authEndpoint = TAIGA_API_ENDPOINT + "/auth";
@@ -37,6 +37,11 @@ public class AuthenticationService {
             HttpClient httpClient = HttpClients.createDefault();
             HttpResponse response = httpClient.execute(request);
 
+            if(response.getStatusLine().getStatusCode()==401){
+                throw new Exception(response.getStatusLine().getReasonPhrase());
+            }
+
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder result = new StringBuilder();
             String line;
@@ -45,22 +50,25 @@ public class AuthenticationService {
                 result.append(line);
             }
 
-            parseAuthToken(result.toString());
+            return parseAuthToken(result.toString());
         } catch (IOException e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
-    private void parseAuthToken(String responseJson) {
+    private String parseAuthToken(String responseJson) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseJson);
             authToken = rootNode.path("auth_token").asText();
+            return authToken;
         } catch (Exception e) {
-            log.error(e.getMessage());
+//            log.error(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
     public String getAuthToken() {
