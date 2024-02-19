@@ -52,7 +52,7 @@ export const options = {
 
 export default function BurndownChart(data: any) {
     return (
-        <div className="flex-1 p-16 h-fit">
+        <div className="flex-1 p-16 h-fit overflow-scroll">
             <Line options={options} data={data.data} redraw={true} />
         </div>
     )

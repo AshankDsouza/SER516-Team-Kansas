@@ -140,9 +140,7 @@ public class TasksService {
 
             LocalDate start = LocalDate.parse(taskData.get(0).get("created_date").toString().substring(1,11));
             LocalDate end= LocalDate.now();
-            if(!taskData.get(0).get("finished_date").equals(null)){
-                 end= LocalDate.parse(taskData.get(0).get("finished_date").toString().substring(1,11));
-            }
+
             List<LocalDate> totalDates = new ArrayList<>();
             while (!start.isAfter(end)) {
                 totalDates.add(start);
