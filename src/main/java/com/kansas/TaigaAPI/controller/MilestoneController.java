@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,11 +90,11 @@ public class MilestoneController {
     }
 
     @GetMapping("getDataForLeadTime")
-    public HashMap<Integer, HashMap<String, String>> getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+    public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintNo") int sprintNo) throws ParseException {
         ProjectService projectService =new ProjectService();
         int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
 
-        HashMap<Integer, HashMap<String, String>> map = new HashMap<>();
+        ArrayList map = new ArrayList();
         JsonNode jsonNode=getMilestoneList(projectId);
 
         int jsonIndexForGivenSprint=jsonNode.size()-sprintNo;
@@ -109,7 +110,7 @@ public class MilestoneController {
             hs.put("created_date",createdDateStr);
             hs.put("finish_date", finishDateStr);
             hs.put("userStory_Name", userStoryName);
-                map.put(i+1,hs);
+                map.add(hs);
         }}
         return map;
     }
