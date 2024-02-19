@@ -1,0 +1,15 @@
+com/kansas/TaigaAPI/controller/TaskController.class
+com/kansas/TaigaAPI/controller/ProjectController.class
+com/kansas/TaigaAPI/model/AuthRequest.class
+com/kansas/TaigaAPI/controller/MilestoneController.class
+com/kansas/TaigaAPI/service/ProjectService.class
+com/kansas/TaigaAPI/utils/HTTPRequest.class
+com/kansas/TaigaAPI/service/AuthenticationService.class
+com/kansas/TaigaAPI/controller/TaigaAPI.class
+com/kansas/TaigaAPI/service/MilestoneService.class
+com/kansas/TaigaAPI/controller/OAuthController.class
+com/kansas/TaigaAPI/model/CycleTime.class
+com/kansas/TaigaAPI/TaigaApiApplication.class
+com/kansas/TaigaAPI/utils/GlobalData.class
+com/kansas/TaigaAPI/Main.class
+com/kansas/TaigaAPI/service/TasksService.class
