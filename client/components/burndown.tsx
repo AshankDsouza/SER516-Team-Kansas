@@ -53,7 +53,7 @@ function Burndown(prop:any) {
         labels,
         datasets: [
             {
-                label: 'Optimal points',
+                label: 'Open points',
                 data: open_points,
                 borderColor: '#000',
                 backgroundColor: '#666',
