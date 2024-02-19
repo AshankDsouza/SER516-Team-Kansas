@@ -6,7 +6,7 @@ function page({ params }: { params: { slug: string } }) {
     <div>
         <NavBar/>
         <div className="p-8 flex flex-col">
-        <Dashboard/>
+        <Dashboard slug={params.slug}/>
         </div>
     </div>
   )

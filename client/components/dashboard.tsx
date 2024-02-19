@@ -6,7 +6,7 @@ import Burndown from "./burndown"
 import LeadTime from "./leadtime"
 import CycleTime from "./cycletime"
 
-function Dashboard() {
+function Dashboard({slug}:{slug: string}) {
     const [chart, setChart] = useState("Burndown")
     const charts = ["Burndown", "Lead time", "Cycle time"]
 
@@ -17,9 +17,9 @@ function Dashboard() {
                 <Button key={chart} onClick={()=>setChart(chart)}>{chart}</Button>
             )}
         </div>
-        {chart=="Burndown"? <Burndown/>: <div></div>}
-        {chart=="Lead time"? <LeadTime/>: <div></div>}
-        {chart=="Cycle time"? <CycleTime/>: <div></div>}
+        {chart=="Burndown"? <Burndown slug={slug}/>: <div></div>}
+        {chart=="Lead time"? <LeadTime slug={slug} />: <div></div>}
+        {chart=="Cycle time"? <CycleTime slug={slug} />: <div></div>}
     </div>
   )
 }
