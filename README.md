@@ -2,6 +2,11 @@
 ## Taiga API Integration
 This project is a Java application for interacting with the Taiga API to perform various task and calculating metrics.
 ## Setting up the application
+### 0) Install dependencies
+Install the following on your system:
+java
+maven
+
 ### 1) Clone the repository
 
 
