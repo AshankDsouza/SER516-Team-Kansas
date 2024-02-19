@@ -37,6 +37,26 @@ export async function getCyleTime(projectSlug: string, milestoneId: string) {
     return cycleTimeData;   
 }
 
+export async function getLeadTime(projectSlug: string, sprintId: string) {
+    var myHeaders = new Headers();
+    const auth_token = cookies().get("auth_token")
+    myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders
+    };
+    //http://localhost:8080/api/getDataForLeadTime?projectSlug=ser516asu-ser516-team-kansas&sprintNo=1
+    const url = `http://localhost:8080/api/getDataForLeadTime?projectSlug=${projectSlug}&sprintNo=1`;
+    console.log({url: url});
+
+    
+
+    const response = await fetch(url, requestOptions)
+    let leadTimeData = await response.json()
+    return leadTimeData;   
+}
+
 export async function getBurndowMetrics(milestoneId: string) {
     const response = await fetch(`http://localhost:8080/api/${milestoneId}/getBurnDownChart`, getRequestOptions())
     let BurndownData = await response.json()

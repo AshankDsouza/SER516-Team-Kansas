@@ -9,6 +9,7 @@ import { getCyleTime } from "@/actions/project";
 interface IProps {
   series: any;
   labels: string[];
+  name: string;
 }
 
 function BarGraph(props: IProps) {
@@ -23,7 +24,7 @@ function BarGraph(props: IProps) {
         type: 'column'
     },
     title: {
-        text: 'Cycle time',
+        text: name,
         align: 'left'
     },
     xAxis: {
