@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,8 +111,8 @@ public class MilestoneController {
             int closedTasks = 0;
             if(!relData.get(i).get("finish_date").isNull()){
 
-            String createdDate = relData.get(i).get("created_date").toString();
-            String finishDate = relData.get(i).get("finish_date").toString();
+            LocalDate createdDate = LocalDate.parse(relData.get(i).get("created_date").toString().substring(1,11));
+            LocalDate finishDate = LocalDate.parse(relData.get(i).get("finish_date").toString().substring(1,11));
             String userStoryName =(relData.get(i).get("subject")).asText();
 //            leadTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishDate.toLocalDate().atStartOfDay()).toDays();
             HashMap hs=new HashMap();
