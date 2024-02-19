@@ -17,6 +17,12 @@ maven
 
 ### 2) Compile and Run the spring boot application
 Go to the project root and compile the Maven project
+to install dependencies run:
+```bash
+mvn clean install -U
+   ```
+To run the backend application run
+
 ```bash
 mvn spring-boot:run
 or
