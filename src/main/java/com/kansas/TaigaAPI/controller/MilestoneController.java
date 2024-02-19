@@ -11,6 +11,8 @@ import com.kansas.TaigaAPI.service.ProjectService;
 import com.kansas.TaigaAPI.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -79,11 +81,38 @@ public class MilestoneController {
         return arrayNode;
     }
     //Cycle Time
-    @GetMapping("/{projectId}/{milestoneId}/getCycleTime")
-    public List<CycleTime> getCycleTime(@PathVariable int projectId, @PathVariable int milestoneId){
+    @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
+    public List<CycleTime> getCycleTime(@PathVariable String projectSlug, @PathVariable int milestoneId){
+        ProjectService projectService =new ProjectService();
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
     }
 
+    @GetMapping("getDataForLeadTime")
+    public HashMap<Integer, HashMap<String, String>> getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+        ProjectService projectService =new ProjectService();
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+
+        HashMap<Integer, HashMap<String, String>> map = new HashMap<>();
+        JsonNode jsonNode=getMilestoneList(projectId);
+
+        int jsonIndexForGivenSprint=jsonNode.size()-sprintNo;
+        int userStoryCount= jsonNode.get(jsonIndexForGivenSprint).get("user_stories").size();
+        for(int i=0;i<userStoryCount;i++)
+        {
+
+            if(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")!=null){
+            String createdDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")).asText();
+            String finishDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("finish_date")).asText();
+            String userStoryName =(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("subject")).asText();
+                HashMap<String,String> hs=new HashMap<String,String>();
+            hs.put("created_date",createdDateStr);
+            hs.put("finish_date", finishDateStr);
+            hs.put("userStory_Name", userStoryName);
+                map.put(i+1,hs);
+        }}
+        return map;
+    }
 
 
 
