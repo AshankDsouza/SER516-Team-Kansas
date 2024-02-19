@@ -14,7 +14,10 @@ import { useEffect, useState } from "react"
 import BarGraph from "./barGraph"
 
 
-function LeadTime() {
+function LeadTime(props: any) {
+  const {slug} = props;
+
+
   type sprint = {
     id: string,
     value: string
@@ -26,7 +29,7 @@ function LeadTime() {
   const [open_points, setopen_points] = useState<number[]>([])
 
   useEffect(() => {
-    getProjectMilestones("1")
+    getProjectMilestones(slug)
       .then((data: any) => {
         setsprints(data)
         setShowChart(true)
@@ -80,7 +83,7 @@ function LeadTime() {
           </Select>
         </div>
       </div>
-      {showChart ? <BarGraph/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <BarGraph series={undefined}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
