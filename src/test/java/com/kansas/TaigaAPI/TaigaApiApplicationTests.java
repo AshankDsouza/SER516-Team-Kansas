@@ -3,6 +3,7 @@ package com.kansas.TaigaAPI;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kansas.TaigaAPI.model.AuthRequest;
+import com.kansas.TaigaAPI.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,8 @@ class TaigaApiApplicationTests {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Mock
+	private ProjectService projectService;
 
 	@Mock
 	private TasksService tasksService;
@@ -96,8 +99,9 @@ class TaigaApiApplicationTests {
 
 	@Test
 	public void getCycleTime_ShouldReturnCycleTimes() throws Exception {
+		String projectSlug = "ser516asu-ser516-team-kansas";
+		int milestoneId = 376621;
 		int projectId = 1;
-		int milestoneId = 1;
 		String authToken = "auth-token";
 
 		List<CycleTime> expectedCycleTimes = new ArrayList<>();
@@ -105,11 +109,12 @@ class TaigaApiApplicationTests {
 		expectedCycleTimes.add(new CycleTime("ABC",10,2));
 
 		given(authenticationService.getAuthToken()).willReturn(authToken);
+		given(projectService.getProjectId(authToken, projectSlug)).willReturn(projectId);
 		given(tasksService.getTaskHistory(projectId, milestoneId, authToken)).willReturn(expectedCycleTimes);
 
 		String expectedJson = objectMapper.writeValueAsString(expectedCycleTimes);
 
-		mockMvc.perform(get("/api/" + projectId + "/" + milestoneId + "/getCycleTime")
+		mockMvc.perform(get("/api/" + projectSlug + "/" + milestoneId + "/getCycleTime")
 						.contentType(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().json(expectedJson));

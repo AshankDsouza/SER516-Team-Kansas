@@ -35,6 +35,9 @@ public class MilestoneController {
     @Autowired
     private TasksService tasksService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@PathVariable int milestoneId) {
         return milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(), milestoneId);
@@ -88,14 +91,12 @@ public class MilestoneController {
     //Cycle Time
     @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
     public List<CycleTime> getCycleTime(@PathVariable String projectSlug, @PathVariable int milestoneId){
-        ProjectService projectService =new ProjectService();
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
     }
 
     @GetMapping("getDataForLeadTime")
     public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) throws ParseException {
-        ProjectService projectService =new ProjectService();
         int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
 
         ArrayList map = new ArrayList();
