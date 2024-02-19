@@ -94,7 +94,7 @@ function CycleTime(props:any) {
           </Select>
         </div>
       </div>
-      {showChart ? <BarGraph labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <BarGraph name="Cycle Time" labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
