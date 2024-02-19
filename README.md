@@ -40,3 +40,6 @@ npm run dev
 ### NOTE
 In case you don't have Maven installed, please refer to following tutorial
 https://phoenixnap.com/kb/install-maven-windows
+
+### 4) Open browser with the following url http://localhost:3000 and login with Taiga credentials
+
