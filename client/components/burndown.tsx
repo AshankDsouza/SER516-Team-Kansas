@@ -14,7 +14,8 @@ import { useEffect, useState } from "react"
 import BurndownChart from "./burndownChart"
 
 
-function Burndown({slug}:{slug: string}) {
+function Burndown(prop:any) {
+    const {slug} = prop;
     type sprint = {
         id: string,
         value: string
@@ -26,7 +27,7 @@ function Burndown({slug}:{slug: string}) {
     const [open_points, setopen_points] = useState<number[]>([])
 
     useEffect(() => {
-        getProjectMilestones("1")
+        getProjectMilestones(slug)
             .then((data: any) => {
                 setsprints(data)
                 setShowChart(true)
