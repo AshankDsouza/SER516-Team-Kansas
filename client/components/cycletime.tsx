@@ -37,12 +37,9 @@ function CycleTime(props:any) {
   }, [])
 
   useEffect(() => {
-    console.log({selectedSprintID});
-    
+    setShowChart(false)    
     getCyleTime(slug , selectedSprintID)
       .then((data: any) => {
-        console.log({cycleData:data});
-        
         if (data.error)
           return
         const labels = data.map((item: any) => item.taskName);
@@ -57,7 +54,7 @@ function CycleTime(props:any) {
           }
         ]
         setSeries(series)
-
+        setShowChart(true)
       })
   }, [selectedSprintID])
 

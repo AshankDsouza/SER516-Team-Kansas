@@ -27,13 +27,9 @@ export async function getCyleTime(projectSlug: string, milestoneId: string) {
     };
 
     const url = `${process.env.API_URL}/api/${projectSlug}/${milestoneId}/getCycleTime`;
-    console.log({ url: url });
-
-
 
     const response = await fetch(url, requestOptions)
     let cycleTimeData = await response.json()
-    console.log({ cycleTimeData });
     return cycleTimeData;
 }
 
@@ -48,9 +44,6 @@ export async function getLeadTime(projectSlug: string, sprintId: string) {
     };
     //http://localhost:8080/api/getDataForLeadTime?projectSlug=ser516asu-ser516-team-kansas&sprintNo=1
     const url = `http://localhost:8080/api/getDataForLeadTime?projectSlug=${projectSlug}&sprintId=${sprintId}`;
-    console.log({url: url});
-
-    
 
     const response = await fetch(url, requestOptions)
     let leadTimeData = await response.json()
