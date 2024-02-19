@@ -13,9 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import com.kansas.TaigaAPI.service.TasksService.*;
+
 
 
 @RestController
@@ -90,31 +94,43 @@ public class MilestoneController {
     }
 
     @GetMapping("getDataForLeadTime")
-    public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintNo") int sprintNo) throws ParseException {
+    public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) throws ParseException {
         ProjectService projectService =new ProjectService();
         int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
 
         ArrayList map = new ArrayList();
         JsonNode jsonNode=getMilestoneList(projectId);
 
-        int jsonIndexForGivenSprint=jsonNode.size()-sprintNo;
-        int userStoryCount= jsonNode.get(jsonIndexForGivenSprint).get("user_stories").size();
-        for(int i=0;i<userStoryCount;i++)
+        JsonNode relData = getGivenSprintData(sprintId,jsonNode);
+        relData = relData.get("user_stories");
+        for(int i=0;i<relData.size();i++)
         {
+            int leadTime = 0;
+            int closedTasks = 0;
+            if(!relData.get(i).get("finish_date").isNull()){
 
-            if(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")!=null){
-            String createdDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("created_date")).asText();
-            String finishDateStr = (jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("finish_date")).asText();
-            String userStoryName =(jsonNode.get(jsonIndexForGivenSprint).get("user_stories").get(i).get("subject")).asText();
-                HashMap<String,String> hs=new HashMap<String,String>();
-            hs.put("created_date",createdDateStr);
-            hs.put("finish_date", finishDateStr);
+            String createdDate = relData.get(i).get("created_date").toString();
+            String finishDate = relData.get(i).get("finish_date").toString();
+            String userStoryName =(relData.get(i).get("subject")).asText();
+//            leadTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishDate.toLocalDate().atStartOfDay()).toDays();
+            HashMap hs=new HashMap();
+            hs.put("created_date",createdDate);
+            hs.put("finish_date", finishDate);
             hs.put("userStory_Name", userStoryName);
+//            hs.put("lead_time",leadTime);
                 map.add(hs);
         }}
         return map;
     }
 
+    public JsonNode getGivenSprintData(int sprintId, JsonNode allSprintData){
+        for(int i=0;i<allSprintData.size();i++){
+            if (Integer.parseInt(allSprintData.get(i).get("id").toString())==sprintId){
+                return allSprintData.get(i);
+            }
 
+        }
+        return null;
+    }
 
 }
