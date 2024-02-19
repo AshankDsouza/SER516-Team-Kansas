@@ -18,8 +18,8 @@ function Dashboard({slug}:{slug: string}) {
             )}
         </div>
         {chart=="Burndown"? <Burndown slug={slug}/>: <div></div>}
-        {chart=="Lead time"? <LeadTime/>: <div></div>}
-        {chart=="Cycle time"? <CycleTime/>: <div></div>}
+        {chart=="Lead time"? <LeadTime slug={slug} />: <div></div>}
+        {chart=="Cycle time"? <CycleTime slug={slug} />: <div></div>}
     </div>
   )
 }
