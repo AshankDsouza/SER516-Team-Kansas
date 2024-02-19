@@ -47,7 +47,7 @@ export async function getLeadTime(projectSlug: string, sprintId: string) {
         headers: myHeaders
     };
     //http://localhost:8080/api/getDataForLeadTime?projectSlug=ser516asu-ser516-team-kansas&sprintNo=1
-    const url = `http://localhost:8080/api/getDataForLeadTime?projectSlug=${projectSlug}&sprintNo=1`;
+    const url = `http://localhost:8080/api/getDataForLeadTime?projectSlug=${projectSlug}&sprintId=${sprintId}`;
     console.log({url: url});
 
     
