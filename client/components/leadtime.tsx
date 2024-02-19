@@ -1,6 +1,6 @@
 "use client"
 
-import { getBurndowMetrics, getProjectMilestones } from "@/actions/project"
+import { getLeadTime, getProjectMilestones } from "@/actions/project"
 import {
   Select,
   SelectContent,
@@ -27,6 +27,8 @@ function LeadTime(props: any) {
   const [showChart, setShowChart] = useState(false)
   const [labels, setLabels] = useState<string[]>([])
   const [open_points, setopen_points] = useState<number[]>([])
+  const [series, setSeries] = useState<any[]>([])
+
 
   useEffect(() => {
     getProjectMilestones(slug)
@@ -38,14 +40,59 @@ function LeadTime(props: any) {
   }, [])
 
   useEffect(() => {
-    getBurndowMetrics(selectedSprintID)
-      .then((data: any) => {
-        if (data.error)
+    console.log({selectedSprintID});
+    
+    getLeadTime(slug, selectedSprintID)
+      .then((leadData: any) => {
+
+        if (leadData.error)
           return
-        const daysArray = data.map((item: any) => item.day);
-        setLabels(daysArray)
-        const open_points = data.map((item: any) => item.open_points)
-        setopen_points(open_points)
+
+
+        const cleanData:any[] = [];
+
+        leadData.forEach((dataPoint: any) => {
+          if (dataPoint.finish_date !== 'null') {
+            //console.log({ dataPoint })
+
+
+            const finishDate = new Date(dataPoint.finish_date);
+            const createdDate = new Date(dataPoint.created_date);
+
+            // Calculate the difference in milliseconds
+            const timeDifference:number = Math.abs(createdDate.getTime() - finishDate.getTime());
+
+            //console.log({timeDifference});
+            
+
+            // Convert milliseconds to days
+            dataPoint.dayCount= Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); 
+            //console.log("Number of days difference:", dataPoint.dayCount);
+            cleanData.push(dataPoint);
+
+          }
+
+        })
+
+        
+          
+        const dayCountList = cleanData.map((item: any) => item.dayCount);
+        const taskNames = cleanData.map((item: any) => item.userStory_Name)
+
+        console.log({taskNames});
+        console.log({dayCountList});
+
+        let series = [
+          {
+              name: 'Lead Time',
+              data: dayCountList
+          }
+        ]
+
+        
+        setLabels(taskNames)
+
+        setSeries(series)
 
       })
   }, [selectedSprintID])
@@ -83,7 +130,7 @@ function LeadTime(props: any) {
           </Select>
         </div>
       </div>
-      {showChart ? <BarGraph series={undefined}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <BarGraph name="Lead Time"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
