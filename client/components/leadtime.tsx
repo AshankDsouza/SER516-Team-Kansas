@@ -40,62 +40,35 @@ function LeadTime(props: any) {
   }, [])
 
   useEffect(() => {
-    console.log({selectedSprintID});
-    
+    setShowChart(false)
     getLeadTime(slug, selectedSprintID)
       .then((leadData: any) => {
-        console.log({logData: leadData});
-        
-
         if (leadData.error)
           return
 
-
         const cleanData:any[] = [];
-
         leadData.forEach((dataPoint: any) => {
           if (dataPoint.finish_date !== 'null') {
-            //console.log({ dataPoint })
-
-
             const finishDate = new Date(dataPoint.finish_date);
             const createdDate = new Date(dataPoint.created_date);
-
             // Calculate the difference in milliseconds
             const timeDifference:number = Math.abs(createdDate.getTime() - finishDate.getTime());
-
-            //console.log({timeDifference});
-            
-
             // Convert milliseconds to days
             dataPoint.dayCount= Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); 
-            //console.log("Number of days difference:", dataPoint.dayCount);
             cleanData.push(dataPoint);
-
           }
-
         })
-
-        
-          
         const dayCountList = cleanData.map((item: any) => item.dayCount);
         const taskNames = cleanData.map((item: any) => item.userStory_Name)
-
-        console.log({taskNames});
-        console.log({dayCountList});
-
         let series = [
           {
               name: 'Lead Time',
               data: dayCountList
           }
         ]
-
-        
         setLabels(taskNames)
-
         setSeries(series)
-
+        setShowChart(true)
       })
   }, [selectedSprintID])
 
