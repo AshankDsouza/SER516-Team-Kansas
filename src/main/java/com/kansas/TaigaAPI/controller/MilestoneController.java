@@ -100,7 +100,7 @@ public class MilestoneController {
 
         ArrayList map = new ArrayList();
         JsonNode jsonNode=getMilestoneList(projectId);
-
+        //Getting data from taiga api
         JsonNode relData = getGivenSprintData(sprintId,jsonNode);
         relData = relData.get("user_stories");
         for(int i=0;i<relData.size();i++)
@@ -128,7 +128,6 @@ public class MilestoneController {
             if (Integer.parseInt(allSprintData.get(i).get("id").toString())==sprintId){
                 return allSprintData.get(i);
             }
-
         }
         return null;
     }
