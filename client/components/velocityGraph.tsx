@@ -15,7 +15,7 @@ import BarGraph from "./barGraph"
 
 
 function VelocityGraph(props: any) {
-  const {slug} = props;
+  const {slugName} = props;
 
 
   type sprint = {
