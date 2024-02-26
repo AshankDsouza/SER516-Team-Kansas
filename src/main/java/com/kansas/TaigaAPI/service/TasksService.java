@@ -173,4 +173,58 @@ public class TasksService {
 
     }
 
+    public static HashMap getWorkCapacityBySprint(int projectId, int sprintId, String authToken) {
+        try{
+
+
+            String sprintTasksUrl =  TAIGA_API_ENDPOINT + "/tasks?project=" + projectId + "&milestone=" + sprintId;
+            HttpGet request = new HttpGet(sprintTasksUrl);
+            request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
+            request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+
+            String responseJson = HTTPRequest.sendHttpRequest(request);
+            JsonNode taskData = objectMapper.readTree(responseJson);
+            if (taskData.get("code") == null){}
+            else if (taskData.get("code").asText().equals("token_not_valid")){
+                HashMap error = new HashMap<>();
+                error.put("error","Token not valid");
+                return error;
+            }
+
+            LocalDate start = LocalDate.parse(taskData.get(0).get("created_date").toString().substring(1,11));
+            LocalDate end= LocalDate.now();
+
+            List<LocalDate> totalDates = new ArrayList<>();
+            while (!start.isAfter(end)) {
+                totalDates.add(start);
+                start = start.plusDays(1);
+            }
+            HashMap closedTasksByDay = new HashMap<>();
+            for (JsonNode taskNode : taskData) {
+                boolean isClosed = taskNode.has("is_closed") && taskNode.get("is_closed").asBoolean();
+                if (isClosed) {
+                    LocalDate date = LocalDate.parse(taskNode.get("finished_date").toString().substring(1,11));
+                    if (closedTasksByDay.containsKey(date)){
+                        closedTasksByDay.put(date, Integer.parseInt(closedTasksByDay.get(date).toString()) + 1);
+                    }
+                    else {
+                        closedTasksByDay.put(date, 1);
+                    }
+                }
+            }
+            for (LocalDate remDate : totalDates){
+                if (closedTasksByDay.containsKey(remDate)){}
+                else{
+                    closedTasksByDay.put(remDate,0);}
+            }
+            return closedTasksByDay;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
 }

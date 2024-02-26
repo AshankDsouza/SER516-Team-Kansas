@@ -34,4 +34,9 @@ public class TaskController {
         return tasksService.getTasksClosedByDate(projectId,sprintId,authenticationService.getAuthToken());
     }
 
+    @GetMapping("/workCapacity")
+    public HashMap getWorkCapacityBySprint(@RequestParam("project") int projectId, @RequestParam("sprint") int sprintId){
+        return tasksService.getWorkCapacityBySprint(projectId,sprintId,authenticationService.getAuthToken());
+    }
+
 }
