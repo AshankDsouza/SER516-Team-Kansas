@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -133,6 +134,11 @@ public class MilestoneController {
 
         }
         return null;
+    }
+
+    @GetMapping("/{projectId}/getTotalPoints")
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable int projectId){
+        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
     }
 
 }
