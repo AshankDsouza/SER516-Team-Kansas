@@ -1,6 +1,7 @@
 "use client"
 
 
+import { cookies } from "next/headers";
 import {
   Select,
   SelectContent,
@@ -14,9 +15,16 @@ import { useEffect, useState } from "react"
 import BarGraph from "./barGraph"
 
 
-function LeadTime(props: any) {
+async function FocusFactor(props: any) {
   const {slug} = props;
+  var myHeaders = new Headers();
+  const auth_token = cookies().get("auth_token")
+  myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
 
+  var requestOptions = {
+      method: 'GET',
+      headers: myHeaders
+  };
 
   type sprint = {
     id: string,
@@ -29,7 +37,9 @@ function LeadTime(props: any) {
   const [open_points, setopen_points] = useState<number[]>([])
   const [series, setSeries] = useState<any[]>([])
 
+   
 
+  const response = await fetch("http://localhost:8080/api/tasks/workCapacity?projectId=1521719&sprintId=1", requestOptions)
 
  
 
@@ -65,9 +75,9 @@ function LeadTime(props: any) {
           </Select>
         </div>
       </div>
-      {showChart ? <BarGraph name="Lead Time"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <BarGraph name="Focus Factor"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
 
-export default FocusFactor
+export default FocusFactor 
