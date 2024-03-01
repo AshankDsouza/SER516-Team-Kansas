@@ -91,17 +91,18 @@ public class MilestoneService {
         return completedPointsList;
     }
 
-    public JsonNode getMilestoneStats(String authToken, int milestoneId){
+    public JsonNode getMilestoneStats(String authToken, int milestoneId) {
         try {
-            String endpoint = TAIGA_API_ENDPOINT + "/milestones/" + milestoneId+ "/stats";
+            String endpoint = TAIGA_API_ENDPOINT + "/milestones/" + milestoneId + "/stats";
             HttpGet request = new HttpGet(endpoint);
             request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
             request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
             return objectMapper.readTree(HTTPRequest.sendHttpRequest(request));
-        } catch(Exception e) {
+        } catch (Exception e) {
             //  log.error(e.getMessage());
             return null;
         }
+    }
 
     public JsonNode getMilestoneData(String authToken, int milestoneId){
         try {

@@ -97,7 +97,7 @@ public class MilestoneController {
         int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
     }
-
+    //Lead Time
     @GetMapping("getDataForLeadTime")
     public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) throws ParseException {
         int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
@@ -132,20 +132,19 @@ public class MilestoneController {
             if (Integer.parseInt(allSprintData.get(i).get("id").toString())==sprintId){
                 return allSprintData.get(i);
             }
-
         }
         return null;
     }
 
-
+    //Work Capacity calculation
     @GetMapping("/{projectId}/getCompletedPoints")
-    public List<CompletedPoints> getMilestoneCompletedPoints(@PathVariable int projectId){
+    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable int projectId) {
         return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
-
+    }
+    //Velocity Calculation
     @GetMapping("/{projectId}/getTotalPoints")
     public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable int projectId){
         return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
-
     }
 
 }
