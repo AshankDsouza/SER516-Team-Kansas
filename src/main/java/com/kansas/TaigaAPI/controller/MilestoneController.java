@@ -136,7 +136,7 @@ public class MilestoneController {
         return null;
     }
 
-    @GetMapping("/{projectId}/getTotalPoints")
+    @GetMapping("/{projectSlug}/getTotalPoints")
     public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
         return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectSlug);
     }
