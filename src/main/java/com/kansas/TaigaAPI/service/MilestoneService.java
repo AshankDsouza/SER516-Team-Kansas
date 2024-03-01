@@ -11,6 +11,7 @@ import com.kansas.TaigaAPI.utils.HTTPRequest;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kansas.TaigaAPI.model.TotalPoints;
 
@@ -26,6 +27,9 @@ import java.util.List;
 public class MilestoneService {
 
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
@@ -55,7 +59,9 @@ public class MilestoneService {
         }
     }
 
-    public List<TotalPoints>  getMilestoneTotalPoints(String authToken, int projectId){
+    public List<TotalPoints>  getMilestoneTotalPoints(String authToken, String projectSlug){
+        ProjectService projectService =new ProjectService();
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         JsonNode milestoneList = getMilestoneList(authToken,projectId);
         List<TotalPoints> totalPointsList = new ArrayList<>();
         for(JsonNode milestone: milestoneList){
