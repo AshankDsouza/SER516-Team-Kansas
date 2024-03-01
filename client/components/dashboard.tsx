@@ -5,10 +5,11 @@ import { Button } from "./ui/button"
 import Burndown from "./burndown"
 import LeadTime from "./leadtime"
 import CycleTime from "./cycletime"
+import VelocityGraph from "./velocityGraph"
 
 function Dashboard({slug}:{slug: string}) {
     const [chart, setChart] = useState("Burndown")
-    const charts = ["Burndown", "Lead time", "Cycle time"]
+    const charts = ["Burndown", "Lead time", "Cycle time", "Velocity"]
 
   return (
     <div>
@@ -20,6 +21,8 @@ function Dashboard({slug}:{slug: string}) {
         {chart=="Burndown"? <Burndown slug={slug}/>: <div></div>}
         {chart=="Lead time"? <LeadTime slug={slug} />: <div></div>}
         {chart=="Cycle time"? <CycleTime slug={slug} />: <div></div>}
+        {chart=="Velocity"? <VelocityGraph slug={slug} />: <div></div>}
+
     </div>
   )
 }

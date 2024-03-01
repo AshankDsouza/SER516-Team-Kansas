@@ -62,3 +62,23 @@ export async function getBurndowMetrics(milestoneId: string) {
     let BurndownData = await response.json()
     return BurndownData
 }
+
+export async function getVelocity(projectSlug: string, sprintId: string) {
+    var myHeaders = new Headers();
+    const auth_token = cookies().get("auth_token")
+    myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders
+    };
+    //http://localhost:8080/api/getDataForLeadTime?projectSlug=ser516asu-ser516-team-kansas&sprintNo=1
+    const url = `http://localhost:8080/api/1521719/getTotalPoints`;
+    console.log({url: url});
+
+    
+
+    const response = await fetch(url, requestOptions)
+    let leadTimeData = await response.json()
+    return leadTimeData;   
+}
