@@ -137,10 +137,12 @@ public class MilestoneController {
         return null;
     }
 
-    //velocity
-    @GetMapping("/{projectId}/getTotalPoints")
-    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable int projectId) {
-        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
+
+    @GetMapping("/{projectSlug}/getTotalPoints")
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
+        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectSlug);
+
+    
     }
 
     //Work Caapcity
