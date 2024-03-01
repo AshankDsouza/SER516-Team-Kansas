@@ -9,7 +9,7 @@ import FocusFactor from "./focusFactor"
 
 function Dashboard({ slug }: { slug: string }) {
   const [chart, setChart] = useState("Burndown")
-  const charts = ["Burndown", "Lead time", "Cycle time","Focus Factor"]
+  const charts = ["Burndown", "Lead time", "Cycle time","Focus Factor", "Velocity"]
 
   return (
     <div>
@@ -22,6 +22,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Lead time" ? <LeadTime slug={slug} /> : <div></div>}
       {chart == "Cycle time" ? <CycleTime slug={slug} /> : <div></div>}
       {chart == "Focus Factor" ? <FocusFactor slug={slug} /> : <div></div>}
+      {chart == "Velocity" ? <VelocityGraph slug={slug} /> : <div></div>}
     </div>
   )
 }

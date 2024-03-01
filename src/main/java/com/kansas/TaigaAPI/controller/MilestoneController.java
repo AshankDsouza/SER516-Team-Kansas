@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +37,9 @@ public class MilestoneController {
 
     @Autowired
     private TasksService tasksService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@PathVariable int milestoneId) {
@@ -88,14 +94,12 @@ public class MilestoneController {
     //Cycle Time
     @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
     public List<CycleTime> getCycleTime(@PathVariable String projectSlug, @PathVariable int milestoneId){
-        ProjectService projectService =new ProjectService();
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
     }
 
     @GetMapping("getDataForLeadTime")
     public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) throws ParseException {
-        ProjectService projectService =new ProjectService();
         int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
 
         ArrayList map = new ArrayList();
@@ -109,8 +113,8 @@ public class MilestoneController {
             int closedTasks = 0;
             if(!relData.get(i).get("finish_date").isNull()){
 
-            String createdDate = relData.get(i).get("created_date").toString();
-            String finishDate = relData.get(i).get("finish_date").toString();
+            LocalDate createdDate = LocalDate.parse(relData.get(i).get("created_date").toString().substring(1,11));
+            LocalDate finishDate = LocalDate.parse(relData.get(i).get("finish_date").toString().substring(1,11));
             String userStoryName =(relData.get(i).get("subject")).asText();
 //            leadTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishDate.toLocalDate().atStartOfDay()).toDays();
             HashMap hs=new HashMap();
@@ -132,4 +136,16 @@ public class MilestoneController {
         return null;
     }
 
+    //velocity
+    @GetMapping("/{projectId}/getTotalPoints")
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable int projectId) {
+        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
+    }
+
+    //Work Caapcity
+    @GetMapping("/{projectId}/getCompletedPoints")
+    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable int projectId){
+        return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
+
+    }
 }

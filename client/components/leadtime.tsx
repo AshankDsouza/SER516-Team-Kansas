@@ -44,6 +44,8 @@ function LeadTime(props: any) {
     
     getLeadTime(slug, selectedSprintID)
       .then((leadData: any) => {
+        console.log({logData: leadData});
+        
 
         if (leadData.error)
           return
