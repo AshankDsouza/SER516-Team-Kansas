@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import BarGraph from "./barGraph"
-import { getProjectMilestones } from "@/actions/project";
+import { getFocusFactor } from "@/actions/project";
 import LineGraph from "./graphs/lineGraph";
 
 function FocusFactor(props: any) {
@@ -13,12 +13,12 @@ function FocusFactor(props: any) {
   const [showChart, setShowChart] = useState(false)
   const [labels, setLabels] = useState<string[]>([])
   const [series, setSeries] = useState<any[]>([])
-  // useEffect(() => {
-  //   getProjectMilestones(slug)
-  //     .then((data: any) => {
-  //       setsprints(data)
-  //     })
-  // }, [])
+  useEffect(() => {
+    getFocusFactor(slug)
+      .then((data: any) => {
+        setSeries(data);
+      })
+  }, [])
   
 
   return (

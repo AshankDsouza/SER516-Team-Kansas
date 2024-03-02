@@ -76,21 +76,40 @@ export async function getBurndowMetrics(milestoneId: string) {
     return BurndownData
 }
 
-export async function getVelocity(projectSlug: string) {
-    var myHeaders = new Headers();
-    const auth_token = cookies().get("auth_token")
-    myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
+// export async function getVelocity(projectSlug: string) {
+//     var myHeaders = new Headers();
+//     const auth_token = cookies().get("auth_token")
+//     myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
 
-    var requestOptions = {
-        method: 'GET',
-        headers: myHeaders
-    };
-    const url = `http://localhost:8080/api/${projectSlug}/getTotalPoints`;
-    console.log({url: url});
+//     var requestOptions = {
+//         method: 'GET',
+//         headers: myHeaders
+//     };
+//     const url = `http://localhost:8080/api/${projectSlug}/getTotalPoints`;
+//     console.log({url: url});
 
     
 
-    const response = await fetch(url, requestOptions)
-    let leadTimeData = await response.json()
-    return leadTimeData;   
+//     const response = await fetch(url, requestOptions)
+//     let leadTimeData = await response.json()
+//     return leadTimeData;   
+// }
+
+export async function getFocusFactor(milestoneId: string) {
+    const Response = z.array(z.object({
+        open_points: z.number()
+    }))
+    const response1 :any= await fetch(`${process.env.API_URL}/api/${milestoneId}/getTotalPoints`, getRequestOptions())
+    const response2 :any= await fetch(`${process.env.API_URL}/api/${milestoneId}/getCompletedPoints`, getRequestOptions())
+
+    let lab = [];
+    let ser = [];
+    for (let i = 0; i < response1.length; i++) {
+        lab.push(response1[i].sprintName)
+        let focusFactor = response2[i].completedPoints == 0 ? 0 : response1[i].totalPoints / response2[i].completedPoints;
+        ser.push(focusFactor)
+    }
+    console.log(ser)
+    return ser;
+
 }
