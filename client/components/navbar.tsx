@@ -2,8 +2,6 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
 import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
-import { deleteAuthToken } from '@/actions/userToken'
 import Logout from './logout'
 
 function NavBar() {

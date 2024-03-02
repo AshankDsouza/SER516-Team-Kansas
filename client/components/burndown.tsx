@@ -12,39 +12,32 @@ import {
 } from "@/components/ui/select"
 import { useEffect, useState } from "react"
 import BurndownChart from "./burndownChart"
+import { useRouter } from "next/navigation"
 
 
-function Burndown(prop:any) {
-    const {slug} = prop;
-    type sprint = {
-        id: string,
-        value: string
-    }
-    const [sprints, setsprints] = useState<sprint[]>([{ id: '1', value: "sprint-1" }, { id: '2', value: "sprint-2" }, { id: '3', value: "sprint-3" }])
+function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: string}[]}) {
+
+    const router = useRouter();
+
     const [selectedSprintID, setselectedSprintID] = useState("")
-    const [showChart, setShowChart] = useState(false)
+    const [showChart, setShowChart] = useState(true)
     const [labels, setLabels] = useState<string[]>([])
     const [open_points, setopen_points] = useState<number[]>([])
 
-    useEffect(() => {
-        getProjectMilestones(slug)
-            .then((data: any) => {
-                setsprints(data)
-                setShowChart(true)
-            })
-        setopen_points([])
-    }, [])
 
     useEffect(() => {
         getBurndowMetrics(selectedSprintID)
             .then((data: any) => {
-                if(data.error)
-                return
+                if(!data){
+                    router.refresh();
+                    return
+                }
+                setShowChart(false);
                 const daysArray = data.map((item: any) => item.day);
-                setLabels(daysArray)
-                const open_points = data.map((item: any) => item.open_points)
-                setopen_points(open_points)
-
+                setLabels(daysArray);
+                const open_points = data.map((item: any) => item.open_points);
+                setopen_points(open_points);
+                setShowChart(true);
             })
     }, [selectedSprintID])
 
@@ -53,7 +46,7 @@ function Burndown(prop:any) {
         labels,
         datasets: [
             {
-                label: 'Optimal points',
+                label: 'Open points',
                 data: open_points,
                 borderColor: '#000',
                 backgroundColor: '#666',
@@ -73,7 +66,7 @@ function Burndown(prop:any) {
                         <SelectContent>
                             <SelectGroup>
                                 <SelectLabel>Sprints</SelectLabel>
-                                {sprints.map(sprint =>
+                                {sprints && sprints.map(sprint =>
                                     <SelectItem key={sprint.id} value={sprint.id}>{sprint.value}</SelectItem>
                                 )}
                             </SelectGroup>
