@@ -28,7 +28,7 @@ export default async function getUserToken(userName: string, password: string): 
         const tokenObj = await response.json();
         res.parse(tokenObj)
         const token = tokenObj.token;
-        cookies().set('auth_token', token, {expires: Date.now()+300000});
+        cookies().set('auth_token', token, {expires: Date.now()+600000});
         return "token";
 
     } catch (error) {
