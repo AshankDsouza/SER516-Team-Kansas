@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -144,7 +145,23 @@ class TaigaApiApplicationTests {
 						.content(objectMapper.writeValueAsString(authRequest)))
 				.andExpect(status().isForbidden());
 	}
+	@Test
+	public void testGetMilestoneTotalCompletedPoints() throws Exception {
+		String projectSlug = "test-project";
+		String authToken = "auth-token";
+		int  projectId = 123;
+		List<CompletedPoints> mockCompletedPoints = new ArrayList<>();
 
+		when(projectService.getProjectId(authToken,projectSlug)).thenReturn(projectId);
+		when(authenticationService.getAuthToken()).thenReturn(authToken);
+		when(milestoneService.getMilestoneCompletedPoints(authToken, projectId)).thenReturn(mockCompletedPoints);
+
+		mockMvc.perform(get("/api/{projectSlug}/getCompletedPoints", projectSlug))
+				.andExpect(status().isOk());
+
+		verify(authenticationService, times(2)).getAuthToken();
+		verify(milestoneService, times(1)).getMilestoneCompletedPoints(authToken, projectId);
+	}
 
 
 
