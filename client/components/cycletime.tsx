@@ -12,81 +12,64 @@ import {
 } from "@/components/ui/select"
 import { useEffect, useState } from "react"
 import BarGraph from "./barGraph"
+import { useRouter } from "next/navigation"
 
 
-function CycleTime(props:any) {
-  const {slug} = props;
-  type sprint = {
-    id: string,
-    value: string
-  }
-  const [sprints, setsprints] = useState<sprint[]>([{ id: '1', value: "sprint-1" }, { id: '2', value: "sprint-2" }, { id: '3', value: "sprint-3" }])
+function CycleTime({ slug, sprints }: { slug: string, sprints: { id: string, value: string }[] }) {
+
+  const router = useRouter()
   const [selectedSprintID, setselectedSprintID] = useState("")
-  const [showChart, setShowChart] = useState(false)
+  const [showChart, setShowChart] = useState(true)
   const [labels, setLabels] = useState<string[]>([])
-  const [open_points, setopen_points] = useState<number[]>([])
   const [series, setSeries] = useState<any>([])
 
-  useEffect(() => {
-    getProjectMilestones(slug)
-      .then((data: any) => {
-        setsprints(data)
-        setShowChart(true)
-      })
-    setopen_points([])
-  }, [])
 
   useEffect(() => {
-    console.log({selectedSprintID});
-    
-    getCyleTime(slug , selectedSprintID)
-      .then((data: any) => {
-        console.log({cycleData:data});
-        
-        if (data.error)
-          return
-        const labels = data.map((item: any) => item.taskName);
-        setLabels(labels)
-        const open_points = data.map((item: any) => item.cycleTime)
-        setopen_points(open_points)
-
-        let series = [
-          {
-              name: 'Cycle Time',
-              data: open_points
+    const labels = localStorage.getItem(`${slug}-${selectedSprintID}-leadTime-labels`)
+    let series = localStorage.getItem(`${slug}-${selectedSprintID}-leadTime-series`)
+    if (labels !== null && series !== null) {
+      setLabels(labels.split(','))
+      setSeries(JSON.parse(series))
+      setShowChart(true)
+    } else {
+      getCyleTime(slug, selectedSprintID)
+        .then((data: any) => {
+          if (!data) {
+            router.refresh();
+            return
           }
-        ]
-        setSeries(series)
+          const labels = data.map((item: any) => item.taskName);
+          const openPoints = data.map((item: any) => item.cycleTime)
+          setLabels(labels)
 
-      })
+          let series = [
+            {
+              name: 'Cycle Time',
+              data: openPoints
+            }
+          ]
+          setSeries(series)
+          localStorage.setItem(`${slug}-${selectedSprintID}-leadTime-labels`, labels)
+          localStorage.setItem(`${slug}-${selectedSprintID}-leadTime-series`, JSON.stringify(series))
+          setShowChart(true)
+        })
+    }
   }, [selectedSprintID])
 
-
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Optimal points',
-        data: open_points,
-        borderColor: '#000',
-        backgroundColor: '#666',
-      },
-    ],
-  };
 
   return (
     <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
       <div className="filters flex flex-col divide-y-2">
         <div className="p-8 font-bold">Filters</div>
         <div className="p-8">
-          <Select onValueChange={(e) => setselectedSprintID(e)}>
+          <Select onValueChange={(e) => {setselectedSprintID(e); setShowChart(false)}}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Sprint" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Sprints</SelectLabel>
-                {sprints.map(sprint =>
+                {sprints && sprints.map(sprint =>
                   <SelectItem key={sprint.id} value={sprint.id}>{sprint.value}</SelectItem>
                 )}
               </SelectGroup>
@@ -94,7 +77,7 @@ function CycleTime(props:any) {
           </Select>
         </div>
       </div>
-      {showChart ? <BarGraph name="Cycle Time" labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <BarGraph name="Cycle Time" labels={labels} series={series} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }

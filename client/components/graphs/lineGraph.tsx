@@ -7,24 +7,27 @@ import HighchartsReact from "highcharts-react-official";
 
 interface IProps{
     series: any;
+    labels: string[];
+    name: string;
 }
 
 export default function LineGraph(props: IProps) {
 
-    const { series } = props;;
+    const { series, labels, name } = props;
 
   const options = {
         xAxis: {
       type: 'datetime', // specify datetime type for x-axis
+      categories: labels,
+
     },
     chart: {
       type: "spline"
     },
     title: {
-      text: "My chart"
+      text: name
     },
-    series: [
-    ]
+    series:  []
   };
 
     options.series = series;

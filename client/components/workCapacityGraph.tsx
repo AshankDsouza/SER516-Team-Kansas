@@ -1,6 +1,6 @@
 "use client"
 
-import { getLeadTime, getVelocity } from "@/actions/project"
+import { getLeadTime, getVelocity, getWorkCapacity } from "@/actions/project"
 import {
   Select,
   SelectContent,
@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/select"
 import { useEffect, useState } from "react"
 import BarGraph from "./barGraph"
+import LineGraph from "./graphs/lineGraph"
 
 
-function VelocityGraph(props: any) {
+function WorkCapacityGraph(props: any) {
   const {slug} = props;
 
 
@@ -31,21 +32,23 @@ function VelocityGraph(props: any) {
 
   useEffect(()=>{
     
-    getVelocity(slug).then((data)=>{
+    getWorkCapacity(slug).then((data)=>{
+        console.log({workData: data});
+        
 
-      let sprintsCompletedData = data.filter((data: any)=> data.totalPoints !== 0);
+      let sprintsCompletedData = data.filter((data: any)=> data.completedPoints !== 0);
 
       sprintsCompletedData = sprintsCompletedData.sort(function (a: any, b: any) {
         return ('' + a.sprintName).localeCompare(b.sprintName);
     })
       
-      let dataPoints = sprintsCompletedData.map((data: any) =>  data.totalPoints);
+      let dataPoints = sprintsCompletedData.map((data: any) =>  data.completedPoints);
 
       let labels = sprintsCompletedData.map((data: any) =>  data.sprintName);
 
       let series = [
         {
-            name: 'Velocity',
+            name: 'Work Capacity',
             data: dataPoints
         }
       ]
@@ -66,9 +69,9 @@ function VelocityGraph(props: any) {
         <div className="p-8">
         </div>
       </div>
-      {showChart ? <BarGraph name="Velocity"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <LineGraph name="Work Capacity"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
 
-export default VelocityGraph;
+export default WorkCapacityGraph;
