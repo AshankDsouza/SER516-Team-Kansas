@@ -26,11 +26,7 @@ export default function LineGraph(props: IProps) {
     title: {
       text: "My chart"
     },
-    series:  [{
-      name: 'Installation & Developers',
-      data: [43934, 48656, 65165, 81827, 112143, 142383,
-          171533, 165174, 155157, 161454, 154610]
-  }]
+    series:  []
   };
 
     options.series = series;
