@@ -15,7 +15,7 @@ import BarGraph from "./barGraph"
 
 
 function VelocityGraph(props: any) {
-  const {slugName} = props;
+  const {slug} = props;
 
 
   type sprint = {
@@ -30,11 +30,10 @@ function VelocityGraph(props: any) {
   const [series, setSeries] = useState<any[]>([])
 
   useEffect(()=>{
-    getVelocity('', '').then((data)=>{
+    
+    getVelocity(slug).then((data)=>{
 
-      console.log({data: data});
       let sprintsCompletedData = data.filter((data: any)=> data.totalPoints !== 0);
-      console.log({sprintsCompletedData});
 
       sprintsCompletedData = sprintsCompletedData.sort(function (a: any, b: any) {
         return ('' + a.sprintName).localeCompare(b.sprintName);
