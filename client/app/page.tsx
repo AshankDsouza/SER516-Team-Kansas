@@ -54,7 +54,7 @@ export default function LoginForm() {
                             name="name"
                             render={({ field }) => (
                                 <FormItem className=" w-full">
-                                    <FormLabel>UserName</FormLabel>
+                                    <FormLabel>Taiga email</FormLabel>
                                     <FormControl>
                                         <Input placeholder="userName" {...field} />
                                     </FormControl>
