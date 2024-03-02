@@ -31,6 +31,9 @@ public class MilestoneService {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private ProjectService projectService;
+
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -59,9 +62,7 @@ public class MilestoneService {
         }
     }
 
-    public List<TotalPoints>  getMilestoneTotalPoints(String authToken, String projectSlug){
-        ProjectService projectService =new ProjectService();
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+    public List<TotalPoints>  getMilestoneTotalPoints(String authToken, int projectId){
         JsonNode milestoneList = getMilestoneList(authToken,projectId);
         List<TotalPoints> totalPointsList = new ArrayList<>();
         for(JsonNode milestone: milestoneList){
