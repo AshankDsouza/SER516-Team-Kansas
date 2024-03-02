@@ -96,3 +96,24 @@ export async function getVelocity(projectSlug: string) {
 
     return data;   
 }
+
+export async function getWorkCapacity(projectSlug: string) {
+    const Response = z.array(z.object({
+        sprintName: z.string(),
+        completedPoints: z.number()
+    }))
+    
+
+    const url = `http://localhost:8080/api/1521719/getCompletedPoints`;
+
+    const response = await fetch(url, getRequestOptions())
+    const data = await response.json();
+
+    try {
+        Response.parse(data)
+    } catch (error) {
+        return null
+    }
+
+    return data;   
+}
