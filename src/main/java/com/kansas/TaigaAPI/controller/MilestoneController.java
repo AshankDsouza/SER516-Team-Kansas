@@ -134,8 +134,9 @@ public class MilestoneController {
 
 
     @GetMapping("/{projectSlug}/getTotalPoints")
-    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug, int projectId){
-        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectSlug);
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
     
     }
 
@@ -143,6 +144,7 @@ public class MilestoneController {
     @GetMapping("/{projectSlug}/getCompletedPoints")
     public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable String projectSlug){
         int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+
         return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
 
     }
