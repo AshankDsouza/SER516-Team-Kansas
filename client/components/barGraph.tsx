@@ -14,76 +14,49 @@ interface IProps {
 
 function BarGraph(props: IProps) {
 
-  const { series,labels } = props;
-  const [barData, setBarData] = useState([]);
-  const [taskNames, setTaskNames] = useState([]);
-
+  const { series, labels } = props;
 
   const options = {
     chart: {
-        type: 'column'
+      type: 'column'
     },
     title: {
-        text: name,
-        align: 'left'
+      text: name,
+      align: 'left'
     },
     xAxis: {
-        categories: labels,
-        crosshair: true,
-        accessibility: {
-            description: 'Countries'
-        }
+      categories: labels,
+      crosshair: true,
+      accessibility: {
+        description: 'Countries',
+      }
     },
     yAxis: {
-        min: 0,
-        title: {
-            text: 'Days taken to complete task'
-        }
+      min: 0,
+      title: {
+        text: 'Days taken to complete task'
+      }
     },
     tooltip: {
-        valueSuffix: ' (1000 MT)'
+      valueSuffix: ' (1000 MT)'
     },
     plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
+      column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+      }
     },
-    series:series 
-};
-
-// useEffect(() => {
-//   getCyleTime("1")
-//       .then((data: any) => {
-//           console.log({data});
-
-//           getBarGraphData(data);
-          
-//       })
-// }, [])
-
-function getBarGraphData(apiResponseData: any) {
-
-  let cycleData:any[] = [];
-  let taskNames: any[] = [];
-
-//   apiResponseData.forEach((data: any) => {
-
-//     cycleData.push(data.cycleTime);
-//     taskNames.push(data.taskName);
-
-//   });
+    accessibility:{
+      enabled: false
+    },
+    series: series
+  };
 
 
-//   setBarData(cycleData);
-//   setTaskNames(taskNames);
-
-}
-
-
-  return (<div>
-    <HighchartsReact highcharts={Highcharts} options={options} />
-  </div>
+  return (
+    <div className="flex-1 p-16 h-fit overflow-scroll">
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
   );
 };
 
