@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -102,7 +104,7 @@ public class MilestoneController {
 
         ArrayList map = new ArrayList();
         JsonNode jsonNode=getMilestoneList(projectId);
-
+        //Getting data from taiga api
         JsonNode relData = getGivenSprintData(sprintId,jsonNode);
         relData = relData.get("user_stories");
         for(int i=0;i<relData.size();i++)
@@ -130,9 +132,22 @@ public class MilestoneController {
             if (Integer.parseInt(allSprintData.get(i).get("id").toString())==sprintId){
                 return allSprintData.get(i);
             }
-
         }
         return null;
     }
 
+
+    @GetMapping("/{projectSlug}/getTotalPoints")
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
+        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectSlug);
+
+    
+    }
+
+    //Work Caapcity
+    @GetMapping("/{projectId}/getCompletedPoints")
+    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable int projectId){
+        return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
+
+    }
 }

@@ -75,3 +75,22 @@ export async function getBurndowMetrics(milestoneId: string) {
     }
     return BurndownData
 }
+
+export async function getVelocity(projectSlug: string) {
+    var myHeaders = new Headers();
+    const auth_token = cookies().get("auth_token")
+    myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders
+    };
+    const url = `http://localhost:8080/api/${projectSlug}/getTotalPoints`;
+    console.log({url: url});
+
+    
+
+    const response = await fetch(url, requestOptions)
+    let leadTimeData = await response.json()
+    return leadTimeData;   
+}
