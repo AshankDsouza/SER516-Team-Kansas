@@ -123,7 +123,7 @@ export async function getWorkCapacity(projectSlug: string) {
     }))
     
 
-    const url = `http://localhost:8080/api/1521719/getCompletedPoints`;
+    const url = `http://localhost:8080/api/${projectSlug}/getCompletedPoints`;
 
     const response = await fetch(url, getRequestOptions())
     const data = await response.json();
