@@ -2,8 +2,10 @@ package com.kansas.TaigaAPI;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.kansas.TaigaAPI.model.AuthRequest;
-import com.kansas.TaigaAPI.service.ProjectService;
+import com.kansas.TaigaAPI.model.CompletedPoints;
+import com.kansas.TaigaAPI.service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kansas.TaigaAPI.controller.MilestoneController;
 import com.kansas.TaigaAPI.model.CycleTime;
-import com.kansas.TaigaAPI.service.AuthenticationService;
-import com.kansas.TaigaAPI.service.TasksService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -88,6 +91,9 @@ class TaigaApiApplicationTests {
 	@Mock
 	private AuthenticationService authenticationService;
 
+	@Mock
+	private MilestoneService milestoneService;
+
 	@InjectMocks
 	private MilestoneController milestoneController;
 
@@ -138,6 +144,9 @@ class TaigaApiApplicationTests {
 						.content(objectMapper.writeValueAsString(authRequest)))
 				.andExpect(status().isForbidden());
 	}
+
+
+
 
 //	@Test
 //	void login_with_valid_credentials_ok() throws Exception {
