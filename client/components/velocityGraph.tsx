@@ -64,19 +64,6 @@ function VelocityGraph(props: any) {
       <div className="filters flex flex-col divide-y-2">
         <div className="p-8 font-bold">Filters</div>
         <div className="p-8">
-          <Select onValueChange={(e) => setselectedSprintID(e)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sprint" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Sprints</SelectLabel>
-                {sprints.map(sprint =>
-                  <SelectItem key={sprint.id} value={sprint.id}>{sprint.value}</SelectItem>
-                )}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
         </div>
       </div>
       {showChart ? <BarGraph name="Velocity"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
