@@ -15,14 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import com.kansas.TaigaAPI.service.TasksService.*;
-
 
 
 @RestController
@@ -138,15 +134,15 @@ public class MilestoneController {
 
 
     @GetMapping("/{projectSlug}/getTotalPoints")
-    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug, int projectId){
         return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectSlug);
-
     
     }
 
-    //Work Caapcity
-    @GetMapping("/{projectId}/getCompletedPoints")
-    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable int projectId){
+    //Work Capacity
+    @GetMapping("/{projectSlug}/getCompletedPoints")
+    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable String projectSlug){
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
 
     }
