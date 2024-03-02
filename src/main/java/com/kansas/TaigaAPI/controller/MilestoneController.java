@@ -142,7 +142,8 @@ public class MilestoneController {
     //Work Capacity
     @GetMapping("/{projectSlug}/getCompletedPoints")
     public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable String projectSlug){
-        return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectSlug);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+        return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
 
     }
 }
