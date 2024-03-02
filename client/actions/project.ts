@@ -63,7 +63,7 @@ export async function getBurndowMetrics(milestoneId: string) {
     return BurndownData
 }
 
-export async function getVelocity(projectSlug: string, sprintId: string) {
+export async function getVelocity(projectSlug: string) {
     var myHeaders = new Headers();
     const auth_token = cookies().get("auth_token")
     myHeaders.append("Authorization", `Bearer ${auth_token?.value}`);
@@ -73,7 +73,7 @@ export async function getVelocity(projectSlug: string, sprintId: string) {
         headers: myHeaders
     };
     //http://localhost:8080/api/getDataForLeadTime?projectSlug=ser516asu-ser516-team-kansas&sprintNo=1
-    const url = `http://localhost:8080/api/1521719/getTotalPoints`;
+    const url = `http://localhost:8080/api/${projectSlug}/getTotalPoints`;
     console.log({url: url});
 
     

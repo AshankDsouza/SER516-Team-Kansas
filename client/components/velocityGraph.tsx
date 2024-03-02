@@ -15,7 +15,7 @@ import BarGraph from "./barGraph"
 
 
 function VelocityGraph(props: any) {
-  const {slugName} = props;
+  const {slug} = props;
 
 
   type sprint = {
@@ -30,7 +30,9 @@ function VelocityGraph(props: any) {
   const [series, setSeries] = useState<any[]>([])
 
   useEffect(()=>{
-    getVelocity('', '').then((data)=>{
+    console.log({slug});
+    
+    getVelocity(slug).then((data)=>{
 
       console.log({data: data});
       let sprintsCompletedData = data.filter((data: any)=> data.totalPoints !== 0);
