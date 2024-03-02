@@ -16,24 +16,23 @@ function FocusFactor(props: any) {
   useEffect(() => {
     getFocusFactor(slug)
       .then((data: any) => {
-        setSeries(data);
+        data = data.sort(function (a: any, b: any) {
+          return ('' + a.label).localeCompare(b.label);
       })
-      let sprintsCompletedData:any = series.filter((data: any)=> data.completedPoints !== 0);
-
-      sprintsCompletedData = sprintsCompletedData.sort(function (a: any, b: any) {
-        return ('' + a.sprintName).localeCompare(b.sprintName);
-    })
-      
-      let dataPoints = sprintsCompletedData.map((data: any) =>  data.completedPoints);
-
-      let labels = sprintsCompletedData.map((data: any) =>  data.sprintName);
+      let label=data.map((x:any)=>x.label)
+      let focusFactor=data.map((x:any)=>x.focusFactor)
 
       let series = [
         {
             name: 'Focus Factor',
-            data: dataPoints
+            data: focusFactor
         }
       ]
+      setSeries(series)
+      setLabels(labels)
+      setShowChart(true)
+      })
+
   }, [])
   
 
@@ -42,7 +41,7 @@ function FocusFactor(props: any) {
       <div className="filters flex flex-col divide-y-2">
         <div className="p-8 font-bold">Focus Factor</div>
       </div>
-      {showChart ? <LineGraph series={series} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <LineGraph series={series} labels={labels} name="focus factor"/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
