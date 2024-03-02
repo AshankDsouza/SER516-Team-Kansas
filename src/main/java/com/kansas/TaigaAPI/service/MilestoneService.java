@@ -79,9 +79,7 @@ public class MilestoneService {
     }
 
 
-    public List<CompletedPoints> getMilestoneCompletedPoints(String authToken,String projectSlug){
-        ProjectService projectService =new ProjectService();
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+    public List<CompletedPoints> getMilestoneCompletedPoints(String authToken,int projectId){
         JsonNode milestoneList = getMilestoneList(authToken,projectId);
         List<CompletedPoints> completedPointsList = new ArrayList<>();
         for(JsonNode milestone: milestoneList){
