@@ -25,7 +25,7 @@ function Dashboard({ slug }: { slug: string }) {
 
   const [sprints, setsprints] = useState<sprint[]>([{ id: '1', value: "sprint-1" }, { id: '2', value: "sprint-2" }, { id: '3', value: "sprint-3" }])
   const [chart, setChart] = useState("Burndown")
-  const charts = ["Burndown", "Lead time", "Cycle time", "Velocity", "Focus Factor"]
+  const charts = ["Burndown", "Lead time", "Cycle time", "Velocity", "Focus Factor", "Work Capacity"]
 
   useEffect(() => {
     getProjectMilestones(slug)
