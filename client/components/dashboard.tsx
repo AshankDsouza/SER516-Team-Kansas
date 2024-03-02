@@ -9,6 +9,8 @@ import { ArrowLeft, RotateCcw } from "lucide-react"
 import Link from "next/link"
 import { getProjectMilestones } from "@/actions/project"
 import { useRouter } from "next/navigation"
+import FocusFactor from "./focusFactor"
+import VelocityGraph from "./velocityGraph"
 
 function Dashboard({ slug }: { slug: string }) {
 
