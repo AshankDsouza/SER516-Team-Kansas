@@ -8,7 +8,7 @@ export function getRequestOptions() {
 
     var requestOptions = {
         method: 'GET',
-        headers: myHeaders
+        headers: myHeaders,
     };
     return requestOptions;
 }

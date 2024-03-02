@@ -28,7 +28,7 @@ mvn spring-boot:run
 or
 mvn compile spring:boot-run
    ```
-### 3) Open and new terminal Install dependencies and start the NPM server
+### 3) Open and new terminal Install dependencies and start the NextJS client
 
 
    ```bash
