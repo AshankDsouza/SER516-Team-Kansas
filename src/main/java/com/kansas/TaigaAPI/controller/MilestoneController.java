@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -13,14 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import com.kansas.TaigaAPI.service.TasksService.*;
-
 
 
 @RestController
@@ -102,7 +100,7 @@ public class MilestoneController {
 
         ArrayList map = new ArrayList();
         JsonNode jsonNode=getMilestoneList(projectId);
-
+        //Getting data from taiga api
         JsonNode relData = getGivenSprintData(sprintId,jsonNode);
         relData = relData.get("user_stories");
         for(int i=0;i<relData.size();i++)
@@ -130,9 +128,24 @@ public class MilestoneController {
             if (Integer.parseInt(allSprintData.get(i).get("id").toString())==sprintId){
                 return allSprintData.get(i);
             }
-
         }
         return null;
     }
 
+
+    @GetMapping("/{projectSlug}/getTotalPoints")
+    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
+    
+    }
+
+    //Work Capacity
+    @GetMapping("/{projectSlug}/getCompletedPoints")
+    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable String projectSlug){
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+
+        return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
+
+    }
 }
