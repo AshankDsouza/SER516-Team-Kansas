@@ -69,7 +69,7 @@ function WorkCapacityGraph(props: any) {
         <div className="p-8">
         </div>
       </div>
-      {showChart ? <LineGraph  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <LineGraph name="Work Capacity"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
