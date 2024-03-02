@@ -18,6 +18,22 @@ function FocusFactor(props: any) {
       .then((data: any) => {
         setSeries(data);
       })
+      let sprintsCompletedData:any = series.filter((data: any)=> data.completedPoints !== 0);
+
+      sprintsCompletedData = sprintsCompletedData.sort(function (a: any, b: any) {
+        return ('' + a.sprintName).localeCompare(b.sprintName);
+    })
+      
+      let dataPoints = sprintsCompletedData.map((data: any) =>  data.completedPoints);
+
+      let labels = sprintsCompletedData.map((data: any) =>  data.sprintName);
+
+      let series = [
+        {
+            name: 'Focus Factor',
+            data: dataPoints
+        }
+      ]
   }, [])
   
 

@@ -82,13 +82,16 @@ export async function getFocusFactor(milestoneId: string) {
         open_points: z.number()
     }))
     const response1 :any= await fetch(`${process.env.API_URL}/api/${milestoneId}/getTotalPoints`, getRequestOptions())
-    const response2 :any= await fetch(`${process.env.API_URL}/api/${milestoneId}/getCompletedPoints`, getRequestOptions())
+    const response2 :any= await fetch(`${process.env.API_URL}/api/1521719/getCompletedPoints`, getRequestOptions())
+
+    const tP = await response1.json()
+    const cP = await response2.json()
 
     let lab = [];
     let ser = [];
-    for (let i = 0; i < response1.length; i++) {
-        lab.push(response1[i].sprintName)
-        let focusFactor = response2[i].completedPoints == 0 ? 0 : response1[i].totalPoints / response2[i].completedPoints;
+    for (let i = 0; i < tP.length; i++) {
+        lab.push(tP[i].sprintName)
+        let focusFactor = cP[i].completedPoints == 0 ? 0 : tP[i].totalPoints / cP[i].completedPoints;
         ser.push(focusFactor)
     }
     console.log(ser)
