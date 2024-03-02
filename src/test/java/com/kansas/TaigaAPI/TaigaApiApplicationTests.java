@@ -1,8 +1,12 @@
 package com.kansas.TaigaAPI;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.kansas.TaigaAPI.model.AuthRequest;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.FileCopyUtils;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;import com.kansas.TaigaAPI.model.AuthRequest;
+import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +18,7 @@ import com.kansas.TaigaAPI.controller.MilestoneController;
 import com.kansas.TaigaAPI.model.CycleTime;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.TasksService;
+import com.kansas.TaigaAPI.service.MilestoneService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,6 +93,9 @@ class TaigaApiApplicationTests {
 	@Mock
 	private AuthenticationService authenticationService;
 
+	@Mock
+	private MilestoneService milestoneService;
+
 	@InjectMocks
 	private MilestoneController milestoneController;
 
@@ -149,6 +157,41 @@ class TaigaApiApplicationTests {
 //						.content(objectMapper.writeValueAsString(authRequest)))
 //				.andExpect(status().isOk());
 //	}
+	public static String loadMockData(String filePath) throws IOException {
+		ClassPathResource cpr = new ClassPathResource(filePath);
+		byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+		return new String(bdata, StandardCharsets.UTF_8);
+	}
+
+	@Test
+	public void getTotalPointsSuccess() throws Exception {
+		String projectSlug = "ser516asu-ser516-team-kansas";
+		int projectId = 1;
+		String authToken = "auth-token";
+
+		List<TotalPoints> totalPointsList = new ArrayList<>(); ;
+		JsonNode jsonData =  objectMapper.readTree(loadMockData("totalPointsMock.json"));
+		JsonNode sprintData =  objectMapper.readTree(loadMockData("sprintList.json"));
+		totalPointsList.add(new TotalPoints("Sprint 5",0));
+		totalPointsList.add(new TotalPoints("Sprint 4",0));
+		totalPointsList.add(new TotalPoints("Sprint 3",0));
+		totalPointsList.add(new TotalPoints("Sprint 2",37));
+		totalPointsList.add(new TotalPoints("Sprint 1",41));
+
+		given(authenticationService.getAuthToken()).willReturn(authToken);
+		given(projectService.getProjectId(authToken, projectSlug)).willReturn(projectId);
+//		given(milestoneService.getMilestoneList(authToken,projectId)).willReturn(sprintData);
+		given(milestoneService.getMilestoneTotalPoints(authToken,projectId)).willReturn(totalPointsList);
+
+		String expectedJson = objectMapper.writeValueAsString(totalPointsList);
+
+		mockMvc.perform(get("/api/" + projectSlug + "/getTotalPoints")
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().json(expectedJson));
+	}
+
+
 
 
 }
