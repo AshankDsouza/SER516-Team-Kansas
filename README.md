@@ -43,3 +43,8 @@ https://phoenixnap.com/kb/install-maven-windows
 
 ### 4) Open browser with the following url http://localhost:3000 and login with Taiga credentials
 
+### 5) Dockerization steps 
+```mvn clean package ## Clean and build jar application along with docker image```<br>
+```mvn clean package -Ddockerfile.skip # Clean and build the jar application```<br>
+```docker run -p 8080:8080 kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application interactively```<br>
+```docker run -p 8080:8080 -d kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application in background```
