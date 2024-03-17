@@ -13,6 +13,8 @@ import {
 import { useEffect, useState } from "react"
 import BurndownChart from "./burndownChart"
 import { useRouter } from "next/navigation"
+import Chip from '@mui/material/Chip';
+
 
 
 function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: string}[]}) {
@@ -23,6 +25,10 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
     const [showChart, setShowChart] = useState(true)
     const [labels, setLabels] = useState<string[]>([])
     const [open_points, setopen_points] = useState<number[]>([])
+
+    let sprintNames = sprints.map((sprint) => sprint.value);
+
+    const [selectedSprints, setSelectedSprints] = useState<string[]>(sprintNames)
 
 
     useEffect(() => {
@@ -67,11 +73,33 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                             <SelectGroup>
                                 <SelectLabel>Sprints</SelectLabel>
                                 {sprints && sprints.map(sprint =>
-                                    <SelectItem key={sprint.id} value={sprint.id}>{sprint.value}</SelectItem>
+                                    <>
+                                     <SelectItem key={sprint.id} value={sprint.id}>{sprint.value}</SelectItem>
+                             
+                                    </>
+                                    
                                 )}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
+                </div>
+
+                <div className="p-8">
+                    {selectedSprints.length > 0 && (
+                        <div>
+                            <div className="font-bold">Selected Sprints:</div>
+                            <ul>
+                                {selectedSprints.map(sprint => (
+                                    <>
+                                    <li key={sprint}>{sprint}</li>
+                                    <Chip
+                                    onDelete={() => (console.log("to be implemented later"))}
+                                   />
+                                   </>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
             {showChart ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
