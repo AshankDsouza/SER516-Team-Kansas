@@ -148,4 +148,11 @@ public class MilestoneController {
         return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
 
     }
+    @GetMapping("/getLeadTimeForAbitraryTimeframe")
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("timeFrame") int timeframe) throws ParseException {
+        ArrayList map = new ArrayList();
+        map=getDataForLeadTime(projectSlug,timeframe);
+        return null;
+
+    }
 }
