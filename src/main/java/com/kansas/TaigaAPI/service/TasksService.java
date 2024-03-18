@@ -119,7 +119,6 @@ public class TasksService {
                 }
             }
         }
-            // API to get history of task
         return result;
     }
 
@@ -178,7 +177,7 @@ public class TasksService {
     }
 
 
-    public List<EffectiveEstimatePoints> calculateEstimateEffectiveness(int projectId, int milestoneId, String authToken){
+    public List<EffectiveEstimatePoints> calculateEstimateEffectiveness(int milestoneId, String authToken){
         List<EffectiveEstimatePoints> effectiveEstimatePointsList = new ArrayList<>();
 
         JsonNode milestoneData = milestoneService.getMilestoneData(authToken, milestoneId);
@@ -190,7 +189,6 @@ public class TasksService {
                 for (JsonNode userStory : userStories) {
                     int cycleTime = 0;
                     int storyPoints = userStory.get("total_points").asInt();
-                    String storyTitle = userStory.get("subject").asText();
                     if(userStory.get("is_closed").asBoolean()){
                         LocalDateTime finishedDate = parseDateTime(userStory.get("finish_date").asText());
                         LocalDateTime createdDate = parseDateTime(userStory.get("created_date").asText());
