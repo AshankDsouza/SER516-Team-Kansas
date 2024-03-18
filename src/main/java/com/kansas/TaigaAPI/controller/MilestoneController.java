@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.EffectiveEstimatePoints;
 import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
@@ -147,5 +148,11 @@ public class MilestoneController {
 
         return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
 
+    }
+
+    @GetMapping("/{projectSlug}/{milestoneId}/getEstimateEffectiveness")
+    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable String projectSlug, @PathVariable int milestoneId) {
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+        return tasksService.calculateEstimateEffectiveness(projectId,milestoneId, authenticationService.getAuthToken());
     }
 }
