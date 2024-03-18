@@ -150,9 +150,8 @@ public class MilestoneController {
 
     }
 
-    @GetMapping("/{projectSlug}/{milestoneId}/getEstimateEffectiveness")
-    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable String projectSlug, @PathVariable int milestoneId) {
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
-        return tasksService.calculateEstimateEffectiveness(projectId,milestoneId, authenticationService.getAuthToken());
+    @GetMapping("/{milestoneId}/getEstimateEffectiveness")
+    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable int milestoneId) {
+        return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken());
     }
 }
