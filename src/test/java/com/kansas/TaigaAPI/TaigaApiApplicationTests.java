@@ -2,18 +2,19 @@ package com.kansas.TaigaAPI;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kansas.TaigaAPI.model.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import com.kansas.TaigaAPI.model.AuthRequest;
-import com.kansas.TaigaAPI.model.TotalPoints;
+
 import com.kansas.TaigaAPI.service.ProjectService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.kansas.TaigaAPI.model.AuthRequest;
-import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kansas.TaigaAPI.controller.MilestoneController;
-import com.kansas.TaigaAPI.model.CycleTime;
 
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.TasksService;
@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
@@ -55,8 +55,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -106,7 +104,7 @@ class TaigaApiApplicationTests {
 	@Mock
 	private AuthenticationService authenticationService;
 
-	@Mock
+	@MockBean
 	private MilestoneService milestoneService;
 
 	@InjectMocks
@@ -223,7 +221,58 @@ class TaigaApiApplicationTests {
 				.andExpect(content().json(expectedJson));
 	}
 
+	@Test
+	void testGetEstimateEffectiveness() {
 
+		String projectSlug = "ser516asu-ser516-team-kansas";
+		int milestoneId = 376621;
+		String authToken = "auth-token";
+		List<EffectiveEstimatePoints> mockResponse = List.of(new EffectiveEstimatePoints(projectSlug, milestoneId));
+
+		when(authenticationService.getAuthToken()).thenReturn(authToken);
+		when(tasksService.calculateEstimateEffectiveness(milestoneId, authToken)).thenReturn(mockResponse);
+
+		List<EffectiveEstimatePoints> result = milestoneController.getEstimateEffectiveness(milestoneId);
+
+		assertNotNull(result);
+		assertEquals(mockResponse, result);
+		verify(tasksService).calculateEstimateEffectiveness(milestoneId, authToken);
+	}
+
+	@Test
+	void calculateEstimateEffectiveness_Success() throws JsonProcessingException {
+		int milestoneId = 100;
+		String authToken = "authToken";
+
+		String milestoneDataJson = """
+                {
+                  "user_stories": [
+                    {
+                      "is_closed": true,
+                      "total_points": 5,
+                      "subject": "Closed Story",
+                      "created_date": "2023-01-01T00:00:00Z",
+                      "finish_date": "2023-01-03T00:00:00Z"
+                    },
+                    {
+                      "is_closed": false,
+                      "total_points": 3,
+                      "subject": "Open Story"
+                    }
+                  ]
+                }
+                """;
+
+		JsonNode milestoneData = objectMapper.readTree(milestoneDataJson);
+
+		when(milestoneService.getMilestoneData(authToken, milestoneId)).thenReturn(milestoneData);
+
+		List<EffectiveEstimatePoints> result = tasksService.calculateEstimateEffectiveness(milestoneId, authToken);
+
+		assertNotNull(result);
+		assertEquals(0, result.size());
+	}
 
 
 }
+
