@@ -150,8 +150,17 @@ public class MilestoneController {
 
     }
 
+    @GetMapping("/getLeadTimeForAbitraryTimeframe")
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("timeFrame") int timeframe) throws ParseException {
+        ArrayList map = new ArrayList();
+        map=getDataForLeadTime(projectSlug,timeframe);
+        return null;
+}
+
+
     @GetMapping("/{milestoneId}/getEstimateEffectiveness")
     public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable int milestoneId) {
         return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken());
+
     }
 }
