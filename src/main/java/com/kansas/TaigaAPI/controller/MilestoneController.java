@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.EffectiveEstimatePoints;
 import com.kansas.TaigaAPI.model.TotalPoints;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
@@ -148,25 +149,18 @@ public class MilestoneController {
         return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
 
     }
-    @GetMapping("/getLeadTimeForAbitraryTimeframe")
-    public HashMap getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
-        ArrayList map = new ArrayList();
 
-       // map=getDataForLeadTime(projectSlug,timeframe);
-        JsonNode jsonNode=getMilestoneList(projectId);
-        LocalDate createDateFromString = LocalDate.parse(startDate);
-        LocalDate endDateFromString = LocalDate.parse(endDate);
-        HashMap hs=new HashMap();
-        for(int i=0;i<jsonNode.size();i++) {
-            LocalDate finishDate=LocalDate.parse(jsonNode.get(i).get("finish_date").toString().substring(1,11));
-            LocalDate createDate=LocalDate.parse(jsonNode.get(i).get("create_date").toString().substring(1,11));
-            if(!finishDate.isAfter(endDateFromString) && !createDate.isBefore(createDateFromString)){
-            hs.put("created_date",startDate);
-            hs.put("finish_date", endDate);
-            hs.put("userStory_Name", (jsonNode.get(i).get("subject")).asText());}
-        }
-        return hs;
+    @GetMapping("/getLeadTimeForAbitraryTimeframe")
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("timeFrame") int timeframe) throws ParseException {
+        ArrayList map = new ArrayList();
+        map=getDataForLeadTime(projectSlug,timeframe);
+        return null;
+}
+
+
+    @GetMapping("/{milestoneId}/getEstimateEffectiveness")
+    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable int milestoneId) {
+        return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken());
 
     }
 }
