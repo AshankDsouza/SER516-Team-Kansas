@@ -151,12 +151,26 @@ public class MilestoneController {
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
-    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("timeFrame") int timeframe) throws ParseException {
+    public HashMap getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
         ArrayList map = new ArrayList();
-        map=getDataForLeadTime(projectSlug,timeframe);
-        return null;
-}
 
+        // map=getDataForLeadTime(projectSlug,timeframe);
+        JsonNode jsonNode=getMilestoneList(projectId);
+        LocalDate createDateFromString = LocalDate.parse(startDate);
+        LocalDate endDateFromString = LocalDate.parse(endDate);
+        HashMap hs=new HashMap();
+        for(int i=0;i<jsonNode.size();i++) {
+            LocalDate finishDate=LocalDate.parse(jsonNode.get(i).get("finish_date").toString().substring(1,11));
+            LocalDate createDate=LocalDate.parse(jsonNode.get(i).get("create_date").toString().substring(1,11));
+            if(!finishDate.isAfter(endDateFromString) && !createDate.isBefore(createDateFromString)){
+                hs.put("created_date",startDate);
+                hs.put("finish_date", endDate);
+                hs.put("userStory_Name", (jsonNode.get(i).get("subject")).asText());}
+        }
+        return hs;
+
+    }
 
     @GetMapping("/{milestoneId}/getEstimateEffectiveness")
     public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable int milestoneId) {
