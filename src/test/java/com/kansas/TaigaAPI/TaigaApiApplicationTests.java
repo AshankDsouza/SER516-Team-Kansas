@@ -129,7 +129,7 @@ class TaigaApiApplicationTests {
 
 		expectedCycleTimes.add(new CycleTime("ABC",10,2));
 
-		given(authenticationService.getAuthToken()).willReturn(authToken);
+		given(authenticationService.getAuthToken(authToken)).willReturn(authToken);
 		given(projectService.getProjectId(authToken, projectSlug)).willReturn(projectId);
 		given(tasksService.getTaskHistory(projectId, milestoneId, authToken)).willReturn(expectedCycleTimes);
 
@@ -167,13 +167,13 @@ class TaigaApiApplicationTests {
 		List<CompletedPoints> mockCompletedPoints = new ArrayList<>();
 
 		when(projectService.getProjectId(authToken,projectSlug)).thenReturn(projectId);
-		when(authenticationService.getAuthToken()).thenReturn(authToken);
+		when(authenticationService.getAuthToken(authToken)).thenReturn(authToken);
 		when(milestoneService.getMilestoneCompletedPoints(authToken, projectId)).thenReturn(mockCompletedPoints);
 
 		mockMvc.perform(get("/api/{projectSlug}/getCompletedPoints", projectSlug))
 				.andExpect(status().isOk());
 
-		verify(authenticationService, times(2)).getAuthToken();
+		verify(authenticationService, times(2)).getAuthToken(authToken);
 		verify(milestoneService, times(1)).getMilestoneCompletedPoints(authToken, projectId);
 	}
 
@@ -210,7 +210,7 @@ class TaigaApiApplicationTests {
 		totalPointsList.add(new TotalPoints("Sprint 2",37));
 		totalPointsList.add(new TotalPoints("Sprint 1",41));
 
-		given(authenticationService.getAuthToken()).willReturn(authToken);
+		given(authenticationService.getAuthToken(authToken)).willReturn(authToken);
 		given(projectService.getProjectId(authToken, projectSlug)).willReturn(projectId);
 //		given(milestoneService.getMilestoneList(authToken,projectId)).willReturn(sprintData);
 		given(milestoneService.getMilestoneTotalPoints(authToken,projectId)).willReturn(totalPointsList);

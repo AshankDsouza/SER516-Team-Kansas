@@ -14,6 +14,7 @@ import com.kansas.TaigaAPI.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,28 +39,28 @@ public class MilestoneController {
     private ProjectService projectService;
 
     @GetMapping("/{milestoneId}/stats")
-    public JsonNode getBurnDownMetrics(@PathVariable int milestoneId) {
-        return milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(), milestoneId);
+    public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,@PathVariable int milestoneId) {
+        return milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(authorizationHeader), milestoneId);
     }
 
     @GetMapping("/getMilestoneList")
-    public JsonNode getMilestoneList(@RequestParam("project") int projectId) {
-        return milestoneService.getMilestoneList(authenticationService.getAuthToken(), projectId);
+    public JsonNode getMilestoneList(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("project") int projectId) {
+        return milestoneService.getMilestoneList(authenticationService.getAuthToken(authorizationHeader), projectId);
     }
 
     @GetMapping("/getMilestoneListForSprint")
-    public JsonNode getMilestoneListForSprint(@RequestParam("project") int projectId, @RequestParam("sprintNo") int sprintNo){
-        JsonNode jsonNode=getMilestoneList(projectId);
+    public JsonNode getMilestoneListForSprint(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("project") int projectId, @RequestParam("sprintNo") int sprintNo){
+        JsonNode jsonNode=getMilestoneList(authorizationHeader,projectId);
         int value= jsonNode.size()-sprintNo;
       //  System.out.println("Value " +value+" Sprint Length "+ jsonNode);
         return jsonNode.get(value);
     }
 
     @GetMapping("/getAllSprints")
-    public HashMap<String,Integer> getAllSprints(@RequestParam("project") String projectSlug){
+    public HashMap<String,Integer> getAllSprints(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("project") String projectSlug){
         ProjectService projectService =new ProjectService();
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
-        JsonNode jsonNode=getMilestoneList(projectId);
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
+        JsonNode jsonNode=getMilestoneList(authorizationHeader,projectId);
         HashMap<String,Integer> sprintVal= new HashMap<String,Integer>();
            for(int i=0;i<jsonNode.size();i++) {
                sprintVal.put(jsonNode.get(i).get("name").asText(),jsonNode.get(i).get("id").asInt());
@@ -69,8 +70,8 @@ public class MilestoneController {
 
     //Burndown chart
     @GetMapping("/{milestoneId}/getBurnDownChart")
-    public JsonNode getTotalStoryPoints(@PathVariable int milestoneId) {
-        JsonNode rootNode = milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(), milestoneId);
+    public JsonNode getTotalStoryPoints(@RequestHeader("Authorization") String authorizationHeader,@PathVariable int milestoneId) {
+        JsonNode rootNode = milestoneService.getBurnDownMetrics(authenticationService.getAuthToken(authorizationHeader), milestoneId);
 
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode arrayNode = mapper.createArrayNode();
@@ -89,17 +90,18 @@ public class MilestoneController {
     }
     //Cycle Time
     @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
-    public List<CycleTime> getCycleTime(@PathVariable String projectSlug, @PathVariable int milestoneId){
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
-        return tasksService.getTaskHistory(projectId,milestoneId,authenticationService.getAuthToken());
+    public List<CycleTime> getCycleTime(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug, @PathVariable int milestoneId){
+        String authToken=authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authToken, projectSlug);
+        return tasksService.getTaskHistory(projectId,milestoneId,authToken);
     }
 
     @GetMapping("getDataForLeadTime")
-    public ArrayList getDataForLeadTime(@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) throws ParseException {
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+    public ArrayList getDataForLeadTime(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) throws ParseException {
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
 
         ArrayList map = new ArrayList();
-        JsonNode jsonNode=getMilestoneList(projectId);
+        JsonNode jsonNode=getMilestoneList(authorizationHeader,projectId);
         //Getting data from taiga api
         JsonNode relData = getGivenSprintData(sprintId,jsonNode);
         relData = relData.get("user_stories");
@@ -134,18 +136,20 @@ public class MilestoneController {
 
 
     @GetMapping("/{projectSlug}/getTotalPoints")
-    public List<TotalPoints> getMilestoneCompletedPoints(@PathVariable String projectSlug){
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
-        return milestoneService.getMilestoneTotalPoints(authenticationService.getAuthToken(), projectId);
+    public List<TotalPoints> getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authToken, projectSlug);
+        return milestoneService.getMilestoneTotalPoints(authToken, projectId);
     
     }
 
     //Work Capacity
     @GetMapping("/{projectSlug}/getCompletedPoints")
-    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@PathVariable String projectSlug){
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(), projectSlug);
+    public List<CompletedPoints> getMilestoneTotalCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authToken, projectSlug);
 
-        return milestoneService.getMilestoneCompletedPoints(authenticationService.getAuthToken(), projectId);
+        return milestoneService.getMilestoneCompletedPoints(authToken, projectId);
 
     }
 }
