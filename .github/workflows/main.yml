@@ -23,6 +23,9 @@ jobs:
           cd kansas/SER516-Team-Kansas
           git pull origin main
 
+    - name: Turning down the containers
+      run: docker-compose down
+
     - name: Delete all old containers
       run: docker-compose rm -f
 

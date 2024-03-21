@@ -103,7 +103,7 @@ export async function getVelocity(projectSlug: string) {
     }))
     
 
-    const url = `http://localhost:8080/api/${projectSlug}/getTotalPoints`;
+    const url = `${process.env.API_URL}/api/${projectSlug}/getTotalPoints`;
 
     const response = await fetch(url, getRequestOptions())
     const data = await response.json();
@@ -124,7 +124,7 @@ export async function getWorkCapacity(projectSlug: string) {
     }))
     
 
-    const url = `http://localhost:8080/api/${projectSlug}/getCompletedPoints`;
+    const url = `${process.env.API_URL}/api/${projectSlug}/getCompletedPoints`;
 
     const response = await fetch(url, getRequestOptions())
     const data = await response.json();
