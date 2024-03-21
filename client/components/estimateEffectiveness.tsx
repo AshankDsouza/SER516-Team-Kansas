@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select"
 import BurndownChart from "./burndownChart";
+import { getEstimateEffectiveness } from "@/actions/project";
 
 
 function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id: string, value: string }[] }) {
@@ -11,14 +12,26 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
     const [showChart, setShowChart] = useState(true);
     const [labels, setLabels] = useState<string[]>(["100"])
     const [open_points, setopen_points] = useState<number[]>([1])
+    const [effectiveness, seteffectiveness] = useState<number[]>([1])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const effectiveness = await getEstimateEffectiveness(selectedSprintID);
+            seteffectiveness(effectiveness.map((item: any) => item.effectiveness))
+            setLabels(effectiveness.map((item: any) => item.storyTitle.slice(0,5)+'...'))
+        }
+        if (selectedSprintID) {
+            fetchData();
+        }
+    }, [selectedSprintID]);
+    
 
     const data = {
         labels,
         datasets: [
             {
                 label: 'Open points',
-                data: open_points,
+                data: effectiveness,
                 borderColor: '#000',
                 backgroundColor: '#666',
             },
