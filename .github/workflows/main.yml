@@ -23,8 +23,8 @@ jobs:
           cd kansas/SER516-Team-Kansas
           git pull origin main
 
-    - name: Build Docker image
-      run: docker build -t java_backend .
+    - name: Delete all old containers
+      run: docker-compose rm -f
 
-    - name: Run Docker container
-      run: docker run -d -p 8080:80 java_backend
+    - name: Build and run new containers from new images
+      run: docker-compose up --build -d
