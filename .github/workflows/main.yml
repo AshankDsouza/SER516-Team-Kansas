@@ -26,8 +26,17 @@ jobs:
     - name: Turning down the containers
       run: docker-compose down
 
+    - name: Delete all images
+      run: docker system prune
+
     - name: Delete all old containers
       run: docker-compose rm -f
 
-    - name: Build and run new containers from new images
-      run: docker-compose up --build -d
+    - name: Build new images 
+      run: docker-compose build
+
+    - name: Run the images as containers
+      run: docker-compose up -d
+
+    
+
