@@ -14,7 +14,7 @@ export default async function getUserToken(userName: string, password: string): 
         "password": password
     });
 
-    const response = await fetch("http://localhost:8080/api/auth", {
+    const response = await fetch(`${process.env.API_URL}/api/auth`, {
         method: 'POST',
         headers: myHeaders,
         body: raw,
