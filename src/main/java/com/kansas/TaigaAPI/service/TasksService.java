@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kansas.TaigaAPI.TaigaApiApplication;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.EffectiveEstimatePoints;
 import com.kansas.TaigaAPI.utils.GlobalData;
 import com.kansas.TaigaAPI.utils.HTTPRequest;
 import org.apache.http.HttpHeaders;
@@ -31,6 +32,9 @@ public class TasksService {
 
     @Autowired
     private  AuthenticationService authenticationService;
+
+    @Autowired
+    private MilestoneService milestoneService;
 
     public List<JsonNode> getClosedTasks(int projectId, String authToken) {
 
@@ -103,7 +107,7 @@ public class TasksService {
 
                     String responseJson = HTTPRequest.sendHttpRequest(request);
                     JsonNode historyData = objectMapper.readTree(responseJson);
-                 //   System.out.println(historyData);
+
                     LocalDateTime finishedDate = parseDateTime(task.get("finished_date").asText());
 
                     int[] cycleTimeAndClosedTasks = calculateCycleTime(historyData, finishedDate);
@@ -115,7 +119,6 @@ public class TasksService {
                 }
             }
         }
-            // API to get history of task
         return result;
     }
 
@@ -171,6 +174,51 @@ public class TasksService {
         }
         return null;
 
+    }
+
+
+    public List<EffectiveEstimatePoints> calculateEstimateEffectiveness(int milestoneId, String authToken){
+        List<EffectiveEstimatePoints> effectiveEstimatePointsList = new ArrayList<>();
+
+        JsonNode milestoneData = milestoneService.getMilestoneData(authToken, milestoneId);
+        int totalCycleTime = 0;
+        int totalStoryPoints = 0;
+        if (milestoneData != null) {
+            JsonNode userStories = milestoneData.get("user_stories");
+            if (userStories != null && userStories.isArray()) {
+                for (JsonNode userStory : userStories) {
+                    int cycleTime = 0;
+                    int storyPoints = userStory.get("total_points").asInt();
+                    if(userStory.get("is_closed").asBoolean()){
+                        LocalDateTime finishedDate = parseDateTime(userStory.get("finish_date").asText());
+                        LocalDateTime createdDate = parseDateTime(userStory.get("created_date").asText());
+                        cycleTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishedDate.toLocalDate().atStartOfDay()).toDays();
+                    }
+                    totalCycleTime += cycleTime;
+                    totalStoryPoints += storyPoints;
+                }
+                for (JsonNode userStory : userStories) {
+                    int cycleTime = 0;
+                    int storyPoints = userStory.get("total_points").asInt();
+                    String storyTitle = userStory.get("subject").asText();
+                    if(userStory.get("is_closed").asBoolean()){
+                        LocalDateTime finishedDate = parseDateTime(userStory.get("finish_date").asText());
+                        LocalDateTime createdDate = parseDateTime(userStory.get("created_date").asText());
+                        cycleTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishedDate.toLocalDate().atStartOfDay()).toDays();
+                    }
+                    double cycleTimeRatio = (double) cycleTime / totalCycleTime;
+                    double storyPointsRatio = (double) storyPoints / totalStoryPoints;
+                    double effectiveness = cycleTimeRatio / storyPointsRatio;
+                    effectiveEstimatePointsList.add(new EffectiveEstimatePoints(storyTitle, effectiveness));
+                }
+
+            } else {
+                System.out.println("No user stories found for the milestone.");
+            }
+        } else {
+            System.out.println("Failed to retrieve milestone data.");
+        }
+        return effectiveEstimatePointsList;
     }
 
 

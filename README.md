@@ -10,6 +10,7 @@ maven
 ### 1) Clone the repository
 
 
+
    ```bash
  git clone https://github.com/ser516asu/SER516-Team-Kansas.git
    cd SER516-Team-Kansas
@@ -48,3 +49,8 @@ https://phoenixnap.com/kb/install-maven-windows
 ```mvn clean package -Ddockerfile.skip # Clean and build the jar application```<br>
 ```docker run -p 8080:8080 kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application interactively```<br>
 ```docker run -p 8080:8080 -d kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application in background```
+
+Site is available at:
+http://20.39.192.152
+Backend is available at:
+http://20.39.192.152:8080
