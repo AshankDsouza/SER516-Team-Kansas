@@ -1,0 +1,46 @@
+name: Deploy to VM and Dockerize
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: SSH into VM and update code
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd kansas/SER516-Team-Kansas
+          git pull origin main
+          sudo docker-compose down
+          sudo docker system prune -f
+          sudo docker-compose build
+          sudo docker-compose up -d
+
+    # - name: Turning down the containers
+    #   run: sudo docker-compose down
+
+    # - name: Delete all images
+    #   run: sudo docker system prune -f
+
+    # - name: Delete all old containers
+    #   run: docker-compose rm -f
+
+    # - name: Build new images 
+    #   run: docker-compose build
+
+    # - name: Run the images as containers
+    #   run: docker-compose up -d
+
+    
+
