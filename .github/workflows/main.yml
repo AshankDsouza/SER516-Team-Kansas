@@ -26,23 +26,18 @@ jobs:
           sudo docker system prune -f
 
     # - name: Turning down the containers
-    #   id: turnOff
     #   run: sudo docker-compose down
 
     # - name: Delete all images
-    #   if: steps.turnOff.outcome == 'success'
     #   run: sudo docker system prune -f
 
     # - name: Delete all old containers
-    #   if: steps.turnOff.outcome == 'success'
     #   run: docker-compose rm -f
 
     - name: Build new images 
-      if: steps.turnOff.outcome == 'success'
       run: docker-compose build
 
     - name: Run the images as containers
-      if: steps.turnOff.outcome == 'success'
       run: docker-compose up -d
 
     
