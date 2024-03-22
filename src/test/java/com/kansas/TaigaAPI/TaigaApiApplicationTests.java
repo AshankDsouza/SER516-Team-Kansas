@@ -34,18 +34,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
@@ -56,28 +52,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashMap;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import com.kansas.TaigaAPI.service.AuthenticationService;
+import org.springframework.http.HttpHeaders;
+
 
 
 @RunWith(SpringRunner.class)
@@ -136,6 +119,7 @@ class TaigaApiApplicationTests {
 		String expectedJson = objectMapper.writeValueAsString(expectedCycleTimes);
 
 		mockMvc.perform(get("/api/" + projectSlug + "/" + milestoneId + "/getCycleTime")
+						.header(HttpHeaders.AUTHORIZATION,   authToken)
 						.contentType(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().json(expectedJson));
@@ -170,10 +154,11 @@ class TaigaApiApplicationTests {
 		when(authenticationService.getAuthToken(authToken)).thenReturn(authToken);
 		when(milestoneService.getMilestoneCompletedPoints(authToken, projectId)).thenReturn(mockCompletedPoints);
 
-		mockMvc.perform(get("/api/{projectSlug}/getCompletedPoints", projectSlug))
+		mockMvc.perform(get("/api/{projectSlug}/getCompletedPoints", projectSlug)
+						.header(HttpHeaders.AUTHORIZATION,   authToken))
 				.andExpect(status().isOk());
 
-		verify(authenticationService, times(2)).getAuthToken(authToken);
+		verify(authenticationService, times(1)).getAuthToken(authToken);
 		verify(milestoneService, times(1)).getMilestoneCompletedPoints(authToken, projectId);
 	}
 
@@ -218,6 +203,7 @@ class TaigaApiApplicationTests {
 		String expectedJson = objectMapper.writeValueAsString(totalPointsList);
 
 		mockMvc.perform(get("/api/" + projectSlug + "/getTotalPoints")
+						.header(HttpHeaders.AUTHORIZATION,   authToken)
 						.contentType(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().json(expectedJson));
