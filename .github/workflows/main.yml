@@ -24,6 +24,8 @@ jobs:
           git pull origin main
           sudo docker-compose down
           sudo docker system prune -f
+          sudo docker-compose build
+          sudo docker-compose up -d
 
     # - name: Turning down the containers
     #   run: sudo docker-compose down
@@ -34,11 +36,11 @@ jobs:
     # - name: Delete all old containers
     #   run: docker-compose rm -f
 
-    - name: Build new images 
-      run: docker-compose build
+    # - name: Build new images 
+    #   run: docker-compose build
 
-    - name: Run the images as containers
-      run: docker-compose up -d
+    # - name: Run the images as containers
+    #   run: docker-compose up -d
 
     
 
