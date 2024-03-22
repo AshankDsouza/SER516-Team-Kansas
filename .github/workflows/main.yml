@@ -27,7 +27,7 @@ jobs:
       run: docker-compose down
 
     - name: Delete all images
-      run: docker system prune
+      run: docker system prune -f
 
     - name: Delete all old containers
       run: docker-compose rm -f
