@@ -71,8 +71,8 @@ public class AuthenticationService {
         return null;
     }
 
-    public String getAuthToken() {
-        return authToken;
+    public String getAuthToken(String authorizationHeader) {
+        return authorizationHeader.substring(7);
     }
 }
 
