@@ -24,10 +24,10 @@ jobs:
           git pull origin main
 
     - name: Turning down the containers
-      run: docker-compose down
+      run: sudo docker-compose down
 
     - name: Delete all images
-      run: docker system prune -f
+      run: sudo docker system prune -f
 
     - name: Delete all old containers
       run: docker-compose rm -f
