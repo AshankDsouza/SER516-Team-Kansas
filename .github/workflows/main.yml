@@ -22,7 +22,7 @@ jobs:
         script: |
           cd kansas/SER516-Team-Kansas
           git pull origin main
-          docker-compose down
+          sudo docker-compose down
           sudo docker system prune -f
 
     # - name: Turning down the containers
