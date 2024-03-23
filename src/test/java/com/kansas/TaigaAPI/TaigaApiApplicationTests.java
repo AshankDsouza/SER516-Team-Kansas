@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.model.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
@@ -42,6 +43,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
@@ -216,10 +219,10 @@ class TaigaApiApplicationTests {
 		String authToken = "auth-token";
 		List<EffectiveEstimatePoints> mockResponse = List.of(new EffectiveEstimatePoints(projectSlug, milestoneId));
 
-		when(authenticationService.getAuthToken()).thenReturn(authToken);
+		when(authenticationService.getAuthToken(authToken)).thenReturn(authToken);
 		when(tasksService.calculateEstimateEffectiveness(milestoneId, authToken)).thenReturn(mockResponse);
 
-		List<EffectiveEstimatePoints> result = milestoneController.getEstimateEffectiveness(milestoneId);
+		List<EffectiveEstimatePoints> result = milestoneController.getEstimateEffectiveness(authToken,milestoneId);
 
 		assertNotNull(result);
 		assertEquals(mockResponse, result);
