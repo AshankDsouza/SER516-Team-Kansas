@@ -155,16 +155,43 @@ public class MilestoneController {
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
-    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestParam("projectSlug") String projectSlug, @RequestParam("timeFrame") int timeframe) throws ParseException {
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
         ArrayList map = new ArrayList();
-        map=getDataForLeadTime(projectSlug,timeframe);
-        return null;
-}
+        JsonNode jsonNode=getMilestoneList(authorizationHeader,projectId);
+        LocalDate createDateFromString = LocalDate.parse(startDate);
+        LocalDate endDateFromString = LocalDate.parse(endDate);
 
+        for(int i=0;i<jsonNode.size();i++) {
+            int userStoriesCount = jsonNode.get(i).get("user_stories").size();
 
-    @GetMapping("/{milestoneId}/getEstimateEffectiveness")
-    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@PathVariable int milestoneId) {
-        return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken());
+            for (int j = 0; j < userStoriesCount; j++) {
+                JsonNode relData = jsonNode.get(i).get("user_stories");
+
+                LocalDate createdDate = LocalDate.parse(relData.get(j).get("created_date").toString().substring(1,11));
+                if(relData.get(j).get("finish_date")!=null) {
+                    LocalDate finishDate = LocalDate.parse(relData.get(j).get("finish_date").toString().substring(1, 11));
+                    if (!finishDate.isAfter(endDateFromString) && !createdDate.isBefore(createDateFromString)) {
+
+                        HashMap hs=new HashMap();
+                        hs.put("created_date", createdDate);
+                        hs.put("finish_date", finishDate);
+                        hs.put("userStory_Name", (relData.get(j).get("subject")).asText());
+                        hs.put("id",(relData.get(j).get("id")).asText());
+
+                        map.add(hs);
+                    }
+                }
+            }
+        }
+        return map;
 
     }
+
+    @GetMapping("/{milestoneId}/getEstimateEffectiveness")
+    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId) {
+        return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken(authorizationHeader));
+
+    }
+
 }
