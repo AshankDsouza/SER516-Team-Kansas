@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kansas.TaigaAPI.TaigaApiApplication;
+import com.kansas.TaigaAPI.model.ArbitaryCycleTime;
 import com.kansas.TaigaAPI.model.CycleTime;
+import com.kansas.TaigaAPI.model.EffectiveEstimatePoints;
 import com.kansas.TaigaAPI.utils.GlobalData;
 import com.kansas.TaigaAPI.utils.HTTPRequest;
 import org.apache.http.HttpHeaders;
@@ -17,9 +19,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TasksService {
@@ -31,6 +31,12 @@ public class TasksService {
 
     @Autowired
     private  AuthenticationService authenticationService;
+
+    @Autowired
+    private MilestoneService milestoneService;
+
+    static DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     public List<JsonNode> getClosedTasks(int projectId, String authToken) {
 
@@ -87,6 +93,28 @@ public class TasksService {
         return new int[]{cycleTime, closedTasks};
     }
 
+    private int[] calculateCycleTime(JsonNode historyData, LocalDate startDate, LocalDate endDate,LocalDate finishedDate) {
+        int cycleTime = 0;
+        int closedTasks = 0;
+
+        for (JsonNode event : historyData) {
+            JsonNode valuesDiff = event.get("values_diff");
+            if (valuesDiff != null && valuesDiff.has("status")) {
+                JsonNode statusDiff = valuesDiff.get("status");
+                if (statusDiff.isArray() && statusDiff.size() == 2
+                        && "New".equals(statusDiff.get(0).asText()) && "In progress".equals(statusDiff.get(1).asText())) {
+                    LocalDate createdAt = LocalDate.parse(pattern.format(parseDateTime(event.get("created_at").asText())));
+                    if(startDate.isBefore(createdAt) && finishedDate.isBefore(endDate)) {
+                        cycleTime += Duration.between(createdAt.atStartOfDay(), finishedDate.atStartOfDay()).toDays();
+                        closedTasks++;
+                    }
+                }
+            }
+        }
+
+        return new int[]{cycleTime, closedTasks};
+    }
+
     public List<CycleTime> getTaskHistory(int projectId, int milestoneId, String authToken) {
         List<CycleTime> result = new ArrayList<>();
         List<JsonNode> tasks =  getClosedTasks(projectId, authToken);
@@ -103,7 +131,7 @@ public class TasksService {
 
                     String responseJson = HTTPRequest.sendHttpRequest(request);
                     JsonNode historyData = objectMapper.readTree(responseJson);
-                 //   System.out.println(historyData);
+
                     LocalDateTime finishedDate = parseDateTime(task.get("finished_date").asText());
 
                     int[] cycleTimeAndClosedTasks = calculateCycleTime(historyData, finishedDate);
@@ -115,7 +143,6 @@ public class TasksService {
                 }
             }
         }
-            // API to get history of task
         return result;
     }
 
@@ -174,5 +201,85 @@ public class TasksService {
     }
 
 
+    public List<EffectiveEstimatePoints> calculateEstimateEffectiveness(int milestoneId, String authToken){
+        List<EffectiveEstimatePoints> effectiveEstimatePointsList = new ArrayList<>();
+
+        JsonNode milestoneData = milestoneService.getMilestoneData(authToken, milestoneId);
+        int totalCycleTime = 0;
+        int totalStoryPoints = 0;
+        if (milestoneData != null) {
+            JsonNode userStories = milestoneData.get("user_stories");
+            if (userStories != null && userStories.isArray()) {
+                for (JsonNode userStory : userStories) {
+                    int cycleTime = 0;
+                    int storyPoints = userStory.get("total_points").asInt();
+                    if(userStory.get("is_closed").asBoolean()){
+                        LocalDateTime finishedDate = parseDateTime(userStory.get("finish_date").asText());
+                        LocalDateTime createdDate = parseDateTime(userStory.get("created_date").asText());
+                        cycleTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishedDate.toLocalDate().atStartOfDay()).toDays();
+                    }
+                    totalCycleTime += cycleTime;
+                    totalStoryPoints += storyPoints;
+                }
+                for (JsonNode userStory : userStories) {
+                    int cycleTime = 0;
+                    int storyPoints = userStory.get("total_points").asInt();
+                    String storyTitle = userStory.get("subject").asText();
+                    if(userStory.get("is_closed").asBoolean()){
+                        LocalDateTime finishedDate = parseDateTime(userStory.get("finish_date").asText());
+                        LocalDateTime createdDate = parseDateTime(userStory.get("created_date").asText());
+                        cycleTime += Duration.between(createdDate.toLocalDate().atStartOfDay(), finishedDate.toLocalDate().atStartOfDay()).toDays();
+                    }
+                    double cycleTimeRatio = (double) cycleTime / totalCycleTime;
+                    double storyPointsRatio = (double) storyPoints / totalStoryPoints;
+                    double effectiveness = cycleTimeRatio / storyPointsRatio;
+                    effectiveEstimatePointsList.add(new EffectiveEstimatePoints(storyTitle, effectiveness));
+                }
+
+            } else {
+                System.out.println("No user stories found for the milestone.");
+            }
+        } else {
+            System.out.println("Failed to retrieve milestone data.");
+        }
+        return effectiveEstimatePointsList;
+    }
+
+
+    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(int projectId, String authToken,String startDate, String endDate) {
+        List<JsonNode> tasks =  getClosedTasks(projectId, authToken);
+        int totalCycleTime = 0;
+        int noOfClosedTasks = 0;
+        List<ArbitaryCycleTime> result = new ArrayList<>();
+        for (JsonNode task : tasks) {
+            int taskId = task.get("id").asInt();
+
+            String taskHistoryUrl = TAIGA_API_ENDPOINT + "/history/task/" + taskId;
+            try {
+                HttpGet request = new HttpGet(taskHistoryUrl);
+                request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
+                request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+
+                String responseJson = HTTPRequest.sendHttpRequest(request);
+                JsonNode historyData = objectMapper.readTree(responseJson);
+
+                LocalDate finishedDate = LocalDate.parse(pattern.format(parseDateTime(task.get("finished_date").asText())));
+
+                LocalDate startDateTime = LocalDate.parse(startDate);
+                LocalDate endDateTime = LocalDate.parse(endDate);
+
+                int[] cycleTimeAndClosedTasks = calculateCycleTime(historyData,startDateTime, endDateTime,finishedDate);
+
+                String taskName = task.get("subject").asText();
+                if(cycleTimeAndClosedTasks[0] != 0){
+                    result.add(new ArbitaryCycleTime(taskName,cycleTimeAndClosedTasks[0]));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
 
 }

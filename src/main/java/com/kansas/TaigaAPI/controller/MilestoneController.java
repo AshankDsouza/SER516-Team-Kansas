@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kansas.TaigaAPI.model.CompletedPoints;
-import com.kansas.TaigaAPI.model.CycleTime;
-import com.kansas.TaigaAPI.model.TotalPoints;
+import com.kansas.TaigaAPI.model.*;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -20,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -153,6 +152,7 @@ public class MilestoneController {
 
     }
 
+
     @GetMapping("/{projectSlug}/multiSprintBundown")
     public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
         String authToken = authenticationService.getAuthToken(authorizationHeader);
@@ -162,4 +162,52 @@ public class MilestoneController {
         return milestoneService.getMultiSprintBurndown(authToken,projectId, (JsonNode) projectDetails.get(projectId));
 
     }
+
+    @GetMapping("/getLeadTimeForAbitraryTimeframe")
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
+        ArrayList map = new ArrayList();
+        JsonNode jsonNode=getMilestoneList(authorizationHeader,projectId);
+        LocalDate createDateFromString = LocalDate.parse(startDate);
+        LocalDate endDateFromString = LocalDate.parse(endDate);
+
+        for(int i=0;i<jsonNode.size();i++) {
+            int userStoriesCount = jsonNode.get(i).get("user_stories").size();
+
+            for (int j = 0; j < userStoriesCount; j++) {
+                JsonNode relData = jsonNode.get(i).get("user_stories");
+
+                LocalDate createdDate = LocalDate.parse(relData.get(j).get("created_date").toString().substring(1,11));
+                if(relData.get(j).get("finish_date")!=null) {
+                    LocalDate finishDate = LocalDate.parse(relData.get(j).get("finish_date").toString().substring(1, 11));
+                    if (!finishDate.isAfter(endDateFromString) && !createdDate.isBefore(createDateFromString)) {
+
+                        HashMap hs=new HashMap();
+                        hs.put("created_date", createdDate);
+                        hs.put("finish_date", finishDate);
+                        hs.put("userStory_Name", (relData.get(j).get("subject")).asText());
+                        hs.put("id",(relData.get(j).get("id")).asText());
+
+                        map.add(hs);
+                    }
+                }
+            }
+        }
+        return map;
+
+    }
+
+    @GetMapping("/{milestoneId}/getEstimateEffectiveness")
+    public List<EffectiveEstimatePoints> getEstimateEffectiveness(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId) {
+        return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken(authorizationHeader));
+
+    }
+
+    @GetMapping("/{projectSlug}/getArbitraryCycleTime")
+    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
+//        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authorizationHeader, projectSlug);
+        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate);
+    }
+
 }
