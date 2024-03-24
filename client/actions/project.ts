@@ -137,3 +137,26 @@ export async function getWorkCapacity(projectSlug: string) {
 
     return data;   
 }
+
+export async function getLeadTimeArbitrary(projectSlug: string, startDate: string, endDate: string) {
+    const Response = z.array(z.object({
+        leadTimeArbitrary: z.number()
+    }));
+    const url = `${process.env.API_URL}/api/${projectSlug}/leadTimeArbitrary`;
+    const requestBody = {
+        startDate,
+        endDate
+    };
+    const response = await fetch(url, {
+        ...getRequestOptions(),
+        method: 'POST',
+        body: JSON.stringify(requestBody)
+    });
+    let leadTimeArbitraryData = await response.json();
+    try {
+        Response.parse(leadTimeArbitraryData);
+    } catch (error) {
+        return null;
+    }
+    return leadTimeArbitraryData;
+}

@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation"
 import WorkCapacityGraph from "./workCapacityGraph"
 import FocusFactor from "./focusFactor"
 import VelocityGraph from "./velocityGraph"
+import LeadTimeArbitaryGraph from "./leadTimeArbitary"
+
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -25,7 +27,7 @@ function Dashboard({ slug }: { slug: string }) {
 
   const [sprints, setsprints] = useState<sprint[]>([{ id: '1', value: "sprint-1" }, { id: '2', value: "sprint-2" }, { id: '3', value: "sprint-3" }])
   const [chart, setChart] = useState("Burndown")
-  const charts = ["Burndown", "Lead time", "Cycle time", "Velocity", "Focus Factor", "Work Capacity"]
+  const charts = ["Burndown", "Lead time", "Cycle time", "Velocity", "Focus Factor", "Work Capacity","LeadTime Arbitary"]
 
   useEffect(() => {
     getProjectMilestones(slug)
@@ -43,7 +45,7 @@ function Dashboard({ slug }: { slug: string }) {
       <div className="flex justify-between mb-4">
         <div className="flex gap-4">
         {charts.map(chart =>
-          <Button key={chart} onClick={() => setChart(chart)}>{chart}</Button>
+          <Button key={chart} onClick={() =>  {console.log(chart); setChart(chart)}}>{chart}</Button>
         )}
         </div>
       <Button onClick={()=>localStorage.clear()} className="flex gap-2"><RotateCcw size={16}/>Refresh cache</Button>
@@ -54,6 +56,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div></div>}
+      {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
 
     </div>
   )
