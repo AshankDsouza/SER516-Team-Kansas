@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kansas.TaigaAPI.model.CompletedPoints;
-import com.kansas.TaigaAPI.model.CycleTime;
-import com.kansas.TaigaAPI.model.EffectiveEstimatePoints;
-import com.kansas.TaigaAPI.model.TotalPoints;
+import com.kansas.TaigaAPI.model.*;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -193,6 +190,17 @@ public class MilestoneController {
 
     }
 
+
+    @GetMapping("/{projectSlug}/multiSprintBundown")
+    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        HashMap projectDetails = projectService.getprojectIdAndSprintId(authToken,projectSlug);
+        int projectId  = Integer.parseInt(projectDetails.keySet().iterator().next().toString());
+
+        return milestoneService.getMultiSprintBurndown(authToken,projectId, (JsonNode) projectDetails.get(projectId));
+
+    }
+
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
     public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate,
@@ -237,6 +245,13 @@ public class MilestoneController {
         return tasksService.calculateEstimateEffectiveness(milestoneId,
                 authenticationService.getAuthToken(authorizationHeader));
 
+    }
+
+    @GetMapping("/{projectSlug}/getArbitraryCycleTime")
+    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
+//        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authorizationHeader, projectSlug);
+        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate);
     }
 
 }
