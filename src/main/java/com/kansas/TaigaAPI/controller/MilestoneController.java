@@ -152,4 +152,14 @@ public class MilestoneController {
         return milestoneService.getMilestoneCompletedPoints(authToken, projectId);
 
     }
+
+    @GetMapping("/{projectSlug}/multiSprintBundown")
+    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        HashMap projectDetails = projectService.getprojectIdAndSprintId(authToken,projectSlug);
+        int projectId  = Integer.parseInt(projectDetails.keySet().iterator().next().toString());
+
+        return milestoneService.getMultiSprintBurndown(authToken,projectId, (JsonNode) projectDetails.get(projectId));
+
+    }
 }

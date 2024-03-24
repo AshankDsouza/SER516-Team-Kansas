@@ -11,6 +11,8 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -42,18 +44,13 @@ public class ProjectService {
         // Open any Taiga project and check the url of your browser. Slug name is the value after " /project/SLUG_NAME "
         // Example https://tree.taiga.io/project/SLUG_NAME/us/1?no-milestone=1
 
-        String endpoint = TAIGA_API_ENDPOINT + "/projects/by_slug?slug=" + projectSlug;
-
-        HttpGet request = new HttpGet(endpoint);
-        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
-        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-
-        String responseJson = HTTPRequest.sendHttpRequest(request);
+        String responseJson = getProjectdetails(authToken,projectSlug);
 
         if (responseJson != null) {
             try {
                 JsonNode projectInfo = objectMapper.readTree(responseJson);
                 int projectId = projectInfo.has("id") ? projectInfo.get("id").asInt() : -1;
+
 
                 if (projectId != -1) {
                     System.out.println("Project details retrieved successfully.");
@@ -67,6 +64,39 @@ public class ProjectService {
         }
 
         return -1;
+    }
+
+    public HashMap getprojectIdAndSprintId(String authToken,String projectSlug){
+        String responseJson = getProjectdetails(authToken,projectSlug);
+        HashMap result = new HashMap<>();
+        if (responseJson != null) {
+            try {
+                JsonNode projectInfo = objectMapper.readTree(responseJson);
+                int projectId = projectInfo.has("id") ? projectInfo.get("id").asInt() : -1;
+                JsonNode milestoneIds =projectInfo.has("milestones") ? projectInfo.get("milestones"): null;
+                if (projectId != -1) {
+                    System.out.println("Project details retrieved successfully.");
+                    result.put(projectId,milestoneIds);
+                    return result;
+                } else {
+                    System.out.println("Invalid project slug. Please try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public String getProjectdetails(String authToken,String projectSlug){
+        String endpoint = TAIGA_API_ENDPOINT + "/projects/by_slug?slug=" + projectSlug;
+
+        HttpGet request = new HttpGet(endpoint);
+        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authToken);
+        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        String responseJson = HTTPRequest.sendHttpRequest(request);
+        return responseJson;
     }
 
 }
