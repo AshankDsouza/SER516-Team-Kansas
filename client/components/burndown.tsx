@@ -26,11 +26,9 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
     const [labels, setLabels] = useState<string[]>([])
     const [open_points, setopen_points] = useState<number[]>([])
     const [optimal_points, setoptimal_points] = useState<number[]>([])
+    const [story_points, setstory_points] = useState<number[]>([])
 
     let sprintNames = sprints.map((sprint) => sprint.value);
-
-    const [selectedSprints, setSelectedSprints] = useState<string[]>(sprintNames)
-
 
     useEffect(() => {
         getBurndowMetrics(selectedSprintID)
@@ -46,6 +44,8 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                 setopen_points(open_points);
                 const optimal_points = data.map((item: any) => item.optimal_points);
                 setoptimal_points(optimal_points);
+                const story_points = data.map((item: any) => item.story_points);
+                setstory_points(story_points);
                 setShowChart(true);
             })
     }, [selectedSprintID])
@@ -58,13 +58,19 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                 label: 'Open points',
                 data: open_points,
                 borderColor: '#000',
-                backgroundColor: '#666',
+                backgroundColor: '#000',
             },
             {
                 label: 'Optimal points',
                 data: optimal_points,
                 borderColor: '#333',
-                backgroundColor: '#999',
+                backgroundColor: '#333',
+            },
+            {
+                label: 'Story points',
+                data: story_points,
+                borderColor: '#666',
+                backgroundColor: '#666',
             },
         ],
     };
@@ -91,24 +97,6 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                </div>
-
-                <div className="p-8">
-                    {selectedSprints.length > 0 && (
-                        <div>
-                            <div className="font-bold">Selected Sprints:</div>
-                            <ul>
-                                {selectedSprints.map(sprint => (
-                                    <>
-                                    <li key={sprint}>{sprint}</li>
-                                    <Chip
-                                    onDelete={() => (console.log("to be implemented later"))}
-                                   />
-                                   </>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
                 </div>
             </div>
             {showChart ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
