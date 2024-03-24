@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Adjust the port as needed
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Adjust the port as needed
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"  # Expose port 80 of Nginx to the outside world
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Mount a custom nginx configuration if needed
+    depends_on:
+      - client
+    restart: unless-stopped

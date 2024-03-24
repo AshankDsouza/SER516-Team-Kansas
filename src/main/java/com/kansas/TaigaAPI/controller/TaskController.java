@@ -22,16 +22,17 @@ public class TaskController {
     private TasksService tasksService;
 
     @GetMapping("")
-    public List<JsonNode> getClosedTasks(@RequestParam("project") String project){
+    public List<JsonNode> getClosedTasks(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("project") String project){
 
         ProjectService projectService =new ProjectService();
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(), project);
-        return tasksService.getClosedTasks(projectId, authenticationService.getAuthToken());
+        String auuthToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId=projectService.getProjectId(auuthToken, project);
+        return tasksService.getClosedTasks(projectId, auuthToken);
     }
 
     @GetMapping("/closedByDate")
-    public HashMap getTasksClosedByDate(@RequestParam("project") int projectId, @RequestParam("sprint") int sprintId){
-        return tasksService.getTasksClosedByDate(projectId,sprintId,authenticationService.getAuthToken());
+    public HashMap getTasksClosedByDate(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("project") int projectId, @RequestParam("sprint") int sprintId){
+        return tasksService.getTasksClosedByDate(projectId,sprintId,authenticationService.getAuthToken(authorizationHeader));
     }
 
 
