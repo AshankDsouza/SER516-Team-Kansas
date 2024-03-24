@@ -152,6 +152,17 @@ public class MilestoneController {
 
     }
 
+
+    @GetMapping("/{projectSlug}/multiSprintBundown")
+    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        HashMap projectDetails = projectService.getprojectIdAndSprintId(authToken,projectSlug);
+        int projectId  = Integer.parseInt(projectDetails.keySet().iterator().next().toString());
+
+        return milestoneService.getMultiSprintBurndown(authToken,projectId, (JsonNode) projectDetails.get(projectId));
+
+    }
+
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
     public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
         int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);

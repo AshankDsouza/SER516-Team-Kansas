@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kansas.TaigaAPI.model.CompletedPoints;
 import com.kansas.TaigaAPI.utils.GlobalData;
@@ -123,6 +125,37 @@ public class MilestoneService {
             //  log.error(e.getMessage());
             return null;
         }
+    }
+
+    public HashMap<String,ArrayNode> getMultiSprintBurndown(String authToken, int projectId, JsonNode projectDetails){
+        HashMap<String,ArrayNode> allSprintBrnd = new HashMap<String,ArrayNode>();
+        ArrayNode burndownData = null;
+        for(JsonNode milestone: projectDetails){
+            if(milestone.get("id") != null){
+                JsonNode responseJson = getMilestoneStats(authToken,milestone.get("id").asInt());
+                burndownData = extractBurnDountDaycountWise(responseJson.get("days"));
+                allSprintBrnd.put(milestone.get("name").asText(),burndownData);
+            }
+        }
+        return allSprintBrnd;
+    }
+
+    public ArrayNode extractBurnDountDaycountWise(JsonNode daysData){
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode arrayNode = mapper.createArrayNode();
+        int dayCount=0;
+        if (daysData.isArray()) {
+
+            for (JsonNode elementNode : daysData) {
+                dayCount+=1;
+                ObjectNode filteredObject = mapper.createObjectNode();
+                filteredObject.put("day", dayCount);
+                filteredObject.put("open_points", elementNode.get("open_points").asDouble());
+                filteredObject.put("optimal_points", elementNode.get("optimal_points").asDouble());
+                arrayNode.add(filteredObject);
+            }
+        }
+        return arrayNode;
     }
 
 }
