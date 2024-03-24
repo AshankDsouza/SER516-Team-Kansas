@@ -145,7 +145,7 @@ export async function getEstimateEffectiveness(milestoneId: string) {
     }))
     
 
-    const url = `http://localhost:8080/api/${milestoneId}/getEstimateEffectiveness`;// need to change the url
+    const url = `${process.env.API_URL}/api/${milestoneId}/getEstimateEffectiveness`;// need to change the url
 
     const response = await fetch(url, getRequestOptions())
     const data = await response.json();
