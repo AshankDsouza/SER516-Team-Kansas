@@ -11,7 +11,6 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
     const [selectedSprintID, setselectedSprintID] = useState("");
     const [showChart, setShowChart] = useState(true);
     const [labels, setLabels] = useState<string[]>(["100"])
-    const [open_points, setopen_points] = useState<number[]>([1])
     const [effectiveness, seteffectiveness] = useState<number[]>([1])
 
     useEffect(() => {
@@ -30,7 +29,7 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
         labels,
         datasets: [
             {
-                label: 'Open points',
+                label: 'Estimate effectiveness',
                 data: effectiveness,
                 borderColor: '#000',
                 backgroundColor: '#666',
