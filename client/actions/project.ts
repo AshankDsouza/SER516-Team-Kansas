@@ -139,3 +139,24 @@ export async function getWorkCapacity(projectSlug: string) {
 
     return data;   
 }
+
+export async function getEstimateEffectiveness(milestoneId: string) {
+    const Response = z.array(z.object({
+        storyTitle: z.string(),
+        effectiveness: z.number()
+    }))
+    
+
+    const url = `${process.env.API_URL}/api/${milestoneId}/getEstimateEffectiveness`;// need to change the url
+
+    const response = await fetch(url, getRequestOptions())
+    const data = await response.json();
+
+    try {
+        Response.parse(data)
+    } catch (error) {
+        return null
+    }
+
+    return data;   
+}

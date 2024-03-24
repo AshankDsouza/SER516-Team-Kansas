@@ -27,11 +27,10 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
     const [showChart, setShowChart] = useState(true)
     const [labels, setLabels] = useState<string[]>([])
     const [open_points, setopen_points] = useState<number[]>([])
+    const [optimal_points, setoptimal_points] = useState<number[]>([])
+    const [story_points, setstory_points] = useState<number[]>([])
 
     let sprintNames = sprints.map((sprint) => sprint.value);
-
-    const [selectedSprints, setSelectedSprints] = useState<string[]>(sprintNames)
-
 
     useEffect(() => {
         getBurndowMetrics(slug)
@@ -61,6 +60,18 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                 label: 'Open points',
                 data: open_points,
                 borderColor: '#000',
+                backgroundColor: '#000',
+            },
+            {
+                label: 'Optimal points',
+                data: optimal_points,
+                borderColor: '#333',
+                backgroundColor: '#333',
+            },
+            {
+                label: 'Story points',
+                data: story_points,
+                borderColor: '#666',
                 backgroundColor: '#666',
             },
         ],
@@ -109,24 +120,6 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                </div>
-
-                <div className="p-8">
-                    {selectedSprints.length > 0 && (
-                        <div>
-                            <div className="font-bold">Selected Sprints:</div>
-                            <ul>
-                                {selectedSprints.map(sprint => (
-                                    <>
-                                    <li key={sprint}>{sprint}</li>
-                                    <Chip
-                                    onDelete={() => (console.log("to be implemented later"))}
-                                   />
-                                   </>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
                 </div>
             </div>
             {showChart ? <LineGraph name="Sprint Burndown" labels={[]} series={series} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import WorkCapacityGraph from "./workCapacityGraph"
 import FocusFactor from "./focusFactor"
 import VelocityGraph from "./velocityGraph"
+import EstimateEffectiveness from "./estimateEffectiveness"
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -25,7 +26,7 @@ function Dashboard({ slug }: { slug: string }) {
 
   const [sprints, setsprints] = useState<sprint[]>([{ id: '1', value: "sprint-1" }, { id: '2', value: "sprint-2" }, { id: '3', value: "sprint-3" }])
   const [chart, setChart] = useState("Burndown")
-  const charts = ["Burndown", "Lead time", "Cycle time", "Velocity", "Focus Factor", "Work Capacity"]
+  const charts = ["Burndown", "Lead time", "Cycle time", "Velocity", "Focus Factor", "Work Capacity", "Estimate Effectiveness"]
 
   useEffect(() => {
     getProjectMilestones(slug)
@@ -53,6 +54,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Cycle time" ? <CycleTime slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
+      {chart == "Estimate Effectiveness" ? <EstimateEffectiveness slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
       {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div></div>}
 
     </div>
