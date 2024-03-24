@@ -25,6 +25,7 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
     const [showChart, setShowChart] = useState(true)
     const [labels, setLabels] = useState<string[]>([])
     const [open_points, setopen_points] = useState<number[]>([])
+    const [optimal_points, setoptimal_points] = useState<number[]>([])
 
     let sprintNames = sprints.map((sprint) => sprint.value);
 
@@ -43,6 +44,8 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                 setLabels(daysArray);
                 const open_points = data.map((item: any) => item.open_points);
                 setopen_points(open_points);
+                const optimal_points = data.map((item: any) => item.optimal_points);
+                setoptimal_points(optimal_points);
                 setShowChart(true);
             })
     }, [selectedSprintID])
@@ -56,6 +59,12 @@ function Burndown({slug, sprints}:{slug: string, sprints:{id: string, value: str
                 data: open_points,
                 borderColor: '#000',
                 backgroundColor: '#666',
+            },
+            {
+                label: 'Optimal points',
+                data: optimal_points,
+                borderColor: '#333',
+                backgroundColor: '#999',
             },
         ],
     };

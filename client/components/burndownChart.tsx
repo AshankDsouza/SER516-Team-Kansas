@@ -33,7 +33,7 @@ export default function BurndownChart(data: any) {
             },
             title: {
                 display: true,
-                text: 'Burndown Chart',
+                text: 'Line Chart',
             },
         },
         scales:{
