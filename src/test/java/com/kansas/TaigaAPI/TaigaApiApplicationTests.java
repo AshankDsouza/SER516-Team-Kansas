@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kansas.TaigaAPI.model.*;
+import org.hamcrest.Matchers;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
@@ -41,21 +43,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 import org.springframework.http.MediaType;
@@ -261,6 +264,35 @@ class TaigaApiApplicationTests {
 
 		assertNotNull(result);
 		assertEquals(0, result.size());
+	}
+
+	@Test
+	public void getCycleTimeForArbitraryTimeFrame_ShouldReturnList() throws Exception {
+		// Arrange
+		String authorizationHeader = "Bearer valid_access_token";
+		String projectSlug = "example-project";
+		String startDate = "2022-01-01";
+		String endDate = "2022-01-31";
+		int projectId = 1; // Assuming this is the ID for 'example-project'
+
+		List<ArbitaryCycleTime> expectedList = Arrays.asList(
+				new ArbitaryCycleTime("Task 1", 5),
+				new ArbitaryCycleTime("Task 2", 3)
+		);
+
+		Mockito.when(projectService.getProjectId(authorizationHeader, projectSlug)).thenReturn(projectId);
+		Mockito.when(tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate)).thenReturn(expectedList);
+
+		// Act & Assert
+		mockMvc.perform(get("/api/{projectSlug}/getArbitraryCycleTime", projectSlug)
+						.header("Authorization", authorizationHeader)
+						.param("startDate", startDate)
+						.param("endDate", endDate))
+				.andExpect(status().isOk());
+
+		// Verify interactions
+		Mockito.verify(projectService).getProjectId(authorizationHeader, projectSlug);
+		Mockito.verify(tasksService).getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate);
 	}
 
 
