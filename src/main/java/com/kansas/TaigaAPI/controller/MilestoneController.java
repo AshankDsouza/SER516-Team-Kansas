@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kansas.TaigaAPI.model.CompletedPoints;
-import com.kansas.TaigaAPI.model.CycleTime;
-import com.kansas.TaigaAPI.model.EffectiveEstimatePoints;
-import com.kansas.TaigaAPI.model.TotalPoints;
+import com.kansas.TaigaAPI.model.*;
 import com.kansas.TaigaAPI.service.AuthenticationService;
 import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
@@ -21,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -192,6 +190,13 @@ public class MilestoneController {
     public List<EffectiveEstimatePoints> getEstimateEffectiveness(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId) {
         return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken(authorizationHeader));
 
+    }
+
+    @GetMapping("/{projectSlug}/getArbitraryCycleTime")
+    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
+//        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authorizationHeader, projectSlug);
+        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate);
     }
 
 }
