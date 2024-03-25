@@ -15,6 +15,8 @@ import VelocityGraph from "./velocityGraph";
 import EstimateEffectiveness from "./estimateEffectiveness";
 import ArbitaryCycleTimeGraph from "./arbitraryCycleTime";
 import LeadTimeArbitaryGraph from "./leadTimeArbitary"
+import BurndownMulti from "./burndownMulti"
+
 
 function Dashboard({ slug }: { slug: string }) {
   type sprint = {
@@ -33,6 +35,7 @@ function Dashboard({ slug }: { slug: string }) {
   const [chart, setChart] = useState("Burndown");
   const charts = [
     "Burndown",
+    "BurndownMulti",
     "Lead time",
     "Cycle time",
     "Velocity",
@@ -41,7 +44,6 @@ function Dashboard({ slug }: { slug: string }) {
     "Estimate Effectiveness",
     "Arbitary Cycle Time" ,"LeadTime Arbitary"
   ];
-
 
   useEffect(() => {
     getProjectMilestones(slug).then((data: any) => {
@@ -56,7 +58,7 @@ function Dashboard({ slug }: { slug: string }) {
     <div className="flex flex-col gap-4">
       <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
       <div className="flex justify-between mb-4">
-        <div className="flex gap-4">
+        <div className="flex-wrap gap-4">
         {charts.map(chart =>
           <Button key={chart} onClick={() =>  {setChart(chart)}}>{chart}</Button>
         )}
@@ -65,6 +67,7 @@ function Dashboard({ slug }: { slug: string }) {
       </div>
 
       {chart == "Burndown" ? <Burndown slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
+      {chart == "BurndownMulti" ? <BurndownMulti slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
       {chart == "Lead time" ? <LeadTime slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Cycle time" ? <CycleTime slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
