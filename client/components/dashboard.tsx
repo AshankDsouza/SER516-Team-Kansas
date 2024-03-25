@@ -58,7 +58,7 @@ function Dashboard({ slug }: { slug: string }) {
     <div className="flex flex-col gap-4">
       <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
       <div className="flex justify-between mb-4">
-        <div className="flex-wrap gap-4">
+        <div className="flex-wrap gap-6">
         {charts.map(chart =>
           <Button key={chart} onClick={() =>  {setChart(chart)}}>{chart}</Button>
         )}
