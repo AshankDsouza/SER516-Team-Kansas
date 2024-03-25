@@ -140,23 +140,22 @@ export async function getWorkCapacity(projectSlug: string) {
 
 export async function getLeadTimeArbitrary(projectSlug: string, startDate: string, endDate: string) {
     const Response = z.array(z.object({
-        leadTimeArbitrary: z.number()
+        finish_date: z.string()
     }));
-    const url = `${process.env.API_URL}/api/${projectSlug}/leadTimeArbitrary`;
-    const requestBody = {
-        startDate,
-        endDate
-    };
-    const response = await fetch(url, {
-        ...getRequestOptions(),
-        method: 'POST',
-        body: JSON.stringify(requestBody)
-    });
+    const url = `${process.env.API_URL}/api/getLeadTimeForAbitraryTimeframe?projectSlug=${projectSlug}&startDate=${startDate}&endDate=${endDate}`;
+    
+    console.log("This code is working");
+    console.log(projectSlug);
+    const response = await fetch(url, getRequestOptions());
+   // console.log(response);
+    
     let leadTimeArbitraryData = await response.json();
+    console.log(leadTimeArbitraryData);
     try {
         Response.parse(leadTimeArbitraryData);
     } catch (error) {
         return null;
     }
+    
     return leadTimeArbitraryData;
 }

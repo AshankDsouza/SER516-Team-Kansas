@@ -24,8 +24,13 @@ function LeadTimeArbitaryGraph({ slug, sprints }: { slug: string, sprints: { id:
           router.refresh();
           return;
         }
-        const labels = data.map((item: any) => item.taskName);
-        const openPoints = data.map((item: any) => item.leadTimeArbitary);
+        const labels = data.map((item: any) => item.userStory_Name);
+        const openPoints = data.map((item: any) => {
+          const startDate:any = new Date(item.created_date);
+          const endDate:any = new Date(item.finish_date);
+          const differenceInMs = Math.abs(endDate - startDate);
+          return Math.ceil(differenceInMs / (1000 * 60 * 60 * 24));
+        });
         setLabels(labels);
         let series = [
           {
@@ -38,7 +43,7 @@ function LeadTimeArbitaryGraph({ slug, sprints }: { slug: string, sprints: { id:
       }
     };
     fetchData();
-  }, [slug, startDate, endDate]);
+  }, [startDate, endDate]);
 
   return (
     <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
