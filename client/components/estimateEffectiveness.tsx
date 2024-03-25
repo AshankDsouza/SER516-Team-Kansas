@@ -12,12 +12,18 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
     const [showChart, setShowChart] = useState(true);
     const [labels, setLabels] = useState<string[]>(["100"])
     const [effectiveness, seteffectiveness] = useState<number[]>([1])
+    const [noData, setNoData] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             const effectiveness = await getEstimateEffectiveness(selectedSprintID);
+            if(effectiveness){
             seteffectiveness(effectiveness.map((item: any) => item.effectiveness))
             setLabels(effectiveness.map((item: any) => item.storyTitle.slice(0,5)+'...'))
+            }
+            else{
+                setNoData(true);
+            }
         }
         if (selectedSprintID) {
             fetchData();
@@ -62,7 +68,8 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
                 </div>
 
             </div>
-            {showChart ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+            {showChart && !noData ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+            {noData ? <div className="flex">There is no data for this sprint</div> : <div className=" hidden"></div> }
         </div>
     )
 }
