@@ -202,11 +202,11 @@ public class MilestoneController {
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
-    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,
-            @RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate,
-            @RequestParam("endDate") String endDate) throws ParseException {
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
-                projectSlug);
+
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
+        int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
+       
+
         ArrayList map = new ArrayList();
         JsonNode jsonNode = getMilestoneList(authorizationHeader, projectId);
         LocalDate createDateFromString = LocalDate.parse(startDate);
@@ -224,11 +224,12 @@ public class MilestoneController {
                             .parse(relData.get(j).get("finish_date").toString().substring(1, 11));
                     if (!finishDate.isAfter(endDateFromString) && !createdDate.isBefore(createDateFromString)) {
 
-                        HashMap hs = new HashMap();
+                    System.out.println("Fetching details");
+                        HashMap hs=new HashMap();
                         hs.put("created_date", createdDate);
                         hs.put("finish_date", finishDate);
                         hs.put("userStory_Name", (relData.get(j).get("subject")).asText());
-                        hs.put("id", (relData.get(j).get("id")).asText());
+                        hs.put("id",(relData.get(j).get("id")).asText());
 
                         map.add(hs);
                     }
