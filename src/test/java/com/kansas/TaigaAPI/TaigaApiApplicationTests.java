@@ -272,7 +272,7 @@ class TaigaApiApplicationTests {
 		String projectSlug = "example-project";
 		String startDate = "2022-01-01";
 		String endDate = "2022-01-31";
-		int projectId = 1; // Assuming this is the ID for 'example-project'
+		int projectId = 1;
 
 		List<ArbitaryCycleTime> expectedList = Arrays.asList(
 				new ArbitaryCycleTime("Task 1", 5),
