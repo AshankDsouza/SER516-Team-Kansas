@@ -72,6 +72,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Cycle time" ? <CycleTime slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
+      {chart == "Estimate Effectiveness" ? <EstimateEffectiveness slug={slug} sprints={sprints}/> : <div className=" hidden"></div>} 
       {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div></div>}
       {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
       {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div className=" hidden"></div>)}
