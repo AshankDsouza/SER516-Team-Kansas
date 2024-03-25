@@ -33,8 +33,17 @@ function Dashboard({ slug }: { slug: string }) {
     { id: "3", value: "sprint-3" },
   ]);
   const [chart, setChart] = useState("Burndown");
-  const charts = ["Burndown", "BurndownMulti","Lead time", "Cycle time", "Velocity", "Focus Factor", "Work Capacity", "Estimate Effectiveness"]
-
+  const charts = [
+    "Burndown",
+    "BurndownMulti",
+    "Lead time",
+    "Cycle time",
+    "Velocity",
+    "Focus Factor",
+    "Work Capacity",
+    "Estimate Effectiveness",
+    "Arbitary Cycle Time" ,"LeadTime Arbitary"
+  ];
 
   useEffect(() => {
     getProjectMilestones(slug).then((data: any) => {
@@ -49,7 +58,7 @@ function Dashboard({ slug }: { slug: string }) {
     <div className="flex flex-col gap-4">
       <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
       <div className="flex justify-between mb-4">
-        <div className="flex gap-4">
+        <div className="flex-wrap gap-4">
         {charts.map(chart =>
           <Button key={chart} onClick={() =>  {setChart(chart)}}>{chart}</Button>
         )}
