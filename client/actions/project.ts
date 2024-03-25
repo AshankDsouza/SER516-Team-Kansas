@@ -160,7 +160,7 @@ export async function getLeadTimeArbitrary(projectSlug: string, startDate: strin
     }
     
     return leadTimeArbitraryData;
-
+}
 export async function getEstimateEffectiveness(milestoneId: string) {
     const Response = z.array(z.object({
         storyTitle: z.string(),
