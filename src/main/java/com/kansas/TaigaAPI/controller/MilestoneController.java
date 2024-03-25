@@ -251,8 +251,8 @@ public class MilestoneController {
     @GetMapping("/{projectSlug}/getArbitraryCycleTime")
     public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
 //        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authorizationHeader, projectSlug);
-        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
+        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
     }
 
 }
