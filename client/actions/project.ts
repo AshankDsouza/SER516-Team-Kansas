@@ -64,7 +64,8 @@ export async function getLeadTime(projectSlug: string, sprintId: string) {
 
 export async function getBurndowMetrics(milestoneId: string) {
     const Response = z.array(z.object({
-        open_points: z.number()
+        open_points: z.number(),
+        optimal_points: z.number()
     }))
     const response = await fetch(`${process.env.API_URL}/api/${milestoneId}/getBurnDownChart`, getRequestOptions())
     let BurndownData = await response.json()
@@ -138,6 +139,7 @@ export async function getWorkCapacity(projectSlug: string) {
     return data;   
 }
 
+
 export async function getLeadTimeArbitrary(projectSlug: string, startDate: string, endDate: string) {
     const Response = z.array(z.object({
         finish_date: z.string()
@@ -158,4 +160,46 @@ export async function getLeadTimeArbitrary(projectSlug: string, startDate: strin
     }
     
     return leadTimeArbitraryData;
+
+export async function getEstimateEffectiveness(milestoneId: string) {
+    const Response = z.array(z.object({
+        storyTitle: z.string(),
+        effectiveness: z.number()
+    }))
+    
+
+    const url = `${process.env.API_URL}/api/${milestoneId}/getEstimateEffectiveness`;// need to change the url
+
+    const response = await fetch(url, getRequestOptions())
+    const data = await response.json();
+
+    try {
+        Response.parse(data)
+    } catch (error) {
+        return null
+    }
+
+    return data;   
+}
+
+export async function getArbitraryCycleTime(projectSlug: string, startDate: string, endDate: string) {
+    const Response = z.array(z.object({
+        taskName: z.string(),
+        cycleTime: z.number()
+    }));
+    const url = `${process.env.API_URL}/api/${projectSlug}/getArbitraryCycleTime?startDate=${startDate}&endDate=${endDate}`;
+    const requestBody = {
+        startDate,
+        endDate
+    };
+    const response = await fetch(url, getRequestOptions());
+    let ArbitraryCycleTime = await response.json();
+    console.log(ArbitraryCycleTime);
+    try {
+        Response.parse(ArbitraryCycleTime);
+    } catch (error) {
+        return null;
+    }
+    return ArbitraryCycleTime;
+
 }
