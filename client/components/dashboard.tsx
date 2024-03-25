@@ -1,4 +1,4 @@
-
+"use client"
 
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -47,26 +47,14 @@ function Dashboard({ slug }: { slug: string }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Link href={"/project"}>
-        <div className="flex font-bold gap-2 underline">
-          <ArrowLeft></ArrowLeft>
-          {slug}
-        </div>
-      </Link>
+      <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
       <div className="flex justify-between mb-4">
         <div className="flex gap-4">
-
-          {charts.map((chart) => (
-            <Button key={chart} onClick={() => setChart(chart)}>
-              {chart}
-            </Button>
-          ))}
-
+        {charts.map(chart =>
+          <Button key={chart} onClick={() =>  {setChart(chart)}}>{chart}</Button>
+        )}
         </div>
-        <Button onClick={() => localStorage.clear()} className="flex gap-2">
-          <RotateCcw size={16} />
-          Refresh cache
-        </Button>
+      <Button onClick={()=>localStorage.clear()} className="flex gap-2"><RotateCcw size={16}/>Refresh cache</Button>
       </div>
 
       {chart == "Burndown" ? <Burndown slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
@@ -77,11 +65,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
       {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div></div>}
       {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
-      {chart == "Arbitary Cycle Time" ? (
-        <ArbitaryCycleTimeGraph slug={slug} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
+      {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div className=" hidden"></div>)}
 
       
     </div>
