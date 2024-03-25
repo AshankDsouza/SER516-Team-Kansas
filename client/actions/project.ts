@@ -63,18 +63,9 @@ export async function getLeadTime(projectSlug: string, sprintId: string) {
 }
 
 export async function getBurndowMetrics(projectSlug: string) {
-    const Response = z.array(z.object({
-        // open_points: z.number()
-    }))
     const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/multiSprintBundown`, getRequestOptions())
     let BurndownData = await response.json()
-    // try {
-    //     Response.parse(BurndownData)
-    // } catch (error) {
-    //     console.log({error});
-        
-    //     return null
-    // }
+
     return BurndownData
 }
 
