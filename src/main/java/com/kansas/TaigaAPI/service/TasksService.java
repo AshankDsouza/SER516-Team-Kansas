@@ -247,6 +247,7 @@ public class TasksService {
 
 
     public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(int projectId, String authToken,String startDate, String endDate) {
+        System.out.println(startDate + " " + endDate);
         List<JsonNode> tasks =  getClosedTasks(projectId, authToken);
         int totalCycleTime = 0;
         int noOfClosedTasks = 0;
@@ -278,7 +279,7 @@ public class TasksService {
                 e.printStackTrace();
             }
         }
-
+      //  System.out.println(result.get(0));
         return result;
     }
 

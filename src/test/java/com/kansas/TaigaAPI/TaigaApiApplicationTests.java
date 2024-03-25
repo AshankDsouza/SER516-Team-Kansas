@@ -268,7 +268,6 @@ class TaigaApiApplicationTests {
 
 	@Test
 	public void getCycleTimeForArbitraryTimeFrame_ShouldReturnList() throws Exception {
-		// Arrange
 		String authorizationHeader = "Bearer valid_access_token";
 		String projectSlug = "example-project";
 		String startDate = "2022-01-01";
@@ -283,14 +282,12 @@ class TaigaApiApplicationTests {
 		Mockito.when(projectService.getProjectId(authorizationHeader, projectSlug)).thenReturn(projectId);
 		Mockito.when(tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate)).thenReturn(expectedList);
 
-		// Act & Assert
 		mockMvc.perform(get("/api/{projectSlug}/getArbitraryCycleTime", projectSlug)
 						.header("Authorization", authorizationHeader)
 						.param("startDate", startDate)
 						.param("endDate", endDate))
 				.andExpect(status().isOk());
 
-		// Verify interactions
 		Mockito.verify(projectService).getProjectId(authorizationHeader, projectSlug);
 		Mockito.verify(tasksService).getCycleTimeForArbitaryTimeFrame(projectId, authorizationHeader, startDate, endDate);
 	}
