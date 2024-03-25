@@ -139,6 +139,28 @@ export async function getWorkCapacity(projectSlug: string) {
     return data;   
 }
 
+
+export async function getLeadTimeArbitrary(projectSlug: string, startDate: string, endDate: string) {
+    const Response = z.array(z.object({
+        finish_date: z.string()
+    }));
+    const url = `${process.env.API_URL}/api/getLeadTimeForAbitraryTimeframe?projectSlug=${projectSlug}&startDate=${startDate}&endDate=${endDate}`;
+    
+    console.log("This code is working");
+    console.log(projectSlug);
+    const response = await fetch(url, getRequestOptions());
+   // console.log(response);
+    
+    let leadTimeArbitraryData = await response.json();
+    console.log(leadTimeArbitraryData);
+    try {
+        Response.parse(leadTimeArbitraryData);
+    } catch (error) {
+        return null;
+    }
+    
+    return leadTimeArbitraryData;
+
 export async function getEstimateEffectiveness(milestoneId: string) {
     const Response = z.array(z.object({
         storyTitle: z.string(),
@@ -179,4 +201,5 @@ export async function getArbitraryCycleTime(projectSlug: string, startDate: stri
         return null;
     }
     return ArbitraryCycleTime;
+
 }

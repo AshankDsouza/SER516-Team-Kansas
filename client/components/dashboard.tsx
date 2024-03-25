@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -14,6 +14,7 @@ import FocusFactor from "./focusFactor";
 import VelocityGraph from "./velocityGraph";
 import EstimateEffectiveness from "./estimateEffectiveness";
 import ArbitaryCycleTimeGraph from "./arbitraryCycleTime";
+import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 
 function Dashboard({ slug }: { slug: string }) {
   type sprint = {
@@ -22,6 +23,7 @@ function Dashboard({ slug }: { slug: string }) {
   };
 
   const router = useRouter();
+
 
   const [sprints, setsprints] = useState<sprint[]>([
     { id: "1", value: "sprint-1" },
@@ -37,8 +39,9 @@ function Dashboard({ slug }: { slug: string }) {
     "Focus Factor",
     "Work Capacity",
     "Estimate Effectiveness",
-    "Arbitary Cycle Time",
+    "Arbitary Cycle Time", ,"LeadTime Arbitary"
   ];
+
 
   useEffect(() => {
     getProjectMilestones(slug).then((data: any) => {
@@ -59,59 +62,37 @@ function Dashboard({ slug }: { slug: string }) {
       </Link>
       <div className="flex justify-between mb-4">
         <div className="flex gap-4">
+
           {charts.map((chart) => (
             <Button key={chart} onClick={() => setChart(chart)}>
               {chart}
             </Button>
           ))}
+
         </div>
         <Button onClick={() => localStorage.clear()} className="flex gap-2">
           <RotateCcw size={16} />
           Refresh cache
         </Button>
       </div>
-      {chart == "Burndown" ? (
-        <Burndown slug={slug} sprints={sprints} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
-      {chart == "Lead time" ? (
-        <LeadTime slug={slug} sprints={sprints} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
-      {chart == "Cycle time" ? (
-        <CycleTime slug={slug} sprints={sprints} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
-      {chart == "Focus Factor" ? (
-        <FocusFactor slug={slug} sprints={sprints} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
-      {chart == "Velocity" ? (
-        <VelocityGraph slug={slug} sprints={sprints} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
-      {chart == "Estimate Effectiveness" ? (
-        <EstimateEffectiveness slug={slug} sprints={sprints} />
-      ) : (
-        <div className=" hidden"></div>
-      )}
-      {chart == "Work Capacity" ? (
-        <WorkCapacityGraph slug={slug} />
-      ) : (
-        <div></div>
-      )}
+
+      {chart == "Burndown" ? <Burndown slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
+      {chart == "Lead time" ? <LeadTime slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
+      {chart == "Cycle time" ? <CycleTime slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
+      {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
+      {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div className=" hidden"></div>}
+      {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div></div>}
+      {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div className=" hidden"></div>}
       {chart == "Arbitary Cycle Time" ? (
         <ArbitaryCycleTimeGraph slug={slug} />
       ) : (
         <div className=" hidden"></div>
       )}
+
+      
     </div>
   );
 }
+       
 
 export default Dashboard;
