@@ -17,5 +17,4 @@ public class TaigaAPI {
     public String hello() {
         return "Hello";
     }
-
 }
