@@ -1,10 +1,9 @@
-package com.service;
+package service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kansas.TaigaAPI.TaigaApiApplication;
-import com.kansas.TaigaAPI.utils.GlobalData;
-import lombok.extern.log4j.Log4j2;
+import utils.GlobalData;
+//import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -18,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
-@Log4j2
+//@Log4j2
 public class AuthenticationService {
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
     private static String authToken;
