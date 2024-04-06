@@ -1,4 +1,4 @@
-package model;
+package com.kansas.TaigaAPI.model;
 
 public class TotalPoints {
     private String sprintName;

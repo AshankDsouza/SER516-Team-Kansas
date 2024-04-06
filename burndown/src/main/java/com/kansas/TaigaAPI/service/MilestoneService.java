@@ -1,4 +1,4 @@
-package service;
+package com.kansas.TaigaAPI.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -7,19 +7,15 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import model.CompletedPoints;
-import utils.GlobalData;
-import utils.HTTPRequest;
-
-//import lombok.extern.log4j.Log4j2;
+import com.kansas.TaigaAPI.model.CompletedPoints;
+import com.kansas.TaigaAPI.utils.GlobalData;
+import com.kansas.TaigaAPI.utils.HTTPRequest;
+import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import model.TotalPoints;
-import utils.GlobalData;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
+import com.kansas.TaigaAPI.model.TotalPoints;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-//@Log4j2
+@Log4j2
 public class MilestoneService {
 
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
