@@ -19,6 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/api")
 public class MilestoneController {
@@ -34,6 +41,32 @@ public class MilestoneController {
 
     @Autowired
     private ProjectService projectService;
+
+    private String serviceCall(String url)  {
+        // Create an instance of HttpClient
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+
+        // Create a POST request to the /encrypt endpoint
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "text/plain")
+                .GET()
+                .build();
+
+        // Send the request synchronously and handle the response
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Extract and return the response body
+        return response.body();
+    }
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -192,13 +225,12 @@ public class MilestoneController {
 
 
     @GetMapping("/{projectSlug}/multiSprintBundown")
-    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+    public String getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
         String authToken = authenticationService.getAuthToken(authorizationHeader);
-        HashMap projectDetails = projectService.getprojectIdAndSprintId(authToken,projectSlug);
-        int projectId  = Integer.parseInt(projectDetails.keySet().iterator().next().toString());
-
-        return milestoneService.getMultiSprintBurndown(authToken,projectId, (JsonNode) projectDetails.get(projectId));
-
+        String url = "http://localhost:8081/api/"+projectSlug+"/" +authToken+"/multiSprintBurndown";
+        //print url
+        System.out.println(url);
+        return serviceCall(url);
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
