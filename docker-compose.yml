@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    #platform: linux/amd64
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
   burndown_microservice:
-    #platform: linux/amd64
+    platform: linux/amd64
     build:
       context: ./burndown
       dockerfile: Dockerfile
