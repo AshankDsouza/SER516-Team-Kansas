@@ -54,3 +54,20 @@ Site is available at:
 http://20.39.192.152
 Backend is available at:
 http://20.39.192.152:8080
+
+### 5) Local setup
+
+1) 
+if you are on a Mac with M series chip then in docker-compose file uncomment this line
+    #platform: linux/amd64
+in 
+backend:
+and in 
+burndown_microservice:
+
+2)
+in this file: src/main/resources/config.properties
+change BURNDOWN_URL to http://localhost:8081
+
+
+
