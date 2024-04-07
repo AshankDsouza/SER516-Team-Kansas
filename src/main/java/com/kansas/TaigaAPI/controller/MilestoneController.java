@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -42,31 +44,7 @@ public class MilestoneController {
     @Autowired
     private ProjectService projectService;
 
-    private String serviceCall(String url)  {
-        // Create an instance of HttpClient
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-
-        // Create a POST request to the /encrypt endpoint
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "text/plain")
-                .GET()
-                .build();
-
-        // Send the request synchronously and handle the response
-        HttpResponse<String> response = null;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Extract and return the response body
-        return response.body();
-    }
+  
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -223,14 +201,49 @@ public class MilestoneController {
 
     }
 
+      public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
+        HashMap<String, ArrayNode> resultMap = new HashMap<>();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+
+            Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
+            while (fields.hasNext()) {
+                Map.Entry<String, JsonNode> entry = fields.next();
+                ArrayNode arrayNode = objectMapper.createArrayNode();
+                for (JsonNode node : entry.getValue()) {
+                    arrayNode.add((ObjectNode) node);
+                }
+                resultMap.put(entry.getKey(), arrayNode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultMap;
+    }
+
 
     @GetMapping("/{projectSlug}/multiSprintBundown")
-    public String getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = "http://localhost:8081/api/"+projectSlug+"/" +authToken+"/multiSprintBurndown";
-        //print url
+    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        // make this exact same call to a service running on a different port: http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
+        // make the api call:
+        String url = "http://localhost:8081/api/"+projectSlug+"/multiSprintBundown";
+        //print the url
         System.out.println(url);
-        return serviceCall(url);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Authorization", authorizationHeader)
+                .build();
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+        String responseBody = response.join().body();
+
+        HashMap<String, ArrayNode> finalResponse = convertJsonToHashMap(responseBody);
+
+        return finalResponse;
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
