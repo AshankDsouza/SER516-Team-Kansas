@@ -18,15 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
-
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api")
@@ -43,8 +34,6 @@ public class MilestoneController {
 
     @Autowired
     private ProjectService projectService;
-
-  
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -201,49 +190,15 @@ public class MilestoneController {
 
     }
 
-      public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
-        HashMap<String, ArrayNode> resultMap = new HashMap<>();
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
-
-            Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
-            while (fields.hasNext()) {
-                Map.Entry<String, JsonNode> entry = fields.next();
-                ArrayNode arrayNode = objectMapper.createArrayNode();
-                for (JsonNode node : entry.getValue()) {
-                    arrayNode.add((ObjectNode) node);
-                }
-                resultMap.put(entry.getKey(), arrayNode);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return resultMap;
-    }
-
 
     @GetMapping("/{projectSlug}/multiSprintBundown")
     public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
-        // make this exact same call to a service running on a different port: http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
-        // make the api call:
-        String url = "http://localhost:8081/api/"+projectSlug+"/multiSprintBundown";
-        //print the url
-        System.out.println(url);
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Authorization", authorizationHeader)
-                .build();
-        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        HashMap projectDetails = projectService.getprojectIdAndSprintId(authToken,projectSlug);
+        int projectId  = Integer.parseInt(projectDetails.keySet().iterator().next().toString());
 
-        String responseBody = response.join().body();
+        return milestoneService.getMultiSprintBurndown(authToken,projectId, (JsonNode) projectDetails.get(projectId));
 
-        HashMap<String, ArrayNode> finalResponse = convertJsonToHashMap(responseBody);
-
-        return finalResponse;
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
