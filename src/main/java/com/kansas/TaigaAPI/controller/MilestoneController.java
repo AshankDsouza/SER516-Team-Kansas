@@ -28,6 +28,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
+import com.kansas.TaigaAPI.utils.GlobalData;
+
 @RestController
 @RequestMapping("/api")
 public class MilestoneController {
@@ -44,7 +46,8 @@ public class MilestoneController {
     @Autowired
     private ProjectService projectService;
 
-  
+    private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
+
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -229,7 +232,7 @@ public class MilestoneController {
     public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
         // make this exact same call to a service running on a different port: http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
         // make the api call:
-        String url = "http://localhost:8081/api/"+projectSlug+"/multiSprintBundown";
+        String url = BURNDOWN_URL + "/api/"+projectSlug+"/multiSprintBundown";
         //print the url
         System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
