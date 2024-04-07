@@ -9,6 +9,8 @@ services:
     ports:
       - "8080:8080"  # Adjust the port as needed
     restart: unless-stopped
+    network_mode: host
+
 
   burndown_microservice:
     platform: linux/amd64
@@ -18,6 +20,8 @@ services:
     ports:
       - "8081:8081"  # Adjust the port as needed
     restart: unless-stopped
+    network_mode: host
+
 
   client:
     build:
@@ -26,6 +30,7 @@ services:
     ports:
       - "3000:3000"  # Adjust the port as needed
     restart: unless-stopped
+
 
   nginx:
     image: nginx:latest
