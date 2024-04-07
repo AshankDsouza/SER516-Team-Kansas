@@ -30,10 +30,6 @@ public class TaskController {
         return tasksService.getClosedTasks(projectId, auuthToken);
     }
 
-    @GetMapping("/closedByDate")
-    public HashMap getTasksClosedByDate(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("project") int projectId, @RequestParam("sprint") int sprintId){
-        return tasksService.getTasksClosedByDate(projectId,sprintId,authenticationService.getAuthToken(authorizationHeader));
-    }
 
 
 }
