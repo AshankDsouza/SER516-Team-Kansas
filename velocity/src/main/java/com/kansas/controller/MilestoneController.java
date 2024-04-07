@@ -62,10 +62,11 @@ public class MilestoneController {
     @GetMapping("/{projectSlug}/getTotalPoints")
     public List<TotalPoints> getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,
             @PathVariable String projectSlug) {
+        System.out.println(authorizationHeader);
         String authToken = authenticationService.getAuthToken(authorizationHeader);
+        System.out.println(authToken);
         int projectId = projectService.getProjectId(authToken, projectSlug);
         return milestoneService.getMilestoneTotalPoints(authToken, projectId);
-
     }
 
 

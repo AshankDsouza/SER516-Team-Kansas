@@ -180,7 +180,7 @@ public class MilestoneController {
             @PathVariable String projectSlug) {
         String authToken = authenticationService.getAuthToken(authorizationHeader);
         String url = "http://localhost:8090/api/" + projectSlug + "/getTotalPoints";
-
+        System.out.println(authToken);
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();

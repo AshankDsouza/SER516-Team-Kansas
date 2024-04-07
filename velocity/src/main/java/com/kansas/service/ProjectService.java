@@ -43,12 +43,11 @@ public class ProjectService {
         // Example https://tree.taiga.io/project/SLUG_NAME/us/1?no-milestone=1
 
         String responseJson = getProjectdetails(authToken,projectSlug);
-
+        System.out.println(responseJson);
         if (responseJson != null) {
             try {
                 JsonNode projectInfo = objectMapper.readTree(responseJson);
                 int projectId = projectInfo.has("id") ? projectInfo.get("id").asInt() : -1;
-
 
                 if (projectId != -1) {
                     System.out.println("Project details retrieved successfully.");
