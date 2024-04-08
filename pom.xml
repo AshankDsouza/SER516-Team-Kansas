@@ -15,9 +15,6 @@
 	<name>TaigaAPI</name>
 	<description>TaigaAPI</description>
 	<modules>
-		<module>velocity</module>
-        <module>CycleTime</module>
-		<module>CycleTime</module>
 		<module>cycleTime</module>
 	</modules>
 	<properties>
