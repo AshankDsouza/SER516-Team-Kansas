@@ -1,0 +1,1145 @@
+[
+  {
+    "project": 1521719,
+    "project_extra_info": {
+      "name": "SER516-Team-Kansas",
+      "slug": "ser516asu-ser516-team-kansas",
+      "logo_small_url": null,
+      "id": 1521719
+    },
+    "id": 376637,
+    "name": "Sprint 5",
+    "slug": "sprint-5-3545",
+    "owner": 501364,
+    "estimated_start": "2024-04-08",
+    "estimated_finish": "2024-04-21",
+    "created_date": "2024-01-29T21:27:49.850Z",
+    "modified_date": "2024-01-29T21:27:49.896Z",
+    "closed": false,
+    "disponibility": 0.0,
+    "order": 1,
+    "user_stories": [],
+    "total_points": null,
+    "closed_points": null
+  },
+  {
+    "project": 1521719,
+    "project_extra_info": {
+      "name": "SER516-Team-Kansas",
+      "slug": "ser516asu-ser516-team-kansas",
+      "logo_small_url": null,
+      "id": 1521719
+    },
+    "id": 376635,
+    "name": "Sprint 4",
+    "slug": "sprint-4-5680",
+    "owner": 501364,
+    "estimated_start": "2024-03-25",
+    "estimated_finish": "2024-04-07",
+    "created_date": "2024-01-29T21:23:08.131Z",
+    "modified_date": "2024-01-29T21:23:08.177Z",
+    "closed": false,
+    "disponibility": 0.0,
+    "order": 1,
+    "user_stories": [],
+    "total_points": null,
+    "closed_points": null
+  },
+  {
+    "project": 1521719,
+    "project_extra_info": {
+      "name": "SER516-Team-Kansas",
+      "slug": "ser516asu-ser516-team-kansas",
+      "logo_small_url": null,
+      "id": 1521719
+    },
+    "id": 376633,
+    "name": "Sprint 3",
+    "slug": "sprint-3-8370",
+    "owner": 501364,
+    "estimated_start": "2024-03-11",
+    "estimated_finish": "2024-03-24",
+    "created_date": "2024-01-29T21:22:48.505Z",
+    "modified_date": "2024-01-29T21:22:48.552Z",
+    "closed": false,
+    "disponibility": 0.0,
+    "order": 1,
+    "user_stories": [],
+    "total_points": null,
+    "closed_points": null
+  },
+  {
+    "project": 1521719,
+    "project_extra_info": {
+      "name": "SER516-Team-Kansas",
+      "slug": "ser516asu-ser516-team-kansas",
+      "logo_small_url": null,
+      "id": 1521719
+    },
+    "id": 376626,
+    "name": "Sprint 2",
+    "slug": "sprint-2-11428",
+    "owner": 501364,
+    "estimated_start": "2024-02-19",
+    "estimated_finish": "2024-02-25",
+    "created_date": "2024-01-29T21:22:03.025Z",
+    "modified_date": "2024-02-14T01:36:07.522Z",
+    "closed": false,
+    "disponibility": 0.0,
+    "order": 1,
+    "user_stories": [
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468249,
+        "ref": 21,
+        "milestone": 376626,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:45:23.060Z",
+        "modified_date": "2024-02-07T23:47:07.543Z",
+        "finish_date": "2024-02-26T00:11:14.902Z",
+        "subject": "Configure the metric parameters.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 3,
+        "sprint_order": 5,
+        "kanban_order": 1706564723060905,
+        "epics": [
+          {
+            "id": 218085,
+            "ref": 16,
+            "subject": "Work Capacity",
+            "color": "#D3AC50",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295647
+        },
+        "total_points": 5.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468250,
+        "ref": 22,
+        "milestone": 376626,
+        "is_closed": false,
+        "created_date": "2024-01-29T21:45:23.060Z",
+        "modified_date": "2024-02-07T23:43:14.429Z",
+        "finish_date": null,
+        "subject": "Get the data and compute the metric raw value.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 2,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 4,
+        "sprint_order": 6,
+        "kanban_order": 1706564723060953,
+        "epics": [
+          {
+            "id": 218085,
+            "ref": 16,
+            "subject": "Work Capacity",
+            "color": "#D3AC50",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295648
+        },
+        "total_points": 8.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468251,
+        "ref": 23,
+        "milestone": 376626,
+        "is_closed": false,
+        "created_date": "2024-01-29T21:45:23.060Z",
+        "modified_date": "2024-02-07T23:41:58.821Z",
+        "finish_date": null,
+        "subject": "Visualize the metric in an appropriate way.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 2,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 5,
+        "sprint_order": 7,
+        "kanban_order": 1706564723060998,
+        "epics": [
+          {
+            "id": 218085,
+            "ref": 16,
+            "subject": "Work Capacity",
+            "color": "#D3AC50",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295647
+        },
+        "total_points": 5.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468258,
+        "ref": 30,
+        "milestone": 376626,
+        "is_closed": false,
+        "created_date": "2024-01-29T21:45:53.037Z",
+        "modified_date": "2024-02-07T23:36:13.374Z",
+        "finish_date": null,
+        "subject": "Get the data and compute the metric raw value.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 3,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 6,
+        "sprint_order": 2,
+        "kanban_order": 1706564753037780,
+        "epics": [
+          {
+            "id": 218087,
+            "ref": 18,
+            "subject": "Velocity",
+            "color": "#51D355",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295645
+        },
+        "total_points": 2.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468259,
+        "ref": 31,
+        "milestone": 376626,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:45:53.037Z",
+        "modified_date": "2024-02-07T23:36:19.059Z",
+        "finish_date": "2024-03-02T00:22:19.623Z",
+        "subject": "Visualize the metric in an appropriate way.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 2,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 7,
+        "sprint_order": 4,
+        "kanban_order": 1706564753037825,
+        "epics": [
+          {
+            "id": 218087,
+            "ref": 18,
+            "subject": "Velocity",
+            "color": "#51D355",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468257,
+        "ref": 29,
+        "milestone": 376626,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:45:53.037Z",
+        "modified_date": "2024-02-07T23:36:01.282Z",
+        "finish_date": "2024-02-26T00:11:14.358Z",
+        "subject": "Configure the metric parameters.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 2,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 9,
+        "sprint_order": 3,
+        "kanban_order": 1706564753037732,
+        "epics": [
+          {
+            "id": 218087,
+            "ref": 18,
+            "subject": "Velocity",
+            "color": "#51D355",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295644
+        },
+        "total_points": 1.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468253,
+        "ref": 25,
+        "milestone": 376626,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:45:38.289Z",
+        "modified_date": "2024-02-07T23:46:34.663Z",
+        "finish_date": "2024-02-26T00:13:25.767Z",
+        "subject": "Configure the metric parameters.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 3,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 11,
+        "sprint_order": 8,
+        "kanban_order": 1706564738289106,
+        "epics": [
+          {
+            "id": 218086,
+            "ref": 17,
+            "subject": "Focus Factor",
+            "color": "#D351CF",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468254,
+        "ref": 26,
+        "milestone": 376626,
+        "is_closed": false,
+        "created_date": "2024-01-29T21:45:38.289Z",
+        "modified_date": "2024-02-07T23:44:17.773Z",
+        "finish_date": null,
+        "subject": "Get the data and compute the metric raw value.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 2,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 13,
+        "sprint_order": 9,
+        "kanban_order": 1706564738289154,
+        "epics": [
+          {
+            "id": 218086,
+            "ref": 17,
+            "subject": "Focus Factor",
+            "color": "#D351CF",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295647
+        },
+        "total_points": 5.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157387,
+        "status_extra_info": {
+          "name": "New",
+          "color": "#70728F",
+          "is_closed": false
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468255,
+        "ref": 27,
+        "milestone": 376626,
+        "is_closed": false,
+        "created_date": "2024-01-29T21:45:38.289Z",
+        "modified_date": "2024-02-07T23:44:09.120Z",
+        "finish_date": null,
+        "subject": "Visualize the metric in an appropriate way.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 2,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 15,
+        "sprint_order": 10,
+        "kanban_order": 1706564738289199,
+        "epics": [
+          {
+            "id": 218086,
+            "ref": 17,
+            "subject": "Focus Factor",
+            "color": "#D351CF",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295647
+        },
+        "total_points": 5.0
+      }
+    ],
+    "total_points": 37.0,
+    "closed_points": 12.0
+  },
+  {
+    "project": 1521719,
+    "project_extra_info": {
+      "name": "SER516-Team-Kansas",
+      "slug": "ser516asu-ser516-team-kansas",
+      "logo_small_url": null,
+      "id": 1521719
+    },
+    "id": 376621,
+    "name": "Sprint 1",
+    "slug": "sprint-1-7318",
+    "owner": 501364,
+    "estimated_start": "2024-01-29",
+    "estimated_finish": "2024-02-18",
+    "created_date": "2024-01-29T21:21:22.535Z",
+    "modified_date": "2024-02-14T01:36:15.383Z",
+    "closed": true,
+    "disponibility": 0.0,
+    "order": 1,
+    "user_stories": [
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468103,
+        "ref": 4,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:02:41.260Z",
+        "modified_date": "2024-02-19T05:46:27.789Z",
+        "finish_date": "2024-02-19T04:55:33.360Z",
+        "subject": "Select a Taiga project to apply this metric to",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562161260754,
+        "sprint_order": 1,
+        "kanban_order": 1708321587784177,
+        "epics": [
+          {
+            "id": 218037,
+            "ref": 1,
+            "subject": "Burndown chart",
+            "color": "#70728F",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295648
+        },
+        "total_points": 8.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468118,
+        "ref": 5,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:04:21.682Z",
+        "modified_date": "2024-02-19T05:42:41.359Z",
+        "finish_date": "2024-02-18T21:44:34.259Z",
+        "subject": "Configure the metric parameters",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562261682405,
+        "sprint_order": 2,
+        "kanban_order": 1708321361355408,
+        "epics": [
+          {
+            "id": 218037,
+            "ref": 1,
+            "subject": "Burndown chart",
+            "color": "#70728F",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468127,
+        "ref": 6,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:05:30.669Z",
+        "modified_date": "2024-02-19T05:43:28.373Z",
+        "finish_date": "2024-02-19T02:18:13.066Z",
+        "subject": "Get the data and compute the metric raw value",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 7,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562330669058,
+        "sprint_order": 3,
+        "kanban_order": 1708321408368535,
+        "epics": [
+          {
+            "id": 218037,
+            "ref": 1,
+            "subject": "Burndown chart",
+            "color": "#70728F",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468130,
+        "ref": 7,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:05:59.958Z",
+        "modified_date": "2024-02-19T05:43:42.183Z",
+        "finish_date": "2024-02-18T08:41:17.253Z",
+        "subject": "Visualize the metric in an appropriate way",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562359958924,
+        "sprint_order": 4,
+        "kanban_order": 1708321422178695,
+        "epics": [
+          {
+            "id": 218037,
+            "ref": 1,
+            "subject": "Burndown chart",
+            "color": "#70728F",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295648
+        },
+        "total_points": 8.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468163,
+        "ref": 9,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:10:26.796Z",
+        "modified_date": "2024-02-19T05:44:48.564Z",
+        "finish_date": "2024-02-19T02:17:08.838Z",
+        "subject": "Configure the metric parameters.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562626796094,
+        "sprint_order": 6,
+        "kanban_order": 1708321488559908,
+        "epics": [
+          {
+            "id": 218042,
+            "ref": 2,
+            "subject": "Cycle time",
+            "color": "#51D3AC",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468164,
+        "ref": 10,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:10:26.796Z",
+        "modified_date": "2024-02-19T05:49:46.797Z",
+        "finish_date": "2024-02-19T05:48:34.919Z",
+        "subject": "Get the data and compute the metric raw value.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 7,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562626796141,
+        "sprint_order": 7,
+        "kanban_order": 1708321786793018,
+        "epics": [
+          {
+            "id": 218042,
+            "ref": 2,
+            "subject": "Cycle time",
+            "color": "#51D3AC",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468165,
+        "ref": 11,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:10:26.796Z",
+        "modified_date": "2024-02-19T05:45:19.187Z",
+        "finish_date": "2024-02-18T21:41:14.430Z",
+        "subject": "Visualize the metric in an appropriate way.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562626796186,
+        "sprint_order": 8,
+        "kanban_order": 1708321519183522,
+        "epics": [
+          {
+            "id": 218042,
+            "ref": 2,
+            "subject": "Cycle time",
+            "color": "#51D3AC",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295647
+        },
+        "total_points": 5.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468193,
+        "ref": 13,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:11:13.604Z",
+        "modified_date": "2024-02-19T05:46:08.033Z",
+        "finish_date": "2024-02-19T04:53:22.872Z",
+        "subject": "Configure the metric parameters.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562673604718,
+        "sprint_order": 10,
+        "kanban_order": 1708321568028398,
+        "epics": [
+          {
+            "id": 218054,
+            "ref": 3,
+            "subject": "Lead Time",
+            "color": "#D38050",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468194,
+        "ref": 14,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:11:13.604Z",
+        "modified_date": "2024-02-19T05:50:09.211Z",
+        "finish_date": "2024-02-19T05:48:13.378Z",
+        "subject": "Get the data and compute the metric raw value.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 4,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562673604793,
+        "sprint_order": 11,
+        "kanban_order": 1708321809207434,
+        "epics": [
+          {
+            "id": 218054,
+            "ref": 3,
+            "subject": "Lead Time",
+            "color": "#D38050",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295646
+        },
+        "total_points": 3.0
+      },
+      {
+        "due_date": null,
+        "due_date_reason": "",
+        "due_date_status": "not_set",
+        "assigned_to": null,
+        "assigned_to_extra_info": null,
+        "status": 9157391,
+        "status_extra_info": {
+          "name": "Done",
+          "color": "#A8E440",
+          "is_closed": true
+        },
+        "project": 1521719,
+        "project_extra_info": {
+          "name": "SER516-Team-Kansas",
+          "slug": "ser516asu-ser516-team-kansas",
+          "logo_small_url": null,
+          "id": 1521719
+        },
+        "id": 5468195,
+        "ref": 15,
+        "milestone": 376621,
+        "is_closed": true,
+        "created_date": "2024-01-29T21:11:13.604Z",
+        "modified_date": "2024-02-19T05:43:11.697Z",
+        "finish_date": "2024-02-19T01:46:20.597Z",
+        "subject": "Visualize the metric in an appropriate way.",
+        "client_requirement": false,
+        "team_requirement": false,
+        "external_reference": null,
+        "version": 6,
+        "is_blocked": false,
+        "blocked_note": "",
+        "backlog_order": 1706562673604843,
+        "sprint_order": 12,
+        "kanban_order": 1708321391691991,
+        "epics": [
+          {
+            "id": 218054,
+            "ref": 3,
+            "subject": "Lead Time",
+            "color": "#D38050",
+            "project": {
+              "id": 1521719,
+              "name": "SER516-Team-Kansas",
+              "slug": "ser516asu-ser516-team-kansas"
+            }
+          }
+        ],
+        "points": {
+          "9184542": 18295645
+        },
+        "total_points": 2.0
+      }
+    ],
+    "total_points": 41.0,
+    "closed_points": 41.0
+  }
+]

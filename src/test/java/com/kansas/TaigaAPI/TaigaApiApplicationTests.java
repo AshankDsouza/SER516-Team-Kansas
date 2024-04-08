@@ -106,29 +106,29 @@ class TaigaApiApplicationTests {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(milestoneController).build();
 	}
 
-	@Test
-	public void getCycleTime_ShouldReturnCycleTimes() throws Exception {
-		String projectSlug = "ser516asu-ser516-team-kansas";
-		int milestoneId = 376621;
-		int projectId = 1;
-		String authToken = "auth-token";
+	// @Test
+	// public void getCycleTime_ShouldReturnCycleTimes() throws Exception {
+	// 	String projectSlug = "ser516asu-ser516-team-kansas";
+	// 	int milestoneId = 376621;
+	// 	int projectId = 1;
+	// 	String authToken = "auth-token";
 
-		List<CycleTime> expectedCycleTimes = new ArrayList<>();
+	// 	List<CycleTime> expectedCycleTimes = new ArrayList<>();
 
-		expectedCycleTimes.add(new CycleTime("ABC",10,2));
+	// 	expectedCycleTimes.add(new CycleTime("ABC",10,2));
 
-		given(authenticationService.getAuthToken(authToken)).willReturn(authToken);
-		given(projectService.getProjectId(authToken, projectSlug)).willReturn(projectId);
-		given(tasksService.getTaskHistory(projectId, milestoneId, authToken)).willReturn(expectedCycleTimes);
+	// 	given(authenticationService.getAuthToken(authToken)).willReturn(authToken);
+	// 	given(projectService.getProjectId(authToken, projectSlug)).willReturn(projectId);
+	// 	given(tasksService.getTaskHistory(projectId, milestoneId, authToken)).willReturn(expectedCycleTimes);
 
-		String expectedJson = objectMapper.writeValueAsString(expectedCycleTimes);
+	// 	String expectedJson = objectMapper.writeValueAsString(expectedCycleTimes);
 
-		mockMvc.perform(get("/api/" + projectSlug + "/" + milestoneId + "/getCycleTime")
-						.header(HttpHeaders.AUTHORIZATION,   authToken)
-						.contentType(APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(content().json(expectedJson));
-	}
+	// 	mockMvc.perform(get("/api/" + projectSlug + "/" + milestoneId + "/getCycleTime")
+	// 					.header(HttpHeaders.AUTHORIZATION,   authToken)
+	// 					.contentType(APPLICATION_JSON))
+	// 			.andExpect(status().isOk())
+	// 			.andExpect(content().json(expectedJson));
+	// }
 
 	@Test
 	void login_without_credentials_bad_request() throws Exception{
@@ -266,32 +266,32 @@ class TaigaApiApplicationTests {
 		assertEquals(0, result.size());
 	}
 
-	@Test
-	public void getCycleTimeForArbitraryTimeFrame_ShouldReturnList() throws Exception {
-		String authToken = "auth-token";
-		String projectSlug = "example-project";
-		String startDate = "2022-01-01";
-		String endDate = "2022-01-31";
-		int projectId = 1;
+	// @Test
+	// public void getCycleTimeForArbitraryTimeFrame_ShouldReturnList() throws Exception {
+	// 	String authToken = "auth-token";
+	// 	String projectSlug = "example-project";
+	// 	String startDate = "2022-01-01";
+	// 	String endDate = "2022-01-31";
+	// 	int projectId = 1;
 
-		List<ArbitaryCycleTime> expectedList = Arrays.asList(
-				new ArbitaryCycleTime("Task 1", 5),
-				new ArbitaryCycleTime("Task 2", 3)
-		);
+	// 	List<ArbitaryCycleTime> expectedList = Arrays.asList(
+	// 			new ArbitaryCycleTime("Task 1", 5),
+	// 			new ArbitaryCycleTime("Task 2", 3)
+	// 	);
 
-		when(authenticationService.getAuthToken("Bearer " + authToken)).thenReturn(authToken);
-		Mockito.when(projectService.getProjectId(authToken, projectSlug)).thenReturn(projectId);
-		Mockito.when(tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authToken, startDate, endDate)).thenReturn(expectedList);
+	// 	when(authenticationService.getAuthToken("Bearer " + authToken)).thenReturn(authToken);
+	// 	Mockito.when(projectService.getProjectId(authToken, projectSlug)).thenReturn(projectId);
+	// 	Mockito.when(tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authToken, startDate, endDate)).thenReturn(expectedList);
 
-		mockMvc.perform(get("/api/{projectSlug}/getArbitraryCycleTime", projectSlug)
-						.header(HttpHeaders.AUTHORIZATION, "Bearer " + authToken)
-						.param("startDate", startDate)
-						.param("endDate", endDate))
-				.andExpect(status().isOk());
+	// 	mockMvc.perform(get("/api/{projectSlug}/getArbitraryCycleTime", projectSlug)
+	// 					.header(HttpHeaders.AUTHORIZATION, "Bearer " + authToken)
+	// 					.param("startDate", startDate)
+	// 					.param("endDate", endDate))
+	// 			.andExpect(status().isOk());
 
-		Mockito.verify(projectService).getProjectId(authToken, projectSlug);
-		Mockito.verify(tasksService).getCycleTimeForArbitaryTimeFrame(projectId, authToken, startDate, endDate);
-	}
+	// 	Mockito.verify(projectService).getProjectId(authToken, projectSlug);
+	// 	Mockito.verify(tasksService).getCycleTimeForArbitaryTimeFrame(projectId, authToken, startDate, endDate);
+	// }
 
 
 

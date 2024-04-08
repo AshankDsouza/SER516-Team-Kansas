@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   backend:
-    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
@@ -19,10 +18,7 @@ services:
       - "8090:8090"  # Adjust the port as needed
     restart: unless-stopped
 
-
-
   burndownmicroservice:
-    platform: linux/amd64
     build:
       context: ./burndown
       dockerfile: Dockerfile
@@ -30,6 +26,13 @@ services:
       - "8081:8081"  # Adjust the port as needed
     restart: unless-stopped
 
+  cycletimemicroservice:
+    build:
+      context: ./cycleTime
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8070"  # Adjust the port as needed
+    restart: unless-stopped
 
   client:
     build:
