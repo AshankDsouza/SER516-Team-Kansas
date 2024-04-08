@@ -1,4 +1,4 @@
-package com.kansas.TaigaAPI.model;
+package com.kansas.model;
 
 public class CompletedPoints {
 

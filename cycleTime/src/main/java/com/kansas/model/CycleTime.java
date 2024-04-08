@@ -1,8 +1,7 @@
-package com.kansas.TaigaAPI.model;
+package com.kansas.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 
 @Data
 public class CycleTime {

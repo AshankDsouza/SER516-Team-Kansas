@@ -1,9 +1,8 @@
-package com.kansas.TaigaAPI.service;
+package com.kansas.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kansas.TaigaAPI.TaigaApiApplication;
-import com.kansas.TaigaAPI.utils.GlobalData;
+import com.kansas.utils.GlobalData;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

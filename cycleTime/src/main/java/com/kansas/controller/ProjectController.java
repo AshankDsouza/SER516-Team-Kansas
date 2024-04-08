@@ -1,7 +1,7 @@
-package com.kansas.TaigaAPI.controller;
+package com.kansas.controller;
 
-import com.kansas.TaigaAPI.service.AuthenticationService;
-import com.kansas.TaigaAPI.service.ProjectService;
+import com.kansas.service.AuthenticationService;
+import com.kansas.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

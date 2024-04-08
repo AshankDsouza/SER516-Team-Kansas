@@ -1,6 +1,6 @@
-package com.kansas.TaigaAPI.utils;
+package com.kansas.utils;
 
-import com.kansas.TaigaAPI.Main;
+import com.kansas.Main;
 
 import java.io.IOException;
 import java.io.InputStream;

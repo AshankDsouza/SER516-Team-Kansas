@@ -1,7 +1,7 @@
-package com.kansas.TaigaAPI.controller;
+package com.kansas.controller;
 
-import com.kansas.TaigaAPI.model.AuthRequest;
-import com.kansas.TaigaAPI.service.AuthenticationService;
+import com.kansas.model.AuthRequest;
+import com.kansas.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

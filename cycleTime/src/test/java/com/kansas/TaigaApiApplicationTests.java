@@ -1,7 +1,9 @@
-package com.kansas.TaigaAPI;
+package com.kansas;
 
 
-import com.kansas.TaigaAPI.model.*;
+import com.kansas.model.ArbitaryCycleTime;
+import com.kansas.model.CycleTime;
+
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
@@ -9,19 +11,19 @@ import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import com.kansas.TaigaAPI.service.ProjectService;
+import com.kansas.service.ProjectService;
 
-import com.kansas.TaigaAPI.model.AuthRequest;
+import com.kansas.model.AuthRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kansas.TaigaAPI.controller.MilestoneController;
+import com.kansas.controller.MilestoneController;
 
-import com.kansas.TaigaAPI.service.AuthenticationService;
-import com.kansas.TaigaAPI.service.TasksService;
+import com.kansas.service.AuthenticationService;
+import com.kansas.service.TasksService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,7 +63,7 @@ import org.springframework.http.HttpHeaders;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
 		webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-		classes = TaigaApiApplication.class)
+		classes = CycleTimeApplication.class)
 @AutoConfigureMockMvc
 @TestPropertySource(
 		locations = "classpath:application.properties")

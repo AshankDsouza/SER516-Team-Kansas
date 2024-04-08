@@ -1,13 +1,13 @@
-package com.kansas.TaigaAPI.service;
+package com.kansas.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.kansas.TaigaAPI.model.ArbitaryCycleTime;
-import com.kansas.TaigaAPI.model.CycleTime;
-import com.kansas.TaigaAPI.utils.GlobalData;
-import com.kansas.TaigaAPI.utils.HTTPRequest;
+import com.kansas.model.ArbitaryCycleTime;
+import com.kansas.model.CycleTime;
+import com.kansas.utils.GlobalData;
+import com.kansas.utils.HTTPRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
 import org.springframework.beans.factory.annotation.Autowired;
