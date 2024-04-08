@@ -30,6 +30,13 @@ services:
       - "8081:8081"  # Adjust the port as needed
     restart: unless-stopped
 
+    estimateeffectivenessmicroservice:
+      build:
+        context: ./burndown
+        dockerfile: Dockerfile
+      ports:
+        - "8050:8050"  # Adjust the port as needed
+      restart: unless-stopped
 
   client:
     build:

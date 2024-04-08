@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import com.kansas.service.MilestoneService;
 import java.util.*;
 
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -71,6 +70,7 @@ public class TasksService {
     public List<EffectivenessEstimatePoints> calculateEstimateEffectiveness(int milestoneId, String authToken){
         List<EffectivenessEstimatePoints> effectiveEstimatePointsList = new ArrayList<>();
 
+        System.out.println("milestoneID: " + milestoneId);
         JsonNode milestoneData = milestoneService.getMilestoneData(authToken, milestoneId);
         int totalCycleTime = 0;
         int totalStoryPoints = 0;

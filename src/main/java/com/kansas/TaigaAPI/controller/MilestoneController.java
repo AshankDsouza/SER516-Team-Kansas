@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
 
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -55,6 +54,7 @@ public class MilestoneController {
 
     private static final String VELOCITY_URL = GlobalData.getVelocityURL();
     private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
+    private static final String ESTIMATEEFFECTIVENESS_URL = GlobalData.getEstimateEffectivenessURL();
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -225,8 +225,7 @@ public class MilestoneController {
 
     }
 
-
-      public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
+    public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
         HashMap<String, ArrayNode> resultMap = new HashMap<>();
 
         try {
@@ -250,18 +249,21 @@ public class MilestoneController {
     }
 
     @GetMapping("/{projectSlug}/multiSprintBundown")
-    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
-        // make this exact same call to a service running on a different port: http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
+    public HashMap<String, ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable String projectSlug) {
+        // make this exact same call to a service running on a different port:
+        // http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
         // make the api call:
-        String url = BURNDOWN_URL + "/api/"+projectSlug+"/multiSprintBundown";
-        //print the url
+        String url = BURNDOWN_URL + "/api/" + projectSlug + "/multiSprintBundown";
+        // print the url
         System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Authorization", authorizationHeader)
                 .build();
-        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request,
+                HttpResponse.BodyHandlers.ofString());
 
         String responseBody = response.join().body();
 
@@ -312,11 +314,24 @@ public class MilestoneController {
     }
 
     @GetMapping("/{milestoneId}/getEstimateEffectiveness")
-    public List<EffectiveEstimatePoints> getEstimateEffectiveness(
+    public String getEstimateEffectiveness(
             @RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId) {
-        return tasksService.calculateEstimateEffectiveness(milestoneId,
-                authenticationService.getAuthToken(authorizationHeader));
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        String url = ESTIMATEEFFECTIVENESS_URL + "/api/" + milestoneId + "/getEstimateEffectiveness";
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
 
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            String responseBody = responseEntity.getBody();
+            return responseBody;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return "404";
     }
 
     @GetMapping("/{projectSlug}/getArbitraryCycleTime")

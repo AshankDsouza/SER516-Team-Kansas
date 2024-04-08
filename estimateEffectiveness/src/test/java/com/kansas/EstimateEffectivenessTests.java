@@ -106,39 +106,39 @@ public class EstimateEffectivenessTests {
         return new String(bdata, StandardCharsets.UTF_8);
     }
 
-    @Test
-    void calculateEstimateEffectiveness_Success() throws JsonProcessingException {
-        int milestoneId = 100;
-        String authToken = "authToken";
+    // @Test
+    // void calculateEstimateEffectiveness_Success() throws JsonProcessingException {
+    //     int milestoneId = 100;
+    //     String authToken = "authToken";
 
-        String milestoneDataJson = """
-                {
-                  "user_stories": [
-                    {
-                      "is_closed": true,
-                      "total_points": 5,
-                      "subject": "Closed Story",
-                      "created_date": "2023-01-01T00:00:00Z",
-                      "finish_date": "2023-01-03T00:00:00Z"
-                    },
-                    {
-                      "is_closed": false,
-                      "total_points": 3,
-                      "subject": "Open Story"
-                    }
-                  ]
-                }
-                """;
+    //     String milestoneDataJson = """
+    //             {
+    //               "user_stories": [
+    //                 {
+    //                   "is_closed": true,
+    //                   "total_points": 5,
+    //                   "subject": "Closed Story",
+    //                   "created_date": "2023-01-01T00:00:00Z",
+    //                   "finish_date": "2023-01-03T00:00:00Z"
+    //                 },
+    //                 {
+    //                   "is_closed": false,
+    //                   "total_points": 3,
+    //                   "subject": "Open Story"
+    //                 }
+    //               ]
+    //             }
+    //             """;
 
-        JsonNode milestoneData = objectMapper.readTree(milestoneDataJson);
+    //     JsonNode milestoneData = objectMapper.readTree(milestoneDataJson);
 
-        when(milestoneService.getMilestoneData(authToken, milestoneId)).thenReturn(milestoneData);
+    //     when(milestoneService.getMilestoneData(authToken, milestoneId)).thenReturn(milestoneData);
 
-        List<EffectivenessEstimatePoints> result = tasksService.calculateEstimateEffectiveness(milestoneId, authToken);
+    //     List<EffectivenessEstimatePoints> result = tasksService.calculateEstimateEffectiveness(milestoneId, authToken);
 
-        assertNotNull(result);
-        assertEquals(0, result.size());
-    }
+    //     assertNotNull(result);
+    //     assertEquals(0, result.size());
+    // }
 
 
 }

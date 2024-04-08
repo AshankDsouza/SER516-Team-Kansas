@@ -72,8 +72,8 @@ public class MilestoneController {
     @GetMapping("/{milestoneId}/getEstimateEffectiveness")
     public List<EffectivenessEstimatePoints> getEstimateEffectiveness(
             @RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId) {
-        return tasksService.calculateEstimateEffectiveness(milestoneId,
-                authenticationService.getAuthToken(authorizationHeader));
+                System.out.println(milestoneId);
+        return tasksService.calculateEstimateEffectiveness(milestoneId, authenticationService.getAuthToken(authorizationHeader));
     }
 
 
