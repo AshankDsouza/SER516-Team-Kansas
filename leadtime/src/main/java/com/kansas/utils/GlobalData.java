@@ -1,6 +1,6 @@
-package com.kansas.TaigaAPI.utils;
+package com.kansas.utils;
 
-import com.kansas.TaigaAPI.Main;
+import com.kansas.Main;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,21 +43,6 @@ public class GlobalData {
         }
     }
 
-    public static String getCycletimeURL() {
-        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
-            if (input == null) {
-                System.out.println("Sorry, unable to find config.properties");
-                return "default_taiga_url";
-            }
-
-            Properties properties = new Properties();
-            properties.load(input);
-            return properties.getProperty("CYCLETIME_URL");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "http://localhost:8070";
-        }
-    }
 
     public static String getVelocityURL() {
       try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -74,21 +59,5 @@ public class GlobalData {
             return "http://localhost:8090";
         }
     }
-
-    public static String getLeadTimeURL() {
-        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
-              if (input == null) {
-                  System.out.println("Sorry, unable to find config.properties");
-                  return "default_taiga_url";
-              }
-  
-              Properties properties = new Properties();
-              properties.load(input);
-              return properties.getProperty("LEADTIME_URL");
-          } catch (IOException e) {
-              e.printStackTrace();
-              return "http://localhost:8090";
-          }
-      }
 
 }

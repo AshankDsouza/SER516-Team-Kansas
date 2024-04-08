@@ -18,6 +18,14 @@ services:
       - "8090:8090"  # Adjust the port as needed
     restart: unless-stopped
 
+  leadtimemicroservice:
+    build:
+      context: ./leadtime
+      dockerfile: Dockerfile
+    ports:
+      - "8060:8060"  # Adjust the port as needed
+    restart: unless-stopped
+    
   burndownmicroservice:
     build:
       context: ./burndown
