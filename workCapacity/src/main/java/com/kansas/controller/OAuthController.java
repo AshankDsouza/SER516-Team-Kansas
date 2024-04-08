@@ -22,8 +22,6 @@ public class OAuthController {
         HashMap hashMap = new HashMap<>();
         try{
             String token = authenticationService.authenticate(authRequest.getUsername(), authRequest.getPassword());
-            //HashMap authToken=new HashMap<>();
-            //authToken.put("token",token);
             hashMap.put("token",token);
             return new ResponseEntity<>(hashMap, HttpStatus.OK);
         }catch (Exception e){
