@@ -11,6 +11,16 @@ services:
     restart: unless-stopped
 
 
+  velocitymicroservice:
+    build:
+      context: ./velocity
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"  # Adjust the port as needed
+    restart: unless-stopped
+
+
+
   burndownmicroservice:
     platform: linux/amd64
     build:

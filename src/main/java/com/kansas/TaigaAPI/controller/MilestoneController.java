@@ -10,7 +10,12 @@ import com.kansas.TaigaAPI.service.MilestoneService;
 import com.kansas.TaigaAPI.service.ProjectService;
 import com.kansas.TaigaAPI.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -30,6 +35,8 @@ import java.util.concurrent.CompletableFuture;
 
 import com.kansas.TaigaAPI.utils.GlobalData;
 
+import com.kansas.TaigaAPI.utils.GlobalData;
+
 @RestController
 @RequestMapping("/api")
 public class MilestoneController {
@@ -46,8 +53,8 @@ public class MilestoneController {
     @Autowired
     private ProjectService projectService;
 
+    private static final String VELOCITY_URL = GlobalData.getVelocityURL();
     private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
-
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -122,7 +129,7 @@ public class MilestoneController {
                 filteredObject.put("day", elementNode.get("day").asText());
                 filteredObject.put("open_points", elementNode.get("open_points").asDouble());
                 filteredObject.put("optimal_points", elementNode.get("optimal_points").asDouble());
-                if(storyPointsCompleted.containsKey(elementNode.get("day").toString())){
+                if (storyPointsCompleted.containsKey(elementNode.get("day").toString())) {
                     storyPointsPending -= storyPointsCompleted.get(elementNode.get("day").toString());
                 }
                 filteredObject.put("story_points", storyPointsPending);
@@ -185,11 +192,25 @@ public class MilestoneController {
     }
 
     @GetMapping("/{projectSlug}/getTotalPoints")
-    public List<TotalPoints> getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,
+    public String getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,
             @PathVariable String projectSlug) {
         String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authToken, projectSlug);
-        return milestoneService.getMilestoneTotalPoints(authToken, projectId);
+        String url = VELOCITY_URL + "/api/" + projectSlug + "/getTotalPoints";
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            String responseBody = responseEntity.getBody();
+            return responseBody;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return "404";
+        // return milestoneService.getMilestoneTotalPoints(authToken, projectId);
 
     }
 
@@ -203,6 +224,7 @@ public class MilestoneController {
         return milestoneService.getMilestoneCompletedPoints(authToken, projectId);
 
     }
+
 
       public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
         HashMap<String, ArrayNode> resultMap = new HashMap<>();
@@ -227,7 +249,6 @@ public class MilestoneController {
         return resultMap;
     }
 
-
     @GetMapping("/{projectSlug}/multiSprintBundown")
     public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
         // make this exact same call to a service running on a different port: http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
@@ -251,9 +272,11 @@ public class MilestoneController {
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
 
-    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,@RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws ParseException {
-        int projectId=projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
-       
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,
+            @RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate) throws ParseException {
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
+                projectSlug);
 
         ArrayList map = new ArrayList();
         JsonNode jsonNode = getMilestoneList(authorizationHeader, projectId);
@@ -272,12 +295,12 @@ public class MilestoneController {
                             .parse(relData.get(j).get("finish_date").toString().substring(1, 11));
                     if (!finishDate.isAfter(endDateFromString) && !createdDate.isBefore(createDateFromString)) {
 
-                    System.out.println("Fetching details");
-                        HashMap hs=new HashMap();
+                        System.out.println("Fetching details");
+                        HashMap hs = new HashMap();
                         hs.put("created_date", createdDate);
                         hs.put("finish_date", finishDate);
                         hs.put("userStory_Name", (relData.get(j).get("subject")).asText());
-                        hs.put("id",(relData.get(j).get("id")).asText());
+                        hs.put("id", (relData.get(j).get("id")).asText());
 
                         map.add(hs);
                     }
@@ -297,10 +320,14 @@ public class MilestoneController {
     }
 
     @GetMapping("/{projectSlug}/getArbitraryCycleTime")
-    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
-//        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
-        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
+    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(
+            @RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug,
+            @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+        // String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
+                projectSlug);
+        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId,
+                authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
     }
 
 }
