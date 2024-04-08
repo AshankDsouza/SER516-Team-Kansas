@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
 
-  burndown_microservice:
+  burndownmicroservice:
     platform: linux/amd64
     build:
       context: ./burndown
