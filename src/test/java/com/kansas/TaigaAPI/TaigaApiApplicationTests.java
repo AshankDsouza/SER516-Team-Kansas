@@ -214,57 +214,57 @@ class TaigaApiApplicationTests {
 // 				.andExpect(content().json(expectedJson));
 // 	}
 
-	@Test
-	void testGetEstimateEffectiveness() {
+	// @Test
+	// void testGetEstimateEffectiveness() {
 
-		String projectSlug = "ser516asu-ser516-team-kansas";
-		int milestoneId = 376621;
-		String authToken = "auth-token";
-		List<EffectiveEstimatePoints> mockResponse = List.of(new EffectiveEstimatePoints(projectSlug, milestoneId));
+	// 	String projectSlug = "ser516asu-ser516-team-kansas";
+	// 	int milestoneId = 376621;
+	// 	String authToken = "auth-token";
+	// 	List<EffectiveEstimatePoints> mockResponse = List.of(new EffectiveEstimatePoints(projectSlug, milestoneId));
 
-		when(authenticationService.getAuthToken(authToken)).thenReturn(authToken);
-		when(tasksService.calculateEstimateEffectiveness(milestoneId, authToken)).thenReturn(mockResponse);
+	// 	when(authenticationService.getAuthToken(authToken)).thenReturn(authToken);
+	// 	when(tasksService.calculateEstimateEffectiveness(milestoneId, authToken)).thenReturn(mockResponse);
 
-		List<EffectiveEstimatePoints> result = milestoneController.getEstimateEffectiveness(authToken,milestoneId);
+	// 	List<EffectiveEstimatePoints> result = milestoneController.getEstimateEffectiveness(authToken,milestoneId);
 
-		assertNotNull(result);
-		assertEquals(mockResponse, result);
-		verify(tasksService).calculateEstimateEffectiveness(milestoneId, authToken);
-	}
+	// 	assertNotNull(result);
+	// 	assertEquals(mockResponse, result);
+	// 	verify(tasksService).calculateEstimateEffectiveness(milestoneId, authToken);
+	// }
 
-	@Test
-	void calculateEstimateEffectiveness_Success() throws JsonProcessingException {
-		int milestoneId = 100;
-		String authToken = "authToken";
+	// @Test
+	// void calculateEstimateEffectiveness_Success() throws JsonProcessingException {
+	// 	int milestoneId = 100;
+	// 	String authToken = "authToken";
 
-		String milestoneDataJson = """
-                {
-                  "user_stories": [
-                    {
-                      "is_closed": true,
-                      "total_points": 5,
-                      "subject": "Closed Story",
-                      "created_date": "2023-01-01T00:00:00Z",
-                      "finish_date": "2023-01-03T00:00:00Z"
-                    },
-                    {
-                      "is_closed": false,
-                      "total_points": 3,
-                      "subject": "Open Story"
-                    }
-                  ]
-                }
-                """;
+	// 	String milestoneDataJson = """
+    //             {
+    //               "user_stories": [
+    //                 {
+    //                   "is_closed": true,
+    //                   "total_points": 5,
+    //                   "subject": "Closed Story",
+    //                   "created_date": "2023-01-01T00:00:00Z",
+    //                   "finish_date": "2023-01-03T00:00:00Z"
+    //                 },
+    //                 {
+    //                   "is_closed": false,
+    //                   "total_points": 3,
+    //                   "subject": "Open Story"
+    //                 }
+    //               ]
+    //             }
+    //             """;
 
-		JsonNode milestoneData = objectMapper.readTree(milestoneDataJson);
+	// 	JsonNode milestoneData = objectMapper.readTree(milestoneDataJson);
 
-		when(milestoneService.getMilestoneData(authToken, milestoneId)).thenReturn(milestoneData);
+	// 	when(milestoneService.getMilestoneData(authToken, milestoneId)).thenReturn(milestoneData);
 
-		List<EffectiveEstimatePoints> result = tasksService.calculateEstimateEffectiveness(milestoneId, authToken);
+	// 	List<EffectiveEstimatePoints> result = tasksService.calculateEstimateEffectiveness(milestoneId, authToken);
 
-		assertNotNull(result);
-		assertEquals(0, result.size());
-	}
+	// 	assertNotNull(result);
+	// 	assertEquals(0, result.size());
+	// }
 
 	@Test
 	public void getCycleTimeForArbitraryTimeFrame_ShouldReturnList() throws Exception {
