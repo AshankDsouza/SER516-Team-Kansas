@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kansas.TaigaAPI.utils.GlobalData;
+
 @RestController
 @RequestMapping("/api")
 public class MilestoneController {
@@ -39,6 +41,8 @@ public class MilestoneController {
 
     @Autowired
     private ProjectService projectService;
+
+    private static final String VELOCITY_URL = GlobalData.getVelocityURL();
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -179,8 +183,7 @@ public class MilestoneController {
     public String getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,
             @PathVariable String projectSlug) {
         String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = "http://localhost:8090/api/" + projectSlug + "/getTotalPoints";
-        System.out.println(authToken);
+        String url = VELOCITY_URL + "/api/" + projectSlug + "/getTotalPoints";
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -189,7 +192,6 @@ public class MilestoneController {
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             String responseBody = responseEntity.getBody();
-            System.out.println(responseBody);
             return responseBody;
         } catch (Exception e) {
             // TODO: handle exception
