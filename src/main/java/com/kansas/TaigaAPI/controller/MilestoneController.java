@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
 
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -52,6 +54,7 @@ public class MilestoneController {
     private static final String VELOCITY_URL = GlobalData.getVelocityURL();
     private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
     private static final String LEADTIME_URL = GlobalData.getLeadTimeURL();
+    private static final String CYCLETIME_URL = GlobalData.getCycletimeURL();
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -139,11 +142,28 @@ public class MilestoneController {
 
     // Cycle Time
     @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
-    public List<CycleTime> getCycleTime(@RequestHeader("Authorization") String authorizationHeader,
+    public String getCycleTime(@RequestHeader("Authorization") String authorizationHeader,
             @PathVariable String projectSlug, @PathVariable int milestoneId) {
+
+        // String authToken = authenticationService.getAuthToken(authorizationHeader);
+        // int projectId = projectService.getProjectId(authToken, projectSlug);
+        // return tasksService.getTaskHistory(projectId, milestoneId, authToken);
+
         String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authToken, projectSlug);
-        return tasksService.getTaskHistory(projectId, milestoneId, authToken);
+        String url = CYCLETIME_URL + "/api/" + projectSlug + "/" + milestoneId + "/getCycleTime";
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            String responseBody = responseEntity.getBody();
+            return responseBody;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return "404";
     }
 
     @GetMapping("getDataForLeadTime")
@@ -212,6 +232,7 @@ public class MilestoneController {
     }
 
     public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
+
         HashMap<String, ArrayNode> resultMap = new HashMap<>();
 
         try {
@@ -291,14 +312,30 @@ public class MilestoneController {
     }
 
     @GetMapping("/{projectSlug}/getArbitraryCycleTime")
-    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(
+    public String getCycleTimeForArbitaryTimeFrame(
             @RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug,
             @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
         // String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
-                projectSlug);
-        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId,
-                authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
+        // int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
+        //         projectSlug);
+        // return tasksService.getCycleTimeForArbitaryTimeFrame(projectId,
+        //         authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
+
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        String url = CYCLETIME_URL + "/api/" + projectSlug + "/getArbitraryCycleTime?startDate=" + startDate + "&endDate=" + endDate;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            String responseBody = responseEntity.getBody();
+            return responseBody;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return "404";
     }
 
 }
