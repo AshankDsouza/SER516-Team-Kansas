@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+<!--		<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
 	</parent>
 	<groupId>com.kansas</groupId>
 	<artifactId>TaigaAPI</artifactId>
@@ -75,34 +75,34 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>dockerfile-maven-plugin</artifactId>
-				<version>1.4.13</version>
-				<executions>
-					<execution>
-						<id>default</id>
-						<goals>
-							<goal>build</goal>
-<!--							<goal>push</goal>-->
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<repository>kansas/taigaapi</repository>
-					<tag>${project.version}</tag>
-					<buildArgs>
-						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-					</buildArgs>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+<!--	<build>-->
+<!--&lt;!&ndash;		<plugins>&ndash;&gt;-->
+<!--&lt;!&ndash;			<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;				<groupId>org.springframework.boot</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<artifactId>spring-boot-maven-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;			</plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;			<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;				<groupId>com.spotify</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<artifactId>dockerfile-maven-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;				<version>1.4.13</version>&ndash;&gt;-->
+<!--&lt;!&ndash;				<executions>&ndash;&gt;-->
+<!--&lt;!&ndash;					<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;						<id>default</id>&ndash;&gt;-->
+<!--&lt;!&ndash;						<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>build</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;							<goal>push</goal>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;						</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;					</execution>&ndash;&gt;-->
+<!--&lt;!&ndash;				</executions>&ndash;&gt;-->
+<!--&lt;!&ndash;				<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;					<repository>kansas/taigaapi</repository>&ndash;&gt;-->
+<!--&lt;!&ndash;					<tag>${project.version}</tag>&ndash;&gt;-->
+<!--&lt;!&ndash;					<buildArgs>&ndash;&gt;-->
+<!--&lt;!&ndash;						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>&ndash;&gt;-->
+<!--&lt;!&ndash;					</buildArgs>&ndash;&gt;-->
+<!--&lt;!&ndash;				</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;			</plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;		</plugins>&ndash;&gt;-->
+<!--	</build>-->
 
 </project>
