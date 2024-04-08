@@ -9,6 +9,15 @@ services:
       - "8080:8080"  # Adjust the port as needed
     restart: unless-stopped
 
+  Velocity_microservice:
+    platform: linux/amd64
+    build:
+      context: ./velocity
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"  # Adjust the port as needed
+    restart: unless-stopped
+
   client:
     build:
       context: ./client
