@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
@@ -35,6 +34,8 @@ import java.util.concurrent.CompletableFuture;
 
 import com.kansas.TaigaAPI.utils.GlobalData;
 
+import com.kansas.TaigaAPI.utils.GlobalData;
+
 @RestController
 @RequestMapping("/api")
 public class MilestoneController {
@@ -51,6 +52,7 @@ public class MilestoneController {
     @Autowired
     private ProjectService projectService;
 
+    private static final String VELOCITY_URL = GlobalData.getVelocityURL();
     private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
     private static final String CYCLETIME_URL = GlobalData.getCycletimeURL();
 
@@ -207,11 +209,25 @@ public class MilestoneController {
     }
 
     @GetMapping("/{projectSlug}/getTotalPoints")
-    public List<TotalPoints> getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,
+    public String getMilestoneCompletedPoints(@RequestHeader("Authorization") String authorizationHeader,
             @PathVariable String projectSlug) {
         String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authToken, projectSlug);
-        return milestoneService.getMilestoneTotalPoints(authToken, projectId);
+        String url = VELOCITY_URL + "/api/" + projectSlug + "/getTotalPoints";
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + authToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            String responseBody = responseEntity.getBody();
+            return responseBody;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return "404";
+        // return milestoneService.getMilestoneTotalPoints(authToken, projectId);
 
     }
 
@@ -226,7 +242,7 @@ public class MilestoneController {
 
     }
 
-    public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
+      public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
         HashMap<String, ArrayNode> resultMap = new HashMap<>();
 
         try {
