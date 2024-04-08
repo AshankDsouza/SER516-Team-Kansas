@@ -51,6 +51,10 @@ replay_pid*
 /client/.pnp.js
 /client/.yarn/install-state.gz
 
+
+#mircorservices ignore file
+/microservices/burndown/node_modules
+
 # testing
 /client/coverage
 
