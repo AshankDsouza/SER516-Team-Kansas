@@ -9,7 +9,16 @@ services:
       - "8080:8080"  # Adjust the port as needed
     restart: unless-stopped
 
-  burndown_microservice:
+
+  velocitymicroservice:
+    build:
+      context: ./velocity
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"  # Adjust the port as needed
+    restart: unless-stopped
+
+  burndownmicroservice:
     build:
       context: ./burndown
       dockerfile: Dockerfile
@@ -33,6 +42,7 @@ services:
       - "3000:3000"  # Adjust the port as needed
     restart: unless-stopped
 
+
   nginx:
     image: nginx:latest
     ports:
@@ -42,3 +52,14 @@ services:
     depends_on:
       - client
     restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:

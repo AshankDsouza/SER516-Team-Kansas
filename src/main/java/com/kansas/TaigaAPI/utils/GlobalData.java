@@ -25,6 +25,7 @@ public class GlobalData {
         }
     }
 
+
     public static String getBurndownURL() {
         try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
@@ -34,6 +35,7 @@ public class GlobalData {
 
             Properties properties = new Properties();
             properties.load(input);
+
             return properties.getProperty("BURNDOWN_URL");
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,6 +56,22 @@ public class GlobalData {
         } catch (IOException e) {
             e.printStackTrace();
             return "http://localhost:8070";
+        }
+    }
+
+    public static String getVelocityURL() {
+      try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find config.properties");
+                return "default_taiga_url";
+            }
+
+            Properties properties = new Properties();
+            properties.load(input);
+            return properties.getProperty("VELOCITY_URL");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "http://localhost:8090";
         }
     }
 
