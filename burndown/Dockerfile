@@ -1,6 +1,6 @@
 #Stage 1
 # initialize build and set base image for first stage
-FROM maven:3.8.3-openjdk-17  AS stage1 
+FROM maven AS stage1 
 # speed up Maven JVM a bit
 ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 # set working directory
@@ -11,7 +11,7 @@ RUN mvn clean install -Dmaven.test.skip=true -Ddockerfile.skip
 
 #Stage 2
 # set base image for second stage
-FROM openjdk:17-jdk-alpine
+FROM openjdk
 
 # set deployment directory
 WORKDIR /opt/kansas/taiga
