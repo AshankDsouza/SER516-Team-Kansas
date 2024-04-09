@@ -14,7 +14,8 @@ import com.kansas.model.EffectivenessEstimatePoints;
 import java.time.format.DateTimeFormatter;
 import com.kansas.service.MilestoneService;
 import java.util.*;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -29,7 +30,12 @@ public class TasksService {
 
     private static final String TAIGA_API_ENDPOINT = GlobalData.getTaigaURL();
 
+    @Autowired
     private MilestoneService milestoneService;
+
+    public TasksService(MilestoneService milestoneService) {
+        this.milestoneService = milestoneService;
+    }
 
     static DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
