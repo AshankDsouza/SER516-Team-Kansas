@@ -1,5 +1,6 @@
 #Stage 1
 # initialize build and set base image for first stage
+
 FROM maven  as stage1
 # speed up Maven JVM a bit
 ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"

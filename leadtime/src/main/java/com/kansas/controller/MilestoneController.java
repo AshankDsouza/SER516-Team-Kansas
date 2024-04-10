@@ -1,14 +1,13 @@
-package com.kansas.TaigaAPI.controller;
+package com.kansas.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kansas.TaigaAPI.model.*;
-import com.kansas.TaigaAPI.service.AuthenticationService;
-import com.kansas.TaigaAPI.service.MilestoneService;
-import com.kansas.TaigaAPI.service.ProjectService;
-import com.kansas.TaigaAPI.service.TasksService;
+import com.kansas.model.*;
+import com.kansas.service.AuthenticationService;
+import com.kansas.service.MilestoneService;
+import com.kansas.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +32,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
-import com.kansas.TaigaAPI.utils.GlobalData;
+import com.kansas.utils.GlobalData;
+
+import com.kansas.utils.GlobalData;
 
 @RestController
 @RequestMapping("/api")
@@ -46,15 +47,10 @@ public class MilestoneController {
     private MilestoneService milestoneService;
 
     @Autowired
-    private TasksService tasksService;
-
-    @Autowired
     private ProjectService projectService;
 
     private static final String VELOCITY_URL = GlobalData.getVelocityURL();
     private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
-    private static final String LEADTIME_URL = GlobalData.getLeadTimeURL();
-    private static final String CYCLETIME_URL = GlobalData.getCycletimeURL();
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -140,52 +136,38 @@ public class MilestoneController {
         return arrayNode;
     }
 
-    // Cycle Time
-    @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
-    public String getCycleTime(@RequestHeader("Authorization") String authorizationHeader,
-            @PathVariable String projectSlug, @PathVariable int milestoneId) {
-
-        // String authToken = authenticationService.getAuthToken(authorizationHeader);
-        // int projectId = projectService.getProjectId(authToken, projectSlug);
-        // return tasksService.getTaskHistory(projectId, milestoneId, authToken);
-
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = CYCLETIME_URL + "/api/" + projectSlug + "/" + milestoneId + "/getCycleTime";
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            String responseBody = responseEntity.getBody();
-            return responseBody;
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        return "404";
-    }
 
     @GetMapping("getDataForLeadTime")
-    public String getDataForLeadTime(@RequestHeader("Authorization") String authorizationHeader,
-            @RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId) {
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = LEADTIME_URL + "/api/getDataForLeadTime?projectSlug=" + projectSlug + "&sprintId=" + sprintId;
-        System.out.println("here");
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+    public ArrayList getDataForLeadTime(@RequestHeader("Authorization") String authorizationHeader,
+            @RequestParam("projectSlug") String projectSlug, @RequestParam("sprintId") int sprintId)
+            throws ParseException {
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
+                projectSlug);
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            String responseBody = responseEntity.getBody();
-            return responseBody;
-        } catch (Exception e) {
-            System.err.println(e);
+        ArrayList map = new ArrayList();
+        JsonNode jsonNode = getMilestoneList(authorizationHeader, projectId);
+        // Getting data from taiga api
+        JsonNode relData = getGivenSprintData(sprintId, jsonNode);
+        relData = relData.get("user_stories");
+        for (int i = 0; i < relData.size(); i++) {
+            int leadTime = 0;
+            int closedTasks = 0;
+            if (!relData.get(i).get("finish_date").isNull()) {
+
+                LocalDate createdDate = LocalDate.parse(relData.get(i).get("created_date").toString().substring(1, 11));
+                LocalDate finishDate = LocalDate.parse(relData.get(i).get("finish_date").toString().substring(1, 11));
+                String userStoryName = (relData.get(i).get("subject")).asText();
+                // leadTime += Duration.between(createdDate.toLocalDate().atStartOfDay(),
+                // finishDate.toLocalDate().atStartOfDay()).toDays();
+                HashMap hs = new HashMap();
+                hs.put("created_date", createdDate);
+                hs.put("finish_date", finishDate);
+                hs.put("userStory_Name", userStoryName);
+                // hs.put("lead_time",leadTime);
+                map.add(hs);
+            }
         }
-
-        return "404";
+        return map;
     }
 
     public JsonNode getGivenSprintData(int sprintId, JsonNode allSprintData) {
@@ -220,19 +202,10 @@ public class MilestoneController {
 
     }
 
-    // Work Capacity
-    @GetMapping("/{projectSlug}/getCompletedPoints")
-    public List<CompletedPoints> getMilestoneTotalCompletedPoints(
-            @RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug) {
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authToken, projectSlug);
 
-        return milestoneService.getMilestoneCompletedPoints(authToken, projectId);
 
-    }
 
-    public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
-
+      public static HashMap<String, ArrayNode> convertJsonToHashMap(String jsonString) {
         HashMap<String, ArrayNode> resultMap = new HashMap<>();
 
         try {
@@ -256,21 +229,18 @@ public class MilestoneController {
     }
 
     @GetMapping("/{projectSlug}/multiSprintBundown")
-    public HashMap<String, ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,
-            @PathVariable String projectSlug) {
-        // make this exact same call to a service running on a different port:
-        // http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
+    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
+        // make this exact same call to a service running on a different port: http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
         // make the api call:
-        String url = BURNDOWN_URL + "/api/" + projectSlug + "/multiSprintBundown";
-        // print the url
+        String url = BURNDOWN_URL + "/api/"+projectSlug+"/multiSprintBundown";
+        //print the url
         System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Authorization", authorizationHeader)
                 .build();
-        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request,
-                HttpResponse.BodyHandlers.ofString());
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
         String responseBody = response.join().body();
 
@@ -281,61 +251,47 @@ public class MilestoneController {
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
 
-    public String getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,
+    public ArrayList getLeadTimeForAbitraryTimeframe(@RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("projectSlug") String projectSlug, @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate) throws ParseException {
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = LEADTIME_URL + "/api/getLeadTimeForAbitraryTimeframe?projectSlug=" + projectSlug + "&startDate="
-                + startDate + "&endDate=" + endDate;
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            String responseBody = responseEntity.getBody();
-            return responseBody;
-        } catch (Exception e) {
-            System.err.println(e);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
+                projectSlug);
+
+        ArrayList map = new ArrayList();
+        JsonNode jsonNode = getMilestoneList(authorizationHeader, projectId);
+        LocalDate createDateFromString = LocalDate.parse(startDate);
+        LocalDate endDateFromString = LocalDate.parse(endDate);
+
+        for (int i = 0; i < jsonNode.size(); i++) {
+            int userStoriesCount = jsonNode.get(i).get("user_stories").size();
+
+            for (int j = 0; j < userStoriesCount; j++) {
+                JsonNode relData = jsonNode.get(i).get("user_stories");
+
+                LocalDate createdDate = LocalDate.parse(relData.get(j).get("created_date").toString().substring(1, 11));
+                if (relData.get(j).get("finish_date") != null) {
+                    LocalDate finishDate = LocalDate
+                            .parse(relData.get(j).get("finish_date").toString().substring(1, 11));
+                    if (!finishDate.isAfter(endDateFromString) && !createdDate.isBefore(createDateFromString)) {
+
+                        System.out.println("Fetching details");
+                        HashMap hs = new HashMap();
+                        hs.put("created_date", createdDate);
+                        hs.put("finish_date", finishDate);
+                        hs.put("userStory_Name", (relData.get(j).get("subject")).asText());
+                        hs.put("id", (relData.get(j).get("id")).asText());
+
+                        map.add(hs);
+                    }
+                }
+            }
         }
-
-        return "404";
-
-    }
-
-    @GetMapping("/{milestoneId}/getEstimateEffectiveness")
-    public List<EffectiveEstimatePoints> getEstimateEffectiveness(
-            @RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId) {
-        return tasksService.calculateEstimateEffectiveness(milestoneId,
-                authenticationService.getAuthToken(authorizationHeader));
+        return map;
 
     }
 
-    @GetMapping("/{projectSlug}/getArbitraryCycleTime")
-    public String getCycleTimeForArbitaryTimeFrame(
-            @RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug,
-            @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
-        // String authToken = authenticationService.getAuthToken(authorizationHeader);
-        // int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
-        //         projectSlug);
-        // return tasksService.getCycleTimeForArbitaryTimeFrame(projectId,
-        //         authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
 
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = CYCLETIME_URL + "/api/" + projectSlug + "/getArbitraryCycleTime?startDate=" + startDate + "&endDate=" + endDate;
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + authToken);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            String responseBody = responseEntity.getBody();
-            return responseBody;
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
 
-        return "404";
-    }
+
 
 }
