@@ -41,6 +41,14 @@ services:
     ports:
       - "8070:8070"  # Adjust the port as needed
     restart: unless-stopped
+  
+  estimateeffectivenessmicroservice:
+    build:
+      context: ./estimateEffectiveness
+      dockerfile: Dockerfile
+    ports:
+      - "8050:8050"  # Adjust the port as needed
+    restart: unless-stopped
 
   client:
     build:

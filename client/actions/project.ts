@@ -5,7 +5,7 @@ import { z } from "zod";
 
 export async function getProjectId(projectSlug: string) {
     const ID = z.object({
-        id:z.number()
+        id: z.number()
     })
     const response = await fetch(`https://api.taiga.io/api/v1/projects/by_slug?slug=${projectSlug}`, getRequestOptions())
     const projectId = await response.json()
@@ -59,7 +59,7 @@ export async function getLeadTime(projectSlug: string, sprintId: string) {
     } catch (error) {
         return null
     }
-    return leadTimeData;   
+    return leadTimeData;
 }
 export async function getBurndowMetrics(milestoneId: string) {
     const Response = z.array(z.object({
@@ -88,16 +88,16 @@ export async function getFocusFactor(milestoneId: string) {
     const Response = z.array(z.object({
         open_points: z.number()
     }))
-    const response1 :any= await fetch(`${process.env.API_URL}/api/${milestoneId}/getTotalPoints`, getRequestOptions())
-    const response2 :any= await fetch(`${process.env.API_URL}/api/${milestoneId}/getCompletedPoints`, getRequestOptions())
+    const response1: any = await fetch(`${process.env.API_URL}/api/${milestoneId}/getTotalPoints`, getRequestOptions())
+    const response2: any = await fetch(`${process.env.API_URL}/api/${milestoneId}/getCompletedPoints`, getRequestOptions())
     const tP = await response1.json()
     const cP = await response2.json()
     let lab = [];
     let ser = [];
     for (let i = 0; i < tP.length; i++) {
         lab.push(tP[i].sprintName)
-        let focusFactor = cP[i].completedPoints == 0 ? 0 : tP[i].totalPoints *100/ cP[i].completedPoints;
-        ser.push({focusFactor:focusFactor,label:tP[i].sprintName})
+        let focusFactor = cP[i].completedPoints == 0 ? 0 : tP[i].totalPoints * 100 / cP[i].completedPoints;
+        ser.push({ focusFactor: focusFactor, label: tP[i].sprintName })
     }
     console.log(ser)
     return ser;
@@ -108,7 +108,7 @@ export async function getVelocity(projectSlug: string) {
         sprintName: z.string(),
         totalPoints: z.number()
     }))
-    
+
 
     const url = `${process.env.API_URL}/api/${projectSlug}/getTotalPoints`;
 
@@ -121,7 +121,7 @@ export async function getVelocity(projectSlug: string) {
         return null
     }
 
-    return data;   
+    return data;
 }
 
 export async function getWorkCapacity(projectSlug: string) {
@@ -129,7 +129,7 @@ export async function getWorkCapacity(projectSlug: string) {
         sprintName: z.string(),
         completedPoints: z.number()
     }))
-    
+
 
     const url = `${process.env.API_URL}/api/${projectSlug}/getCompletedPoints`;
 
@@ -142,7 +142,7 @@ export async function getWorkCapacity(projectSlug: string) {
         return null
     }
 
-    return data;   
+    return data;
 }
 
 
@@ -151,12 +151,12 @@ export async function getLeadTimeArbitrary(projectSlug: string, startDate: strin
         finish_date: z.string()
     }));
     const url = `${process.env.API_URL}/api/getLeadTimeForAbitraryTimeframe?projectSlug=${projectSlug}&startDate=${startDate}&endDate=${endDate}`;
-    
+
     console.log("This code is working");
     console.log(projectSlug);
     const response = await fetch(url, getRequestOptions());
-   // console.log(response);
-    
+    // console.log(response);
+
     let leadTimeArbitraryData = await response.json();
     console.log(leadTimeArbitraryData);
     try {
@@ -164,29 +164,27 @@ export async function getLeadTimeArbitrary(projectSlug: string, startDate: strin
     } catch (error) {
         return null;
     }
-    
+
     return leadTimeArbitraryData;
 }
 export async function getEstimateEffectiveness(milestoneId: string) {
     const Response = z.array(z.object({
-        storyTitle: z.string(),
-        effectiveness: z.number()
+        taskId: z.string(),
+        estimateAccuracy: z.number()
     }))
-    
-
-    const url = `${process.env.API_URL}/api/${milestoneId}/getEstimateEffectiveness`;// need to change the url
-
-    const response = await fetch(url, getRequestOptions())
-    const data = await response.json();
-
+    var data = []
     try {
+        const url = `${process.env.API_URL}/api/${milestoneId}/getEstimateEffectiveness`;// need to change the url
+        const response = await fetch(url, getRequestOptions())
+        data = await response.json();
         Response.parse(data)
     } catch (error) {
+        console.log(error)
         return null
     }
-
-    return data;   
+    return data;
 }
+
 
 export async function getArbitraryCycleTime(projectSlug: string, startDate: string, endDate: string) {
     const Response = z.array(z.object({

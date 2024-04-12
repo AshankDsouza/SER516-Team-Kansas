@@ -17,11 +17,11 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
     useEffect(() => {
         const fetchData = async () => {
             const effectiveness = await getEstimateEffectiveness(selectedSprintID);
-            if(effectiveness){
-            seteffectiveness(effectiveness.map((item: any) => item.effectiveness))
-            setLabels(effectiveness.map((item: any) => item.storyTitle.slice(0,5)+'...'))
+            if (effectiveness) {
+                seteffectiveness(effectiveness.map((item: any) => item.estimateAccuracy))
+                setLabels(effectiveness.map((item: any) => item.taskId.slice(0, 5) + '...'))
             }
-            else{
+            else {
                 setNoData(true);
             }
         }
@@ -29,7 +29,7 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
             fetchData();
         }
     }, [selectedSprintID]);
-    
+
 
     const data = {
         labels,
@@ -56,11 +56,7 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
                             <SelectGroup>
                                 <SelectLabel>Sprints</SelectLabel>
                                 {sprints && sprints.map(sprint =>
-                                    <>
-                                        <SelectItem key={sprint.id} value={sprint.id}>{sprint.value}</SelectItem>
-
-                                    </>
-
+                                        <SelectItem key={sprint.value} value={sprint.id}>{sprint.value}</SelectItem>
                                 )}
                             </SelectGroup>
                         </SelectContent>
@@ -69,7 +65,7 @@ function EstimateEffectiveness({ slug, sprints }: { slug: string, sprints: { id:
 
             </div>
             {showChart && !noData ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
-            {noData ? <div className="flex">There is no data for this sprint</div> : <div className=" hidden"></div> }
+            {noData ? <div className="flex">There is no data for this sprint</div> : <div className=" hidden"></div>}
         </div>
     )
 }

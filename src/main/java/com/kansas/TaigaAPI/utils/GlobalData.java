@@ -90,5 +90,21 @@ public class GlobalData {
               return "http://localhost:8090";
           }
       }
+    
+      public static String getEstimateEffectivenessURL() {
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
+              if (input == null) {
+                  System.out.println("Sorry, unable to find config.properties");
+                  return "default_taiga_url";
+              }
+  
+              Properties properties = new Properties();
+              properties.load(input);
+              return properties.getProperty("ESTIMATEEFFECTIVENESS_URL");
+          } catch (IOException e) {
+              e.printStackTrace();
+              return "http://localhost:8090";
+          }
+      }
 
 }
