@@ -192,8 +192,7 @@ public class  MilestoneController {
 
 
     @GetMapping("/{projectSlug}/multiSprintBundown")
-    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String projectSlug){
-        String authToken = authenticationService.getAuthToken(authorizationHeader);
+    public HashMap<String,ArrayNode> getmultiSprintBundown(@RequestHeader("Authorization") String authToken,@PathVariable String projectSlug){
         HashMap projectDetails = projectService.getprojectIdAndSprintId(authToken,projectSlug);
         int projectId  = Integer.parseInt(projectDetails.keySet().iterator().next().toString());
 

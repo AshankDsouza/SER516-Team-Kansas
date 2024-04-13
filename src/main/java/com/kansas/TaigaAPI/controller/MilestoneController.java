@@ -261,13 +261,14 @@ public class MilestoneController {
         // make this exact same call to a service running on a different port:
         // http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
         // make the api call:
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
         String url = BURNDOWN_URL + "/api/" + projectSlug + "/multiSprintBundown";
         // print the url
         System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Authorization", authorizationHeader)
+                .header("Authorization", authToken)
                 .build();
         CompletableFuture<HttpResponse<String>> response = client.sendAsync(request,
                 HttpResponse.BodyHandlers.ofString());
