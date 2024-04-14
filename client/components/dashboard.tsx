@@ -16,6 +16,7 @@ import EstimateEffectiveness from "./estimateEffectiveness";
 import ArbitaryCycleTimeGraph from "./arbitraryCycleTime";
 import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 import BurndownMulti from "./burndownMulti"
+import AUCGraph from "./aucGraph";
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -77,7 +78,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div key={"8"} className="hidden"></div>}
       {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div key={"9"} className=" hidden"></div>}
       {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div key={"10"} className=" hidden"></div>)}
-      {chart == "AUC" ?  <div key={"10"} className=" hidden"></div> : ( <div key={"10"} className=" hidden"></div>)}
+      {chart == "AUC" ?  <AUCGraph  slug={slug} sprints={sprints} className=" hidden"></AUC> : ( <div key={"10"} className=" hidden"></div>)}
 
       
     </div>
