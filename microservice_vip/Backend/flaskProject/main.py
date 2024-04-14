@@ -47,7 +47,7 @@ import requests
 from threading import Thread
 
 app = Flask(__name__)
-
+# in main_session: sprint_id, project_id, auth_token
 @app.route("/VIPC", methods=["POST"])
 def calculate_VIP():
     data = request.get_json()

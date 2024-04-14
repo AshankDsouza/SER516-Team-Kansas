@@ -62,8 +62,8 @@ services:
     build: ./microservice_vip
     expose:
       - "5000"
-    ports:
-      - "5001:5000" #this is for testings only
+    #ports:
+    #  - "5001:5000" #this is for testings only
 
 
   nginx:
