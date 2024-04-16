@@ -13,51 +13,43 @@ import {
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import MultiLineGraph from "./graphs/multiLineGraph"
+import BarGraph from "./barGraph"
 
 
 
 function AUCGraph({slug, sprints}:{slug: string, sprints:{id: string, value: string}[]}) {
 
-    const router = useRouter();
-
-    const [selectedSprintID, setselectedSprintID] = useState("")
-    const [showChart, setShowChart] = useState(true)
-
-    const [dataPoints, setDataPoints] = useState<number[]>([]);
-
-    useEffect(() => {
-        getBurndowMetricsMulti(slug)
-            .then((data: any) => {
-
-                if(!data){
-                    router.refresh();
-                    return
-                }
-                console.log({dataFromMulti: data});
-                const result = [];
-
-                // Populate result array and labels list
-                Object.entries(data).forEach(([sprintName, sprintData]) => {
-                    const formattedSprintData ={
-                        name: sprintName,
-                        data: sprintData.map(({ day, open_points, optimal_points }) => ([optimal_points, open_points])),
-                        
-                    }
-                    result.push(formattedSprintData);
-                });
-
-                console.log({result});
-                setDataPoints(result);
-            })
-    }, [selectedSprintID])
-
-
-    const series =  dataPoints;
+    // bar graph to represent:
+    let data = {
+        "work_auc_by_sprint_order": [
+          994.9999999999999,
+          352.0,
+          0,
+          0,
+          0
+        ],
+        "x_axis": [
+          "Sprint 1",
+          "Sprint 2",
+          "Sprint 3",
+          "Sprint 4",
+          "Sprint 5"
+        ]
+      }
+    let labels = data.x_axis;
+    let series = [
+        {
+            name: "AUC",
+            data: data.work_auc_by_sprint_order
+        }
+    ]
     
+
+
 
     return (
         <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
-            {showChart ? <MultiLineGraph name="Sprint Burndown" labels={[]} series={series} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+                    <BarGraph name="Arbitary Cycle Time" labels={labels} series={series} />
         </div>
     )
 }
