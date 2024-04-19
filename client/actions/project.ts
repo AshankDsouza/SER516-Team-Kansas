@@ -207,3 +207,25 @@ export async function getArbitraryCycleTime(projectSlug: string, startDate: stri
     return ArbitraryCycleTime;
 
 }
+
+export async function getValueInProgress(projectSlug: string, startDate: string, endDate: string) {
+    const Response = z.array(z.object({
+        taskName: z.string(),
+        cycleTime: z.number()
+    }));
+    const url = `${process.env.API_URL}/api/${projectSlug}/getArbitraryCycleTime?startDate=${startDate}&endDate=${endDate}`;
+    const requestBody = {
+        startDate,
+        endDate
+    };
+    const response = await fetch(url, getRequestOptions());
+    let ValueInProgress = await response.json();
+    console.log(ValueInProgress);
+    try {
+        Response.parse(ValueInProgress);
+    } catch (error) {
+        return null;
+    }
+    return ValueInProgress;
+
+}

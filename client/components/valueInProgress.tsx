@@ -1,11 +1,11 @@
 "use client";
 
-import { getArbitraryCycleTime, getProjectMilestones } from "@/actions/project";
+import { getValueInProgress, getProjectMilestones } from "@/actions/project";
 import { useEffect, useState } from "react";
 import BarGraph from "./barGraph";
 import { useRouter } from "next/navigation";
 
-function ArbitaryCycleTimeGraph({ slug }: { slug: string }) {
+function ValueInProgress({ slug }: { slug: string }) {
   const router = useRouter();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -27,7 +27,7 @@ function ArbitaryCycleTimeGraph({ slug }: { slug: string }) {
         setLabels(labels);
         let series = [
           {
-            name: "Arbitary Cycle Time",
+            name: "Value In Progress",
             data: openPoints,
           },
         ];
@@ -62,7 +62,7 @@ function ArbitaryCycleTimeGraph({ slug }: { slug: string }) {
         </div>
       </div>
       {showChart ? (
-        <BarGraph name="Arbitary Cycle Time" labels={labels} series={series} />
+        <BarGraph name="Value In Progress" labels={labels} series={series} />
       ) : (
         <div className="flex-1 p-16 min-h-50">Loading...</div>
       )}
