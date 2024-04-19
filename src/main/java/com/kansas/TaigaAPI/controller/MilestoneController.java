@@ -16,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.MediaType;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -55,6 +56,7 @@ public class MilestoneController {
     private static final String LEADTIME_URL = GlobalData.getLeadTimeURL();
     private static final String CYCLETIME_URL = GlobalData.getCycletimeURL();
     private static final String ESTIMATEEFFECTIVENESS_URL = GlobalData.getEstimateEffectivenessURL();
+    private static final String VIP_URL = GlobalData.getVipURL();
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -352,6 +354,43 @@ public class MilestoneController {
         }
 
         return "404";
+    }
+
+    //call vip microservice
+    @GetMapping("/{projectSlug}/vipData")
+    public String getVIP(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId, @PathVariable String projectSlug) {
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        String url = VIP_URL + "/VIPC";
+
+        //post request body
+        int projectId = projectService.getProjectId(authToken, projectSlug);
+        Map<String, String> session = new HashMap<>();
+        session.put("auth_token", authToken);
+        session.put("project_id", Integer.toString(projectId));
+        session.put("sprint_id", Integer.toString(milestoneId));
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("session", session);
+
+        //convet request body to json string
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBodyJson = "";
+        try {
+            requestBodyJson = mapper.writeValueAsString(requestBody);
+        } catch ( IOException e) {
+            e.printStackTrace();
+        }
+
+        //crate http header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(requestBodyJson, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        return responseEntity.getBody();
+
+
     }
 
 }

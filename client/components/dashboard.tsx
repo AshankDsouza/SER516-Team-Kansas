@@ -17,6 +17,7 @@ import ArbitaryCycleTimeGraph from "./arbitraryCycleTime";
 import ValueInProgress from "./valueInProgress";
 import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 import BurndownMulti from "./burndownMulti"
+import AUCGraph from "./aucGraph";
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -42,6 +43,7 @@ function Dashboard({ slug }: { slug: string }) {
     "Velocity",
     "Focus Factor",
     "Work Capacity",
+    "AUC",
     "Estimate Effectiveness",
     "Arbitary Cycle Time" ,
     "LeadTime Arbitary",
@@ -81,6 +83,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div key={"10"} className=" hidden"></div>)}
       {chart == "Value In Progress" ? (<ValueInProgress slug={slug} /> ) : ( <div key={"10"} className=" hidden"></div>)}
 
+      {chart == "AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
 
       
     </div>

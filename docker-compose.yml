@@ -58,6 +58,13 @@ services:
       - "3000:3000"  # Adjust the port as needed
     restart: unless-stopped
 
+  microservice_vip:
+    build: ./microservice_vip
+    expose:
+      - "5000"
+    #ports:
+    #  - "5001:5000" #this is for testings only
+
 
   nginx:
     image: nginx:latest
