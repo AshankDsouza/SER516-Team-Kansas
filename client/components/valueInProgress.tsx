@@ -17,7 +17,7 @@ function ValueInProgress({ slug }: { slug: string }) {
     const fetchData = async () => {
       console.log(startDate, endDate);
       if (startDate && endDate) {
-        const data = await getArbitraryCycleTime(slug, startDate, endDate);
+        const data = await getValueInProgress(slug, startDate, endDate);
         if (!data) {
           router.refresh();
           return;
@@ -70,4 +70,4 @@ function ValueInProgress({ slug }: { slug: string }) {
   );
 }
 
-export default ArbitaryCycleTimeGraph;
+export default ValueInProgress;
