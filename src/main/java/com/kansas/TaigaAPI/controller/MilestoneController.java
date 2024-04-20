@@ -357,7 +357,7 @@ public class MilestoneController {
     }
 
     //call vip microservice
-    @GetMapping("/{projectSlug}/vipData")
+    @GetMapping("/{projectSlug}/{milestoneId}/vipData")
     public String getVIP(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId, @PathVariable String projectSlug) {
         String authToken = authenticationService.getAuthToken(authorizationHeader);
         String url = VIP_URL + "/VIPC";
