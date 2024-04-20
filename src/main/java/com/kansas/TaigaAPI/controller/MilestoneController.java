@@ -57,6 +57,7 @@ public class MilestoneController {
     private static final String CYCLETIME_URL = GlobalData.getCycletimeURL();
     private static final String ESTIMATEEFFECTIVENESS_URL = GlobalData.getEstimateEffectivenessURL();
     private static final String VIP_URL = GlobalData.getVipURL();
+    private static final String BDCONSISTENCY_URL = GlobalData.getBDConsistency();
 
     @GetMapping("/{milestoneId}/stats")
     public JsonNode getBurnDownMetrics(@RequestHeader("Authorization") String authorizationHeader,
@@ -381,6 +382,39 @@ public class MilestoneController {
         }
 
         //crate http header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(requestBodyJson, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        return responseEntity.getBody();
+
+
+    }
+    //call vip microservice
+    @GetMapping("/{projectSlug}/{milestoneId}/vipData")
+    public String getBDConsistency(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId, @PathVariable String projectSlug) {
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        String url = BDCONSISTENCY_URL + "/BDConsistency";
+
+        int projectId = projectService.getProjectId(authToken, projectSlug);
+        Map<String, String> session = new HashMap<>();
+        session.put("auth_token", authToken);
+        session.put("project_id", Integer.toString(projectId));
+        session.put("sprint_id", Integer.toString(milestoneId));
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("session", session);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBodyJson = "";
+        try {
+            requestBodyJson = mapper.writeValueAsString(requestBody);
+        } catch ( IOException e) {
+            e.printStackTrace();
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

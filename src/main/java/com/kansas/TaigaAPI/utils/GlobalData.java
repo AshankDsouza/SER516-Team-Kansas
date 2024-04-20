@@ -124,4 +124,22 @@ public class GlobalData {
                     return "http://localhost:8090";
                 }
         }
+
+    //vip microservice
+    public static String getBDConsistency() {
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find config.properties");
+                return "default_taiga_url";
+            }
+
+            Properties properties = new Properties();
+            properties.load(input);
+            return properties.getProperty("BDCONSISTENCY_URL");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "http://localhost:8090";
+        }
+    }
     }
