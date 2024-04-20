@@ -19,7 +19,7 @@ Go to the project root and run the command
 ```bash
 docker-compose up --build
    ```
-The website is at localhost:3000
+The website will be available at localhost:3000
 
 ## Online access
 Site is available at:
