@@ -225,3 +225,21 @@ export async function getValueInProgress(projectSlug: string, milestoneId: strin
         return ValueInProgressData
 
 }
+
+export async function getBDConsistency(projectSlug: string, milestoneId: string) {
+    const Response = z.array(z.object({
+            date: z.string(),
+            user_story_points: z.number(),
+            BV: z.number()
+        }))
+        const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/${milestoneId}/vipData`, getRequestOptions())
+
+        let BDConsistencyData = await response.json()
+        try {
+            Response.parse(BDConsistencyData)
+        } catch (error) {
+            return null
+        }
+        return BDConsistencyData
+
+}
