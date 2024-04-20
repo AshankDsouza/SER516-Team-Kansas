@@ -24,7 +24,7 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, value: str
     const [selectedSprintID, setselectedSprintID] = useState("")
     const [showChart, setShowChart] = useState(true)
     const [labels, setLabels] = useState<string[]>([])
-    const [story_points, setstory_points] = useState<number[]>([])
+    const [value, setValue] = useState<number[]>([])
     const [bval, set_bv] = useState<number[]>([])
 
     let sprintNames = sprints.map((sprint) => sprint.value);
@@ -39,8 +39,8 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, value: str
                 setShowChart(false);
                 const daysArray = data.map((item: any) => item.date);
                 setLabels(daysArray);
-                const userStoryPoints = data.map((item: any) => item.user_story_points);
-                setstory_points(userStoryPoints);
+                const valuePoints = data.map((item: any) => item.value_points);
+                setValue(valuePoints);
                 const bv = data.map((item: any) => item.BV);
                 set_bv(bv);
                 setShowChart(true);
@@ -53,17 +53,11 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, value: str
         datasets: [
 
             {
-                label: 'Story points',
-                data: story_points,
+                label: 'value',
+                data: value,
                 borderColor: '#666',
                 backgroundColor: '#666',
-            },
-            {
-                label: 'Business value',
-                data: bval,
-                borderColor: '#660',
-                backgroundColor: '#660',
-                        },
+            }
         ],
     };
 

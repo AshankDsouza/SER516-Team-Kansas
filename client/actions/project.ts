@@ -228,13 +228,12 @@ export async function getValueInProgress(projectSlug: string, milestoneId: strin
 
 export async function getValueAUC(projectSlug: string, milestoneId: string) {
     const Response = z.array(z.object({
-            date: z.string(),
-            user_story_points: z.number(),
-            BV: z.number()
+            sprint: z.string(),
+            value_points: z.number()
         }))
-        const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/${milestoneId}/vipData`, getRequestOptions())
-//         let ValueInProgressData = [{'date': '29 Jan 2024', 'user_story_points': 0.0, 'BV': 0.0}, {'date': '30 Jan 2024', 'user_story_points': 0.0, 'BV': 0.0}, {'date': '31 Jan 2024', 'user_story_points': 0.0, 'BV': 0.0}, {'date': '01 Feb 2024', 'user_story_points': 0.0, 'BV': 0.0}, {'date': '02 Feb 2024', 'user_story_points': 0.0, 'BV': 0.0}, {'date': '03 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '04 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '05 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '06 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '07 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '08 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '09 Feb 2024', 'user_story_points': 0.19117647058823528, 'BV': 0.1111111111111111}, {'date': '10 Feb 2024', 'user_story_points': 0.39705882352941174, 'BV': 0.3333333333333333}, {'date': '11 Feb 2024', 'user_story_points': 0.39705882352941174, 'BV': 0.3333333333333333}, {'date': '12 Feb 2024', 'user_story_points': 0.39705882352941174, 'BV': 0.3333333333333333}, {'date': '13 Feb 2024', 'user_story_points': 0.5147058823529411, 'BV': 0.4444444444444444}, {'date': '14 Feb 2024', 'user_story_points': 0.5882352941176471, 'BV': 0.5555555555555556}, {'date': '15 Feb 2024', 'user_story_points': 0.5882352941176471, 'BV': 0.5555555555555556}];
-        let ValueAUCData = await response.json()
+       // const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/${milestoneId}/vipData`, getRequestOptions())
+       let ValueAUCData = [["Sprint 1", 894.9999999999999 ],[ "Sprint 2",49 ],[ "Sprint 3",0]];
+      //  let ValueAUCData = await response.json()
         try {
             Response.parse(ValueAUCData)
         } catch (error) {
