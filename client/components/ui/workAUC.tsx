@@ -1,6 +1,7 @@
 "use client";
 
-import { getArbitraryCycleTime, getProjectMilestones } from "@/actions/project";
+
+import { getWorkAUC } from "@/actions/project";
 import { useEffect, useState } from "react";
 import BarGraph from "./barGraph";
 import { useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ function workAUC({ slug }: { slug: string }) {
     const fetchData = async () => {
       console.log(startDate, endDate);
       if (startDate && endDate) {
-        const data = await getArbitraryCycleTime(slug, startDate, endDate);
+        const data = await getWorkAUC(slug, startDate, endDate);
         if (!data) {
           router.refresh();
           return;
@@ -27,7 +28,7 @@ function workAUC({ slug }: { slug: string }) {
         setLabels(labels);
         let series = [
           {
-            name: "Arbitary Cycle Time",
+            name: "Work AUC",
             data: openPoints,
           },
         ];
@@ -62,7 +63,7 @@ function workAUC({ slug }: { slug: string }) {
         </div>
       </div>
       {showChart ? (
-        <BarGraph name="Arbitary Cycle Time" labels={labels} series={series} />
+        <BarGraph name="Work AUC" labels={labels} series={series} />
       ) : (
         <div className="flex-1 p-16 min-h-50">Loading...</div>
       )}

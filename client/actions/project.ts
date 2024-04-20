@@ -207,3 +207,24 @@ export async function getArbitraryCycleTime(projectSlug: string, startDate: stri
     return ArbitraryCycleTime;
 
 }
+
+export async function getWorkAUC(projectSlug: string, startDate: string, endDate: string) {
+    const Response = z.array(z.object({
+        taskName: z.string(),
+        cycleTime: z.number()
+    }));
+    const url = `${process.env.API_URL}/api/${projectSlug}/getArbitraryCycleTime?startDate=${startDate}&endDate=${endDate}`;
+    const requestBody = {
+        startDate,
+        endDate
+    };
+    const response = await fetch(url, getRequestOptions());
+    let WorkAUCData = await response.json();
+    console.log(WorkAUCData);
+    try {
+        Response.parse(WorkAUCData);
+    } catch (error) {
+        return null;
+    }
+    return WorkAUCData;
+}
