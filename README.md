@@ -50,9 +50,9 @@ https://phoenixnap.com/kb/install-maven-windows
 ```docker run -p 8080:8080 -d kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application in background```
 
 Site is available at:
-http://20.39.192.152
+http://20.39.195.170
 Backend is available at:
-http://20.39.192.152:8080
+http://20.39.195.170/:80
 
 ### 5) Local setup
 
