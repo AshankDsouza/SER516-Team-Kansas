@@ -17,6 +17,7 @@ import ArbitaryCycleTimeGraph from "./arbitraryCycleTime";
 import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 import BurndownMulti from "./burndownMulti"
 import AUCGraph from "./aucGraph";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -33,7 +34,7 @@ function Dashboard({ slug }: { slug: string }) {
     { id: "2", value: "sprint-2" },
     { id: "3", value: "sprint-3" },
   ]);
-  const [chart, setChart] = useState("Estimate Effectiveness");
+  const [chart, setChart] = useState("");
   const charts = [
     "Burndown",
     "BurndownMulti",
@@ -44,7 +45,7 @@ function Dashboard({ slug }: { slug: string }) {
     "Work Capacity",
     "AUC",
     "Estimate Effectiveness",
-    "Arbitary Cycle Time" ,"LeadTime Arbitary"
+    "Arbitary Cycle Time", "LeadTime Arbitary"
   ];
 
   useEffect(() => {
@@ -58,32 +59,52 @@ function Dashboard({ slug }: { slug: string }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
-      <div className="flex justify-between mb-4">
-        <div className="flex-wrap gap-6">
+      <div className="flex justify-between">
+        <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
+      </div>
+      <div className="flex flex-col">
+        <div className="flex justify-between mb-4">
+          <Select onValueChange={(e) => setChart(e)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Charts" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Charts</SelectLabel>
+                {charts.map(chart =>
+                  <>
+                    <SelectItem key={chart} value={chart}>{chart}</SelectItem>
+
+                  </>
+
+                )}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Button onClick={() => localStorage.clear()} className="flex gap-2"><RotateCcw size={16} />Refresh cache</Button>
+          {/* <div className="flex flex-col gap-6">
         {charts.map(chart =>
           <Button key={chart} onClick={() =>  {setChart(chart)}}>{chart}</Button>
         )}
+        </div> */}
         </div>
-      <Button onClick={()=>localStorage.clear()} className="flex gap-2"><RotateCcw size={16}/>Refresh cache</Button>
+
+        {chart == "Burndown" ? <Burndown slug={slug} sprints={sprints} /> : <div key={"1"} className=" hidden"></div>}
+        {chart == "BurndownMulti" ? <BurndownMulti slug={slug} sprints={sprints} /> : <div key={"2"} className=" hidden"></div>}
+        {chart == "Lead time" ? <LeadTime slug={slug} sprints={sprints} /> : <div key={"3"} className=" hidden"></div>}
+        {chart == "Cycle time" ? <CycleTime slug={slug} sprints={sprints} /> : <div key={"4"} className=" hidden"></div>}
+        {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div key={"5"} className=" hidden"></div>}
+        {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div key={"6"} className=" hidden"></div>}
+        {chart == "Estimate Effectiveness" ? <EstimateEffectiveness slug={slug} sprints={sprints} /> : <div key={"7"} className=" hidden"></div>}
+        {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div key={"8"} className="hidden"></div>}
+        {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints} /> : <div key={"9"} className=" hidden"></div>}
+        {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} />) : (<div key={"10"} className=" hidden"></div>)}
+        {chart == "AUC" ? <AUCGraph slug={slug} sprints={sprints} ></AUCGraph> : (<div key={"10"} className=" hidden"></div>)}
+
       </div>
-
-      {chart == "Burndown" ? <Burndown slug={slug} sprints={sprints}/> : <div key={"1"} className=" hidden"></div>}
-      {chart == "BurndownMulti" ? <BurndownMulti slug={slug} sprints={sprints}/> : <div key={"2"} className=" hidden"></div>}
-      {chart == "Lead time" ? <LeadTime slug={slug} sprints={sprints} /> : <div key={"3"} className=" hidden"></div>}
-      {chart == "Cycle time" ? <CycleTime slug={slug} sprints={sprints} /> : <div key={"4"} className=" hidden"></div>}
-      {chart == "Focus Factor" ? <FocusFactor slug={slug} sprints={sprints} /> : <div key={"5"} className=" hidden"></div>}
-      {chart == "Velocity" ? <VelocityGraph slug={slug} sprints={sprints} /> : <div key={"6"} className=" hidden"></div>}
-      {chart == "Estimate Effectiveness" ? <EstimateEffectiveness slug={slug} sprints={sprints}/> : <div key={"7"} className=" hidden"></div>} 
-      {chart == "Work Capacity" ? <WorkCapacityGraph slug={slug} /> : <div key={"8"} className="hidden"></div>}
-      {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div key={"9"} className=" hidden"></div>}
-      {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div key={"10"} className=" hidden"></div>)}
-      {chart == "AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
-
-      
     </div>
   );
 }
-       
+
 
 export default Dashboard;

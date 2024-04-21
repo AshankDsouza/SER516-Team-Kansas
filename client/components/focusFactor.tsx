@@ -35,10 +35,7 @@ function FocusFactor(props: any) {
   
 
   return (
-    <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
-      <div className="filters flex flex-col divide-y-2">
-        <div className="p-8 font-bold">Focus Factor</div>
-      </div>
+    <div className="flex border-2 border-slate-300 rounded-md divide-x-2 h-screen">
       {showChart ? <LineGraph series={series} labels={labels} name="Focus factor" /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
