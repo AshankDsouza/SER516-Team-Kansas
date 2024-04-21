@@ -83,6 +83,13 @@ export async function getBurndowMetricsMulti(projectSlug: string) {
     return BurndownData
 }
 
+export async function getAUCData(projectSlug: string) {
+    const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/auc`, getRequestOptions())
+    let aucData = await response.json()
+
+    return aucData
+}
+
 
 export async function getFocusFactor(milestoneId: string) {
     const Response = z.array(z.object({
@@ -226,6 +233,7 @@ export async function getValueInProgress(projectSlug: string, milestoneId: strin
 
 }
 
+
 export async function getBDConsistency(projectSlug: string, milestoneId: string) {
     const Response = z.array(z.object({
             date: z.string(),
@@ -241,5 +249,21 @@ export async function getBDConsistency(projectSlug: string, milestoneId: string)
             return null
         }
         return BDConsistencyData
+
+export async function getValueAUC(projectSlug: string, milestoneId: string) {
+    const Response = z.array(z.object({
+            sprint: z.string(),
+            value: z.number()
+        }))
+       // const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/${milestoneId}/vipData`, getRequestOptions())
+       let ValueAUCData = [{'sprint' : 'Sprint 1', 'value' : 894.9999999999999 }, { 'sprint': 'Sprint 2', 'value' : 496 },{'sprint': 'Sprint 3',  'value' : 0 },{'sprint': 'Sprint 4', 'value': 0}, { 'sprint': 'Sprint 5', 'value' : 0}];
+      //  let ValueAUCData = await response.json()
+        try {
+            Response.parse(ValueAUCData)
+        } catch (error) {
+            return null
+        }
+        return ValueAUCData
+
 
 }
