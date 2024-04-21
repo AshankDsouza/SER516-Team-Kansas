@@ -55,6 +55,7 @@ public class MilestoneController {
     private static final String BURNDOWN_URL = GlobalData.getBurndownURL();
     private static final String LEADTIME_URL = GlobalData.getLeadTimeURL();
     private static final String CYCLETIME_URL = GlobalData.getCycletimeURL();
+    private static final String AUC_URL = GlobalData.getAUC_URL();
     private static final String ESTIMATEEFFECTIVENESS_URL = GlobalData.getEstimateEffectivenessURL();
     private static final String VIP_URL = GlobalData.getVipURL();
 
@@ -280,6 +281,29 @@ public class MilestoneController {
         HashMap<String, ArrayNode> finalResponse = convertJsonToHashMap(responseBody);
 
         return finalResponse;
+    }
+
+    @GetMapping("/{projectSlug}/auc")
+    public String getAUC(@RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable String projectSlug) {
+        // make this exact same call to a service running on a different port:
+        // http://localhost:8081/api//{projectSlug}/getMultiSprintBurndown
+        // make the api call:
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        String url = AUC_URL + "/work-auc-data/" + projectSlug + "/" + authToken;
+        // print the url
+        System.out.println(url);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Authorization", authToken)
+                .build();
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request,
+                HttpResponse.BodyHandlers.ofString());
+
+        String responseBody = response.join().body();
+
+        return responseBody;
     }
 
     @GetMapping("/getLeadTimeForAbitraryTimeframe")
