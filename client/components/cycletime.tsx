@@ -25,8 +25,8 @@ function CycleTime({ slug, sprints }: { slug: string, sprints: { id: string, val
 
 
   useEffect(() => {
-    const labels = localStorage.getItem(`${slug}-${selectedSprintID}-leadTime-labels`)
-    let series = localStorage.getItem(`${slug}-${selectedSprintID}-leadTime-series`)
+    const labels = localStorage.getItem(`${slug}-${selectedSprintID}-cycleTime-labels`)
+    let series = localStorage.getItem(`${slug}-${selectedSprintID}-cycleTime-series`)
     if (labels !== null && series !== null) {
       setLabels(labels.split(','))
       setSeries(JSON.parse(series))
@@ -49,8 +49,8 @@ function CycleTime({ slug, sprints }: { slug: string, sprints: { id: string, val
             }
           ]
           setSeries(series)
-          localStorage.setItem(`${slug}-${selectedSprintID}-leadTime-labels`, labels)
-          localStorage.setItem(`${slug}-${selectedSprintID}-leadTime-series`, JSON.stringify(series))
+          localStorage.setItem(`${slug}-${selectedSprintID}-cycleTime-labels`, labels)
+          localStorage.setItem(`${slug}-${selectedSprintID}-cycleTime-series`, JSON.stringify(series))
           setShowChart(true)
         })
     }

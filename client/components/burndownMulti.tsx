@@ -23,18 +23,17 @@ function BurndownMulti({slug, sprints}:{slug: string, sprints:{id: string, value
     const [selectedSprintID, setselectedSprintID] = useState("")
     const [showChart, setShowChart] = useState(true)
 
-    const [dataPoints, setDataPoints] = useState<number[]>([]);
+    const [dataPoints, setDataPoints] = useState<any>([]);
 
     useEffect(() => {
         getBurndowMetricsMulti(slug)
-            .then((data: any) => {
+            .then((data: Array<Array<any>>) => {
 
                 if(!data){
                     router.refresh();
                     return
                 }
-                console.log({dataFromMulti: data});
-                const result = [];
+                const result: Array<{name: String, data:Array<any>}> = [];
 
                 // Populate result array and labels list
                 Object.entries(data).forEach(([sprintName, sprintData]) => {
@@ -46,7 +45,6 @@ function BurndownMulti({slug, sprints}:{slug: string, sprints:{id: string, value
                     result.push(formattedSprintData);
                 });
 
-                console.log({result});
                 setDataPoints(result);
             })
     }, [selectedSprintID])

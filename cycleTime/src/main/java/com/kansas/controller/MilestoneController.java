@@ -16,13 +16,11 @@ public class MilestoneController {
     @Autowired
     private AuthenticationService authenticationService;
 
-
     @Autowired
     private TasksService tasksService;
 
     @Autowired
     private ProjectService projectService;
-
 
     // Cycle Time
     @GetMapping("/{projectSlug}/{milestoneId}/getCycleTime")
@@ -33,12 +31,15 @@ public class MilestoneController {
         return tasksService.getTaskHistory(projectId, milestoneId, authToken);
     }
 
-
     @GetMapping("/{projectSlug}/getArbitraryCycleTime")
-    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
-//        String authToken = authenticationService.getAuthToken(authorizationHeader);
-        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader), projectSlug);
-        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId, authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
+    public List<ArbitaryCycleTime> getCycleTimeForArbitaryTimeFrame(
+            @RequestHeader("Authorization") String authorizationHeader, @PathVariable String projectSlug,
+            @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+        // String authToken = authenticationService.getAuthToken(authorizationHeader);
+        int projectId = projectService.getProjectId(authenticationService.getAuthToken(authorizationHeader),
+                projectSlug);
+        return tasksService.getCycleTimeForArbitaryTimeFrame(projectId,
+                authenticationService.getAuthToken(authorizationHeader), startDate, endDate);
     }
 
 }
