@@ -83,6 +83,13 @@ export async function getBurndowMetricsMulti(projectSlug: string) {
     return BurndownData
 }
 
+export async function getAUCData(projectSlug: string) {
+    const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/auc`, getRequestOptions())
+    let aucData = await response.json()
+
+    return aucData
+}
+
 
 export async function getFocusFactor(milestoneId: string) {
     const Response = z.array(z.object({
