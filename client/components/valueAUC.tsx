@@ -37,12 +37,10 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, value: str
                     return
                 }
                 setShowChart(false);
-                const daysArray = data.map((item: any) => item.date);
+                const daysArray = data.map((item: any) => item.sprint);
                 setLabels(daysArray);
-                const valuePoints = data.map((item: any) => item.value_points);
-                setValue(valuePoints);
-                const bv = data.map((item: any) => item.BV);
-                set_bv(bv);
+                const value = data.map((item: any) => item.value);
+                setValue(value);
                 setShowChart(true);
             })
     }, [selectedSprintID])

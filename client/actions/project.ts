@@ -229,10 +229,10 @@ export async function getValueInProgress(projectSlug: string, milestoneId: strin
 export async function getValueAUC(projectSlug: string, milestoneId: string) {
     const Response = z.array(z.object({
             sprint: z.string(),
-            value_points: z.number()
+            value: z.number()
         }))
        // const response = await fetch(`${process.env.API_URL}/api/${projectSlug}/${milestoneId}/vipData`, getRequestOptions())
-       let ValueAUCData = [["Sprint 1", 894.9999999999999 ],[ "Sprint 2",49 ],[ "Sprint 3",0]];
+       let ValueAUCData = [{'sprint' : 'Sprint 1', 'value' : 894.9999999999999 }, { 'sprint': 'Sprint 2', 'value' : 496 },{'sprint': 'Sprint 3',  'value' : 0 },{'sprint': 'Sprint 4', 'value': 0}, { 'sprint': 'Sprint 5', 'value' : 0}];
       //  let ValueAUCData = await response.json()
         try {
             Response.parse(ValueAUCData)
