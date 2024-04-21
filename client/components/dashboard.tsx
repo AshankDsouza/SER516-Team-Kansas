@@ -18,6 +18,7 @@ import ValueInProgress from "./valueInProgress";
 import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 import BurndownMulti from "./burndownMulti"
 import AUCGraph from "./aucGraph";
+import ValueAUC from "./valueAUC";
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -47,7 +48,8 @@ function Dashboard({ slug }: { slug: string }) {
     "Estimate Effectiveness",
     "Arbitary Cycle Time" ,
     "LeadTime Arbitary",
-    "Value In Progress"
+    "Value In Progress",
+    "Value AUC"
   ];
 
   useEffect(() => {
@@ -84,7 +86,7 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "Value In Progress" ? (<ValueInProgress slug={slug} sprints={sprints}/> ) : ( <div key={"10"} className=" hidden"></div>)}
 
       {chart == "AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
-
+      {chart == "Value AUC" ?  <ValueAUC  slug={slug} sprints={sprints} ></ValueAUC> : ( <div key={"10"} className=" hidden"></div>)}
       
     </div>
   );

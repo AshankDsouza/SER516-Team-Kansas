@@ -7,7 +7,6 @@ This project is a Java application for interacting with the Taiga API to perform
 ### 1) Clone the repository
 
 
-
    ```bash
  git clone https://github.com/ser516asu/SER516-Team-Kansas.git
    cd SER516-Team-Kansas
@@ -23,7 +22,8 @@ The website will be available at localhost:3000
 
 ## Online access
 Site is available at:
-http://20.39.192.152
+http://20.39.195.170
+
 
 
 
