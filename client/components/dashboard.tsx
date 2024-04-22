@@ -19,6 +19,7 @@ import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 import BurndownMulti from "./burndownMulti"
 import AUCGraph from "./aucGraph";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
+import ValueAUC from "./valueAUC";
 
 
 function Dashboard({ slug }: { slug: string }) {
@@ -44,11 +45,12 @@ function Dashboard({ slug }: { slug: string }) {
     "Velocity",
     "Focus Factor",
     "Work Capacity",
-    "AUC",
+    "Work AUC",
     "Estimate Effectiveness",
     "Arbitary Cycle Time" ,
     "LeadTime Arbitary",
-    "Value In Progress"
+    "Value In Progress",
+    "Value AUC"
   ];
 
   useEffect(() => {
@@ -103,9 +105,9 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div key={"9"} className=" hidden"></div>}
       {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div key={"10"} className=" hidden"></div>)}
       {chart == "Value In Progress" ? (<ValueInProgress slug={slug} sprints={sprints}/> ) : ( <div key={"10"} className=" hidden"></div>)}
-      {chart == "AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
-
-      </div>
+      {chart == "Work AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
+      {chart == "Value AUC" ?  <ValueAUC  slug={slug} sprints={sprints} ></ValueAUC> : ( <div key={"10"} className=" hidden"></div>)}
+      
     </div>
   );
 }
