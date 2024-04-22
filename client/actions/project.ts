@@ -39,9 +39,12 @@ export async function getCyleTime(projectSlug: string, milestoneId: string) {
     const url = `${process.env.API_URL}/api/${projectSlug}/${milestoneId}/getCycleTime`;
     const response = await fetch(url, getRequestOptions())
     let cycleTimeData = await response.json()
+    console.log(cycleTimeData);
+    
     try {
         Response.parse(cycleTimeData)
     } catch (error) {
+        console.log(error);
         return null
     }
     return cycleTimeData;

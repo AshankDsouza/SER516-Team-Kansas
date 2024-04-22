@@ -15,7 +15,6 @@ function ArbitaryCycleTimeGraph({ slug }: { slug: string }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(startDate, endDate);
       if (startDate && endDate) {
         const data = await getArbitraryCycleTime(slug, startDate, endDate);
         if (!data) {
