@@ -58,6 +58,7 @@ public class MilestoneController {
     private static final String AUC_URL = GlobalData.getAUC_URL();
     private static final String ESTIMATEEFFECTIVENESS_URL = GlobalData.getEstimateEffectivenessURL();
     private static final String VIP_URL = GlobalData.getVipURL();
+    private static final String BDCONSISTENCY_URL = GlobalData.getBDConsistency();
     private static final String VALUE_AUC_URL = GlobalData.getValueAucURL();
 
     @GetMapping("/{milestoneId}/stats")
@@ -416,6 +417,17 @@ public class MilestoneController {
         return responseEntity.getBody();
 
 
+    }
+    //call BDConsistency microservice
+    @GetMapping("/{projectSlug}/{milestoneId}/bdConsistency")
+    public String getBDConsistency(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId, @PathVariable String projectSlug) {
+        String authToken = authenticationService.getAuthToken(authorizationHeader);
+        String url = BDCONSISTENCY_URL + "/" + projectSlug + "/" + milestoneId + "/" + authToken;
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        return responseEntity.getBody();
     }
 
 
