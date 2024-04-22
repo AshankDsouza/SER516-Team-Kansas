@@ -87,6 +87,7 @@ function Dashboard({ slug }: { slug: string }) {
         {chart == "Work AUC" ? <AUCGraph slug={slug} sprints={sprints} ></AUCGraph> : (<div key={"10"} className=" hidden"></div>)}
         {chart == "Value AUC" ? <ValueAUC slug={slug} sprints={sprints} ></ValueAUC> : (<div key={"10"} className=" hidden"></div>)}
       </div>
+
     </div>
   );
 }

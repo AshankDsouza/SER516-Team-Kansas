@@ -49,7 +49,6 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, value: str
     const data = {
         labels,
         datasets: [
-
             {
                 label: 'value',
                 data: Value,
