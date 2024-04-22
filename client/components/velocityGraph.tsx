@@ -61,11 +61,6 @@ function VelocityGraph(props: any) {
 
   return (
     <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
-      <div className="filters flex flex-col divide-y-2">
-        <div className="p-8 font-bold">Filters</div>
-        <div className="p-8">
-        </div>
-      </div>
       {showChart ? <BarGraph name="Velocity"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )

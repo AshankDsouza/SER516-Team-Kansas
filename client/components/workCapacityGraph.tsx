@@ -63,12 +63,7 @@ function WorkCapacityGraph(props: any) {
   }, [])
 
   return (
-    <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
-      <div className="filters flex flex-col divide-y-2">
-        <div className="p-8 font-bold">Filters</div>
-        <div className="p-8">
-        </div>
-      </div>
+    <div className="flex border-2 border-slate-300 rounded-md divide-x-2 h-fit">
       {showChart ? <LineGraph name="Work Capacity"  labels={labels} series={series}/> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )

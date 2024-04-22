@@ -5,18 +5,18 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-interface IProps{
-    series: any;
-    labels: string[];
-    name: string;
+interface IProps {
+  series: any;
+  labels: string[];
+  name: string;
 }
 
 export default function LineGraph(props: IProps) {
 
-    const { series, labels, name } = props;
+  const { series, labels, name } = props;
 
   const options = {
-        xAxis: {
+    xAxis: {
       type: 'datetime', // specify datetime type for x-axis
       categories: labels,
 
@@ -27,12 +27,13 @@ export default function LineGraph(props: IProps) {
     title: {
       text: name
     },
-    series:  []
+    series: []
   };
 
-    options.series = series;
+  options.series = series;
 
-  return (<div>
+  return (
+  <div className="flex-1 p-16 h-fit overflow-scroll">
     <HighchartsReact highcharts={Highcharts} options={options} />
   </div>
   );
