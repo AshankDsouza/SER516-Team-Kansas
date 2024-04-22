@@ -9,7 +9,7 @@ from taigaApi.customAttributes.getCustomAttributes import get_business_value_dat
 
 app = Flask(__name__)
 
-@app.route("/<project_id>/<sprint_id>/<auth_token>/bd-calculation", methods=["GET"])
+@app.route("/<project_id>/<sprint_id>/<auth_token>", methods=["GET"])
 def calclateBDConsistency(project_id, sprint_id, auth_token):
     try:
         # Data required to plot is stored here

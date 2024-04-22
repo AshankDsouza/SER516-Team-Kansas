@@ -2,13 +2,9 @@
 ## Taiga API Integration
 This project is a Java application for interacting with the Taiga API to perform various task and calculating metrics.
 ## Setting up the application
-### 0) Install prerequisite software
-Install the following on your system:
-java
-maven
+
 
 ### 1) Clone the repository
-
 
 
    ```bash
@@ -16,58 +12,18 @@ maven
    cd SER516-Team-Kansas
    ```
 
-### 2) Compile and Run the spring boot application
-Go to the project root and compile the Maven project
-to install dependencies run:
-```bash
-mvn clean install -U
-   ```
-To run the backend application run
+### 2) Build and run docker contianers
+Go to the project root and run the command
 
 ```bash
-mvn spring-boot:run
-or
-mvn compile spring:boot-run
+docker-compose up --build
    ```
-### 3) Open and new terminal Install dependencies and start the NextJS client
+The website will be available at localhost:3000
 
-
-   ```bash
-cd .\client\
-npm install
-npm run dev
-   ```
-
-### NOTE
-In case you don't have Maven installed, please refer to following tutorial
-https://phoenixnap.com/kb/install-maven-windows
-
-### 4) Open browser with the following url http://localhost:3000 and login with Taiga credentials
-
-### 5) Dockerization steps 
-```mvn clean package ## Clean and build jar application along with docker image```<br>
-```mvn clean package -Ddockerfile.skip # Clean and build the jar application```<br>
-```docker run -p 8080:8080 kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application interactively```<br>
-```docker run -p 8080:8080 -d kansas/taigaapi:0.0.1-SNAPSHOT #Command to run application in background```
-
+## Online access
 Site is available at:
-http://20.39.192.152
-Backend is available at:
-http://20.39.192.152:8080
+http://20.39.195.170
 
-### 5) Local setup
-
-1) 
-if you are on a Mac with M series chip then in docker-compose file uncomment this line
-    #platform: linux/amd64
-in 
-backend:
-and in 
-burndown_microservice:
-
-2)
-in this file: src/main/resources/config.properties
-change BURNDOWN_URL to http://localhost:8081
 
 
 

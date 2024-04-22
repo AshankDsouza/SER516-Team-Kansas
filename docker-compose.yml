@@ -84,5 +84,22 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
 
+  workaucmicroservice:
+    build: ./work_auc_microservice
+    ports: 
+      - "5001:5001"
+      
+  bd_consistency:
+    build: ./bdConsistency_microservice
+    expose:
+      - "5000"
+    ports:
+      - "5002:5000"
+
+  value_auc_microservice:
+    build: ./value_auc_microservice
+    ports:
+      - "5003:5003"
+
 volumes:
   portainer_data:
