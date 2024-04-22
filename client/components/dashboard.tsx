@@ -84,9 +84,8 @@ function Dashboard({ slug }: { slug: string }) {
       {chart == "LeadTime Arbitary" ? <LeadTimeArbitaryGraph slug={slug} sprints={sprints}/> : <div key={"9"} className=" hidden"></div>}
       {chart == "Arbitary Cycle Time" ? (<ArbitaryCycleTimeGraph slug={slug} /> ) : ( <div key={"10"} className=" hidden"></div>)}
       {chart == "Value In Progress" ? (<ValueInProgress slug={slug} sprints={sprints}/> ) : ( <div key={"10"} className=" hidden"></div>)}
-
-      {chart == "Work AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
       {chart == "Value AUC" ?  <ValueAUC  slug={slug} sprints={sprints} ></ValueAUC> : ( <div key={"10"} className=" hidden"></div>)}
+      {chart == "Work AUC" ?  <AUCGraph  slug={slug} sprints={sprints} ></AUCGraph> : ( <div key={"10"} className=" hidden"></div>)}
       
     </div>
   );
