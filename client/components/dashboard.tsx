@@ -53,9 +53,7 @@ function Dashboard({ slug }: { slug: string }) {
     "Arbitary Cycle Time" ,
     "LeadTime Arbitary",
     "Value In Progress",
-
-    "BD Consistency"
-
+    "BD Consistency",
     "Value AUC"
 
   ];

@@ -417,38 +417,16 @@ public class MilestoneController {
 
 
     }
-    //call vip microservice
-    @GetMapping("/{projectSlug}/{milestoneId}/vipData")
+    //call BDConsistency microservice
+    @GetMapping("/{projectSlug}/{milestoneId}/bdConsistency")
     public String getBDConsistency(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int milestoneId, @PathVariable String projectSlug) {
         String authToken = authenticationService.getAuthToken(authorizationHeader);
-        String url = BDCONSISTENCY_URL + "/BDConsistency";
-
-        int projectId = projectService.getProjectId(authToken, projectSlug);
-        Map<String, String> session = new HashMap<>();
-        session.put("auth_token", authToken);
-        session.put("project_id", Integer.toString(projectId));
-        session.put("sprint_id", Integer.toString(milestoneId));
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("session", session);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String requestBodyJson = "";
-        try {
-            requestBodyJson = mapper.writeValueAsString(requestBody);
-        } catch ( IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = BDCONSISTENCY_URL + "/" + projectSlug + "/" + milestoneId + "/" + authToken;
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> entity = new HttpEntity<>(requestBodyJson, headers);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         return responseEntity.getBody();
-
-
     }
 
 }
