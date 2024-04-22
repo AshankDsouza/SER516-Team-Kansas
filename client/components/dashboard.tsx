@@ -57,7 +57,7 @@ function Dashboard({ slug }: { slug: string }) {
     "Velocity",
     "Focus Factor",
     "Work Capacity",
-    "Work AUC",
+    "AUC",
     "Estimate Effectiveness",
     "Arbitary Cycle Time",
     "LeadTime Arbitary",
