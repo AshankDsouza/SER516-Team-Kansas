@@ -13,6 +13,8 @@ import {
 import { useEffect, useState } from "react"
 import BarGraph from "./barGraph"
 import { useRouter } from "next/navigation"
+import MultiLineGraph from "./graphs/multiLineGraph"
+import BurndownChart from "./burndownChart"
 
 
 
@@ -28,6 +30,7 @@ function BDConsistency({slug, sprints}:{slug: string, sprints:{id: string, value
   const [showChart, setShowChart] = useState(true)
   const [labels, setLabels] = useState<string[]>([])
   const [series, setSeries] = useState<any[]>([])
+  const [bv_projection, setBv_projection] = useState([])
 
   useEffect(() => {
     getBDConsistency(slug, selectedSprintID).then((data) => {
@@ -43,13 +46,33 @@ function BDConsistency({slug, sprints}:{slug: string, sprints:{id: string, value
           data: dataPoints
         }
       ]
-      setSeries(series)
+      const bv_projection = labels.map((x:string)=>(data.data_to_plot.bv_projection[x.split(" ")[1] + "-" + x.split(" ")[0]]))
+      setBv_projection(bv_projection)
+      setSeries(dataPoints)
       setLabels(labels)
       setShowChart(true)
     });
 
 
   }, [selectedSprintID])
+
+  const data = {
+    labels,
+    datasets: [
+        {
+            label: 'Story points',
+            data: series,
+            borderColor: '#333',
+            backgroundColor: '#333',
+        },
+        {
+            label: 'BV Projection',
+            data: bv_projection,
+            borderColor: '#666',
+            backgroundColor: '#666',
+        },
+    ],
+};
 
   return (
     <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
@@ -75,7 +98,7 @@ function BDConsistency({slug, sprints}:{slug: string, sprints:{id: string, value
           </Select>
         </div>
       </div>
-      {showChart ? <BarGraph name="BDConsistency" labels={labels} series={series} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
+      {showChart ? <BurndownChart data={data} /> : <div className="flex-1 p-16 min-h-50">Loading...</div>}
     </div>
   )
 }
