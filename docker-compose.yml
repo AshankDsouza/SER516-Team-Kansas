@@ -98,8 +98,8 @@ services:
 
   value_auc_microservice:
     build: ./value_auc_microservice
-    expose:
-      - "5000"
+    ports:
+      - "5003:5003"
 
 volumes:
   portainer_data:
