@@ -18,7 +18,6 @@ import ValueInProgress from "./valueInProgress";
 import LeadTimeArbitaryGraph from "./leadTimeArbitary"
 import BurndownMulti from "./burndownMulti"
 import AUCGraph from "./aucGraph";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import ValueAUC from "./valueAUC";
 
 
@@ -36,7 +35,7 @@ function Dashboard({ slug }: { slug: string }) {
     { id: "2", value: "sprint-2" },
     { id: "3", value: "sprint-3" },
   ]);
-  const [chart, setChart] = useState("");
+  const [chart, setChart] = useState("Estimate Effectiveness");
   const charts = [
     "Burndown",
     "BurndownMulti",
@@ -64,35 +63,15 @@ function Dashboard({ slug }: { slug: string }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between">
-        <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
-      </div>
-      <div className="flex flex-col">
-        <div className="flex justify-between mb-4">
-          <Select onValueChange={(e) => setChart(e)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Charts" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Charts</SelectLabel>
-                {charts.map(chart =>
-                  <>
-                    <SelectItem key={chart} value={chart}>{chart}</SelectItem>
-
-                  </>
-
-                )}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Button onClick={() => localStorage.clear()} className="flex gap-2"><RotateCcw size={16} />Refresh cache</Button>
-          {/* <div className="flex flex-col gap-6">
+      <Link href={"/project"}><div className="flex font-bold gap-2 underline"><ArrowLeft></ArrowLeft>{slug}</div></Link>
+      <div className="flex justify-between mb-4">
+        <div className="flex-wrap gap-6">
         {charts.map(chart =>
           <Button key={chart} onClick={() =>  {setChart(chart)}}>{chart}</Button>
         )}
-        </div> */}
         </div>
+      <Button onClick={()=>localStorage.clear()} className="flex gap-2"><RotateCcw size={16}/>Refresh cache</Button>
+      </div>
 
         {chart == "Burndown" ? <Burndown slug={slug} sprints={sprints} /> : <div key={"1"} className=" hidden"></div>}
         {chart == "BurndownMulti" ? <BurndownMulti slug={slug} sprints={sprints} /> : <div key={"2"} className=" hidden"></div>}
@@ -111,6 +90,6 @@ function Dashboard({ slug }: { slug: string }) {
     </div>
   );
 }
-
+       
 
 export default Dashboard;
