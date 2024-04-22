@@ -32,7 +32,7 @@ export default function LineGraph(props: IProps) {
 
     options.series = series;
 
-  return (<div>
+  return (<div  className="flex-1 p-16 h-fit overflow-scroll">
     <HighchartsReact highcharts={Highcharts} options={options} />
   </div>
   );
