@@ -17,7 +17,7 @@ import Chip from '@mui/material/Chip';
 
 
 
-function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, Value: string}[]}) {
+function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, value: string}[]}) {
 
     const router = useRouter();
 
@@ -27,7 +27,7 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, Value: str
     const [Value, setValue] = useState<number[]>([])
     const [bval, set_bv] = useState<number[]>([])
 
-    let sprintNames = sprints.map((Sprint) => Sprint.Value);
+    let sprintNames = sprints.map((Sprint) => Sprint.value);
 
     useEffect(() => {
         getValueAUC(slug,selectedSprintID)
@@ -49,7 +49,6 @@ function ValueAUC({slug, sprints}:{slug: string, sprints:{id: string, Value: str
     const data = {
         labels,
         datasets: [
-
             {
                 label: 'value',
                 data: Value,
