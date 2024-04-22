@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import MultiLineGraph from "./graphs/multiLineGraph"
-import BarGraph from "./barGraph"
+import BarGraph from "./barGraphWorkAUC"
 
 import { getAUCData } from "@/actions/project";
 
@@ -21,27 +21,21 @@ import { getAUCData } from "@/actions/project";
 function AUCGraph({slug, sprints}:{slug: string, sprints:{id: string, value: string}[]}) {
     // bar graph to represent:
     let data = {
-      "work_auc_by_sprint_order": [
-        994.9999999999999,
-        352.0,
-        0,
-        0,
-        0
-      ],
+      "work_auc_by_sprint_order": [0, 0, 0, 0, 0],
       "x_axis": [
         "Sprint 1",
         "Sprint 2",
         "Sprint 3",
         "Sprint 4",
         "Sprint 5"
-      ]
+      ],
     }
     const [aucData, setAucData] = useState(data)
 
     let labels = aucData.x_axis;
     let series = [
         {
-            name: "AUC",
+            name: "Work AUC",
             data: aucData.work_auc_by_sprint_order
         }
     ]
@@ -57,7 +51,7 @@ function AUCGraph({slug, sprints}:{slug: string, sprints:{id: string, value: str
     
     return (
         <div className="flex border-2 border-slate-300 rounded-md divide-x-2">
-                    <BarGraph name="Arbitary Cycle Time" labels={labels} series={series} />
+                    <BarGraph name="Work AUC" labels={labels} series={series} />
         </div>
     )
 }
